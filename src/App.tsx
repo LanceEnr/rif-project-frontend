@@ -5,6 +5,8 @@ import Faqs from './pages/Faqs';
 import Contact from './pages/Contact';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import RIF from './pages/RIF';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
           <Route path="/faqs" element={<Faqs />} /> 
           <Route path="/" element={<Home />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/rif" element={<RIF />}/>
+
         </Routes>
         <Footer />
       </Router>
