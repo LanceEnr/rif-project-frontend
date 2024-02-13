@@ -2,7 +2,7 @@ import React from 'react';
 
 function Faqs() {
   return (
-    <div className="max-w-screen-xl mx-auto px-5 bg-white min-h-screen">
+    <div className="max-w-screen-xl mx-auto px-5 bg-white min-h-screen my-24">
       <div className="flex flex-col items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           FAQ
