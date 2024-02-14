@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <nav style={{ backgroundColor: '#121212' }} className="  fixed w-full z-20 top-0 start-0 border-b border-gray-200">
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+    <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t1.15752-9/426963797_1083902849549118_5791859232688171486_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=SLqvOkzzRY4AX-eGOLW&_nc_ht=scontent.fmnl25-1.fna&oh=03_AdQg1yKPWUhRV8ynkQ8WmwT1SIV8OCwl_23mWq9ZTM8E3g&oe=65F263F0" className="h-8" alt="Flowbite Logo"/>
         <span className="self-center text-2xl font-semibold whitespace-nowrap text-yellow-500">YellowAlert</span>
     </a>
