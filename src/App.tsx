@@ -15,10 +15,10 @@ const App: FC = () => {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/faqs" element={<Faqs />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/FAQS" element={<Faqs />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/Contact" element={<Contact />} />
-          <Route path="/rif" element={<RIF />} />
+          <Route path="/RIF" element={<RIF />} />
         </Routes>
         <Footer />
       </Router>
