@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Contact() {
+const Contact: React.FC = () => {
   return (
     <section className="bg-white my-24">
       <div className="container px-6 py-12 mx-auto">
@@ -48,6 +48,6 @@ function Contact() {
       </div>
     </section>
   );
-}
+};
 
 export default Contact;
