@@ -3,7 +3,7 @@ import React from 'react';
 const Home: React.FC = () => {
   return (
     <>
-      <section className="bg-white my-32">
+      <section className="bg-white md:h-screen flex justify-center">
         <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           <div className="mr-auto place-self-center lg:col-span-7">
             <h1 className="text-5xl font-bold leading-none sm:text-6xl">
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
               Frequently Asked Questions
             </a> 
           </div>
-          <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
+          <div className="hidden lg:flex lg:mt-10 lg:col-span-5 ">
             <div className="relative rounded-lg overflow-hidden">
               <img src="https://c0.wallpaperflare.com/preview/453/640/998/building-philippines-ust.jpg" alt="mockup" className="w-full h-full"/>
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 opacity-50"></div>

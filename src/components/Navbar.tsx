@@ -5,7 +5,7 @@ const Navbar: React.FC = () => {
   return (
     <nav style={{ backgroundColor: '#121212' }} className="fixed w-full z-20 top-0 start-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/Home" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img
             src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t1.15752-9/426963797_1083902849549118_5791859232688171486_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=SLqvOkzzRY4AX-eGOLW&_nc_ht=scontent.fmnl25-1.fna&oh=03_AdQg1yKPWUhRV8ynkQ8WmwT1SIV8OCwl_23mWq9ZTM8E3g&oe=65F263F0"
             className="h-8"
@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="inline-flex items-center p-2 w-10 h-10 jusytify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="navbar-sticky"
             aria-expanded="false"
           >
@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
           <ul style={{ backgroundColor: '#121212' }} className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
             <li>
-              <Link to="/Home" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+              <Link to="/" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
                 Home
               </Link>
             </li>
