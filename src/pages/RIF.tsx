@@ -43,7 +43,15 @@ const RIF: FC = () => (
             <div className="relative w-full">
   <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Internal Client/Stakeholder</label>
   <div className="relative">
-    <input type="text" name="username" id="username" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="e.g. Academic Staff" required />
+  <input 
+  type="text" 
+  name="username" 
+  id="username" 
+  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
+  placeholder="e.g. Academic Staff" 
+  required 
+/>
+
     <button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -57,7 +65,14 @@ const RIF: FC = () => (
 <div className="relative w-full">
   <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">External Client/Stakeholder</label>
   <div className="relative">
-    <input type="text" name="username" id="username" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="e.g. Parents & Guardians" required />
+  <input 
+  type="text" 
+  name="username" 
+  id="username" 
+  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" 
+  placeholder="e.g. Parents & Guardians" 
+  required 
+/>
     <button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
