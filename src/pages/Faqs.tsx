@@ -2,7 +2,7 @@ import React from 'react';
 
 const Faqs: React.FC = () => {
   return (
-    <div className="max-w-screen-xl mx-auto px-5 bg-white min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-10 bg-white min-h-screen my-24">
       <div className="flex flex-col items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           FAQ
@@ -130,7 +130,7 @@ const Faqs: React.FC = () => {
           </details>
         </div>
       </div>
-    </div>
+    </div>  
   );
 }
 
