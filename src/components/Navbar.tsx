@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   return (
-    <nav style={{ backgroundColor: '#121212' }} className="fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+    <nav style={{ backgroundColor: '#121212' }} className="fixed w-full z-20 top-0 start-0 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img
