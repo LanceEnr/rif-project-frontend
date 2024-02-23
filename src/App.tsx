@@ -7,6 +7,7 @@ import Navbar from './user-side/components/Navbar';
 import NavbarAdmin from './admin/components/Navbar';
 import Footer from './user-side/components/Footer';
 import RIF from './user-side/pages/RIF';
+import RiskInputForm from'./admin/pages/RiskInputForm';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -14,14 +15,28 @@ const App: FC = () => {
   return (
     <>
       <Router>
-        <Navbar />
         <Routes>
-          <Route path="/FAQS" element={<Faqs />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/RIF" element={<RIF />} />
+          <Route path="/admin/*" element={
+            <>
+              <NavbarAdmin />
+              <Routes>
+                <Route path="/admin/risk" element={<RiskInputForm />} />
+              </Routes>
+            </>
+          } />
+          <Route path="/*" element={
+            <>
+              <Navbar />
+              <Routes>
+                <Route path="/FAQS" element={<Faqs />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/Contact" element={<Contact />} />
+                <Route path="/RIF" element={<RIF />} />
+              </Routes>
+              <Footer />
+            </>
+          } />
         </Routes>
-        <Footer />
       </Router>
     </>
   );

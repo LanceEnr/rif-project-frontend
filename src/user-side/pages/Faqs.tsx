@@ -2,134 +2,77 @@ import React from 'react';
 
 const Faqs: React.FC = () => {
   return (
-    <div className="max-w-screen-xl mx-auto px-10 bg-white min-h-screen my-24">
-      <div className="flex flex-col items-center">
+    <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+      <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
-          FAQ
+          Frequently Asked Questions
         </h2>
         <p className="text-neutral-500 text-xl mt-3">
-          Frequently asked questions
-        </p>
+        Frequently Asked Questions and How-to-Guides.
+</p>
+<hr className="h-px my-8 border-yellow-500 border-2"/>
+
       </div>
-      <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> What is a SAAS platform?</span>
-              <span className="transition group-open:rotate-180">
-                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-              </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:fadeIn">
-              SAAS platform is a cloud-based software service that allows users to access and use a variety of tools and functionality.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> Can I get a refund for my subscription?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-              We offer a 30-day money-back guarantee for most of its subscription plans. If you are not
-              satisfied with your subscription within the first 30 days, you can request a full refund. Refunds
-              for subscriptions that have been active for longer than 30 days may be considered on a case-by-case
-              basis.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> How do I cancel my subscription?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-              To cancel your We subscription, you can log in to your account and navigate to the
-              subscription management page. From there, you should be able to cancel your subscription and stop
-              future billing.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> Can I try this platform for free?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-              We offer a free trial of its platform for a limited time. During the trial period,
-              you will have access to a limited set of features and functionality, but you will not be charged.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> How do I access documentation?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-                Documentation is available on the company's website and can be accessed by
-              logging in to your account. The documentation provides detailed information on how to use the platform,
-              as well as code examples and other resources.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> How do I contact support?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-              If you need help with the platform or have any other questions, you can contact the
-              company's support team by submitting a support request through the website or by emailing
-              support@We.com.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> Do you offer any discounts or promotions?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-              We may offer discounts or promotions from time to time. To stay up-to-date on the latest
-              deals and special offers, you can sign up for the company's newsletter or follow it on social media.
-            </p>
-          </details>
-        </div>
-        <div className="py-5">
-          <details className="group">
-            <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-              <span> How do we compare to other similar services?</span>
-              <span className="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                  </span>
-            </summary>
-            <p className="text-neutral-600 mt-3 group-open:animate-fadeIn">
-               This platform is a highly reliable and feature-rich service that offers a wide range
-              of tools and functionality. It is competitively priced and offers a variety of billing options to
-              suit different needs and budgets.
-            </p>
-          </details>
-        </div>
-      </div>
+
+      <div id="accordion-color" data-accordion="collapse" data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white">
+  <h2 id="accordion-color-heading-1">
+    <button type="button" className="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-color-body-1" aria-expanded="true" aria-controls="accordion-color-body-1">
+      <span>What is Flowbite?</span>
+      <svg data-accordion-icon className="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+      </svg>
+    </button>
+  </h2>
+  <div id="accordion-color-body-1" className="hidden" aria-labelledby="accordion-color-heading-1">
+    <div className="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+      <p className="mb-2 text-gray-500 dark:text-gray-400">Flowbite is an open-source library of interactive components built on top of Tailwind CSS including buttons, dropdowns, modals, navbars, and more.</p>
+      <p className="text-gray-500 dark:text-gray-400">Check out this guide to learn how to <a href="/docs/getting-started/introduction/" className="text-blue-600 dark:text-blue-500 hover:underline">get started</a> and start developing websites even faster with components on top of Tailwind CSS.</p>
+    </div>
+  </div>
+  <h2 id="accordion-color-heading-2">
+    <button type="button" className="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-color-body-2" aria-expanded="false" aria-controls="accordion-color-body-2">
+      <span>Is there a Figma file available?</span>
+      <svg data-accordion-icon className="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+      </svg>
+    </button>
+  </h2>
+  <div id="accordion-color-body-2" className="hidden" aria-labelledby="accordion-color-heading-2">
+    <div className="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
+      <p className="mb-2 text-gray-500 dark:text-gray-400">Flowbite is first conceptualized and designed using the Figma software so everything you see in the library has a design equivalent in our Figma file.</p>
+      <p className="text-gray-500 dark:text-gray-400">Check out the <a href="https://flowbite.com/figma/" className="text-blue-600 dark:text-blue-500 hover:underline">Figma design system</a> based on the utility classNamees from Tailwind CSS and components from Flowbite.</p>
+    </div>
+  </div>
+  <h2 id="accordion-color-heading-2">
+    <button type="button" className="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-color-body-2" aria-expanded="false" aria-controls="accordion-color-body-2">
+      <span>Is there a Figma file available?</span>
+      <svg data-accordion-icon className="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+      </svg>
+    </button>
+  </h2>
+  <h2 id="accordion-color-heading-3">
+    <button type="button" className="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-color-body-3" aria-expanded="false" aria-controls="accordion-color-body-3">
+      <span>What are the differences between Flowbite and Tailwind UI?</span>
+      <svg data-accordion-icon className="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+      </svg>
+    </button>
+  </h2>
+  <div id="accordion-color-body-3" className="hidden" aria-labelledby="accordion-color-heading-3">
+    <div className="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
+      <p className="mb-2 text-gray-500 dark:text-gray-400">The main difference is that the core components from Flowbite are open source under the MIT license, whereas Tailwind UI is a paid product. Another difference is that Flowbite relies on smaller and standalone components, whereas Tailwind UI offers sections of pages.</p>
+      <p className="mb-2 text-gray-500 dark:text-gray-400">However, we actually recommend using both Flowbite, Flowbite Pro, and even Tailwind UI as there is no technical reason stopping you from using the best of two worlds.</p>
+      <p className="mb-2 text-gray-500 dark:text-gray-400">Learn more about these technologies:</p>
+      <ul className="ps-5 text-gray-500 list-disc dark:text-gray-400">
+        <li><a href="https://flowbite.com/pro/" className="text-blue-600 dark:text-blue-500 hover:underline">Flowbite Pro</a></li>
+        <li><a href="https://tailwindui.com/" rel="nofollow" className="text-blue-600 dark:text-blue-500 hover:underline">Tailwind UI</a></li>
+      </ul>
+    </div>
+  </div>
+  
+</div>
+      
     </div>  
   );
 }
