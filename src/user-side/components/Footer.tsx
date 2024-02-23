@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
-                <h2 className="mb-6 text-sm font-semibold uppercase text-white">Resources</h2>
+                <h2 className="mb-6 text-sm font-semibold uppercase text-white">Resourcess</h2>
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
                     <a href="https://flowbite.com/" className="hover:underline">
