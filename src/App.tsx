@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import './App.css';
-import Home from './pages/Home';
-import Faqs from './pages/Faqs';
-import Contact from './pages/Contact';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import RIF from './pages/RIF';
+import Home from './user-side/pages/Home';
+import Faqs from './user-side/pages/Faqs';
+import Contact from './user-side/pages/Contact';
+import Navbar from './user-side/components/Navbar';
+import NavbarAdmin from './admin/components/Navbar';
+import Footer from './user-side/components/Footer';
+import RIF from './user-side/pages/RIF';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
