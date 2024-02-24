@@ -8,6 +8,7 @@ import NavbarAdmin from './admin/components/Navbar';
 import Footer from './user-side/components/Footer';
 import RIF from './user-side/pages/RIF';
 import RiskInputForm from'./admin/pages/RiskInputForm';
+import DocumentGrid from'./admin/pages/DocumentGrid';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ const App: FC = () => {
               <NavbarAdmin />
               <Routes>
                 <Route path="/admin/risk" element={<RiskInputForm />} />
+                <Route path="/admin/grid" element={<DocumentGrid />} />
               </Routes>
             </>
           } />
