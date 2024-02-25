@@ -21,9 +21,10 @@ const App: FC = () => {
             <>
               <NavbarAdmin />
         <Routes>
-            <Route path="risk" element={<RiskInputForm />} />
-            <Route path="grid" element={<DocumentGrid />} />
+            <Route path="risk" element={<RiskInputForm />} />  {/* Ganto maglagay sa LINK /admin/risk */}
+            <Route path="grid" element={<DocumentGrid />} />   {/* Ganto maglagay sa LINK /admin/grid */}
         </Routes>
+        <Footer />
             </>
           } />
 
