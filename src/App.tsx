@@ -9,6 +9,7 @@ import Footer from "./user-side/components/Footer";
 import RIF from "./user-side/pages/RIF";
 import RiskInputForm from "./admin/pages/RiskInputForm";
 import DocumentGrid from "./admin/pages/DocumentGrid";
+import Users from "./admin/pages/Users";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RifTracker from "./admin/pages/RifTracker";
@@ -33,7 +34,7 @@ const App: FC = () => {
                   <Route path="grid" element={<DocumentGrid />} />{" "}
                   {/* Ganto maglagay sa LINK /admin/grid */}
                   <Route path="tracker" element={<RifTracker />} />
-   
+                  <Route path="users" element={<Users />} />
                 </Routes>
                 </div>
                 </div>
