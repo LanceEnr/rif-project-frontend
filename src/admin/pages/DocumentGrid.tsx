@@ -52,9 +52,9 @@ const DocumentGrid: React.FC = () => {
         "date": "2024-02-26"
       },
       {
-        "title": "Document Sample 8",
-        "img": "https://www.pdffiller.com/preview/332/872/332872673.png",
-        "content": "Sample 8",
+        "title": "Upload",
+        "img": "https://scontent.xx.fbcdn.net/v/t1.15752-9/429637004_356724257234498_589925347412608636_n.png?stp=dst-png_p403x403&_nc_cat=101&ccb=1-7&_nc_sid=510075&_nc_ohc=cspa9hmF9mcAX-w4GCB&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8EJFYneb2zZQ-Qs-YJoR00ZaRGhpKtUA1mURQ7NIlJw&oe=6603960F",
+        "content": "Document",
         "date": "2024-02-26"
       }
 
@@ -102,12 +102,19 @@ const DocumentGrid: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
     <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
-      {posts.map((item, index) => (
-        <div className="w-full rounded-lg shadow-md lg:max-w-sm" key={index}>
+        {posts.map((item, index) => (
+        <div className="w-full rounded-lg shadow-md lg:max-w-sm" key={index} style={{ cursor: 'pointer' }}>
           <img
-            className="object-cover w-full h-64 rounded-t-lg"
-            src={item.img}
-            alt="image"
+          className="object-cover w-full h-64 rounded-t-lg"
+          src={item.img}
+          alt="image"
+          style={{ transition: 'transform 0.3s' }}
+          onMouseOver={(e) => {
+          (e.target as HTMLImageElement).style.transform = 'scale(1.1)';
+          }}
+          onMouseOut={(e) => {
+          (e.target as HTMLImageElement).style.transform = 'scale(1)';
+          }}
           />
           <div className="p-4 rounded-b-lg">
             <h4 className="text-l font-semibold">
