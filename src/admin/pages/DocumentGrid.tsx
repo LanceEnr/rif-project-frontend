@@ -61,7 +61,7 @@ const DocumentGrid: React.FC = () => {
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5 p-10 pl-20 relative">
+    <div className="grid gap-7 lg:grid-cols-5 p-10 pl-18 relative">
       {posts.map((item, index) => (
         <div className="w-full rounded-lg shadow-md lg:max-w-sm" key={index}>
           <img
@@ -84,7 +84,7 @@ const DocumentGrid: React.FC = () => {
               Read more
             </button>
             <div className="svg-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-three-dots-vertica" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-three-dots-vertica" viewBox="0 0 16 16">
             <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
             </svg>
             </div>
