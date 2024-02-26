@@ -108,9 +108,9 @@ const DocumentGrid: React.FC = () => {
           className="object-cover w-full h-64 rounded-t-lg"
           src={item.img}
           alt="image"
-          style={{ transition: 'transform 0.3s' }}
+          style={{ transition: 'transform 0.5s' }}
           onMouseOver={(e) => {
-          (e.target as HTMLImageElement).style.transform = 'scale(1.1)';
+          (e.target as HTMLImageElement).style.transform = 'scale(1.03)';
           }}
           onMouseOut={(e) => {
           (e.target as HTMLImageElement).style.transform = 'scale(1)';
