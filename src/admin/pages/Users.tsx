@@ -6,7 +6,7 @@ const Users: React.FC = () => {
         <div className="flex flex-col items-right">
           <h2 className="font-bold text-5xl mt-5 tracking-tight">Users</h2>
           <div className="flex justify-between items-center">
-            <p className="text-neutral-500 text-xl mt-3">For tracking Users.</p>
+            <p className="text-neutral-500 text-xl mt-3">For user management</p>
             <form action="#" method="GET" className="hidden lg:block lg:pl-2">
               <label className="sr-only">Search</label>
               <div className="relative mt-1 lg:w-72">
@@ -39,7 +39,7 @@ const Users: React.FC = () => {
           </div>
           <hr className="h-px my-8 border-yellow-500 border-2" />
         </div>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-x-auto">
   <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
     {/* Dropdown */}
     <div>
@@ -157,13 +157,13 @@ const Users: React.FC = () => {
       </tr>
     </thead>
     <tbody>
-    <tr className="bg-black-800 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-80 dark:hover:bg-gray-600">
+    <tr className="bg-black-800 border-b  hover:bg-gray-80 ">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
                     id="checkbox-table-search-1"
                     type="checkbox"
-                    className="w-4 h-4 text-black-600 bg-gray-100 border-black-300 rounded focus:ring-black-500 dark:focus:ring-black-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 text-black-600 bg-gray-100 border-black-300 rounded focus:ring-black-500    focus:ring-2 "
                   />
                   <label
                     htmlFor="checkbox-table-search-1"
@@ -173,25 +173,117 @@ const Users: React.FC = () => {
               </td>
               <th
                 scope="row"
-                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
               >
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
+                  src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/352821016_9573881405985280_623867098206874102_n.jpg?stp=cp6_dst-jpg&_nc_cat=107&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=fmqqGk02Tn4AX-R22bv&_nc_ht=scontent.fmnl25-4.fna&oh=00_AfBKXL2Zw3_yaGcP718sKI9HFGfia5A220jvZT5t66y8NA&oe=65E222AE"
                   alt="Jese image"
                 />
                 <div className="ps-3">
-                  <div className="text-base font-semibold">Neil Sims</div>
+                  <div className="text-base font-semibold">Lance Enriquez</div>
                   <div className="font-normal text-gray-500">
-                    neil.sims@flowbite.com
+                    2020145167
                   </div>
                 </div>
               </th>
-              <td className="px-6 py-4">React Developer</td>
+              <td className="px-6 py-4">Admin</td>
               <td className="px-6 py-4">
                 <div className="flex items-center">
                   <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Online
+                 Active
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <a
+                  href="#"
+                  className="font-medium text-blue-600  hover:underline"
+                >
+                  Edit user
+                </a>
+              </td>
+            </tr>
+            <tr className="bg-white border-b hover:bg-gray-50 ">
+              <td className="w-4 p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-table-search-2"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500   focus:ring-2  "
+                  />
+                  <label
+                    htmlFor="checkbox-table-search-2"
+                    className="sr-only"
+                  ></label>
+                </div>
+              </td>
+              <th
+                scope="row"
+                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+              >
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/212452355_2957425344585931_358762392788928651_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=9c7eae&_nc_ohc=XHnIDAMRITkAX84EP8U&_nc_ht=scontent.fmnl25-4.fna&oh=00_AfD2qRTCpBrf0k7ejjaTU5kh_tNxLsavN9OZ73QBVpv3hg&oe=65E0872E"
+                  alt="Jese image"
+                />
+                <div className="ps-3">
+                  <div className="text-base font-semibold">Neil Camacho</div>
+                  <div className="font-normal text-gray-500">
+                    2020167888
+                  </div>
+                </div>
+              </th>
+              <td className="px-6 py-4">User</td>
+              <td className="px-6 py-4">
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                  Active
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <a
+                  href="#"
+                  className="font-medium text-blue-600  hover:underline"
+                >
+                  Edit user
+                </a>
+              </td>
+            </tr>
+            <tr className="bg-white border-b  hover:bg-gray-50 ">
+              <td className="w-4 p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-table-search-2"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
+                  />
+                  <label
+                    htmlFor="checkbox-table-search-2"
+                    className="sr-only"
+                  ></label>
+                </div>
+              </td>
+              <th
+                scope="row"
+                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src="https://scontent.fmnl25-2.fna.fbcdn.net/v/t39.30808-6/279970307_2217365751752200_2184535295422659046_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=9c7eae&_nc_ohc=_tXBzPOcJY0AX_P7xzg&_nc_ht=scontent.fmnl25-2.fna&oh=00_AfDulBW2aYiBR_6aBlp7429HsJWcPnhHXDyL_Kskwor3Kw&oe=65E06350"
+                  alt="Jese image"
+                />
+                <div className="ps-3">
+                  <div className="text-base font-semibold">Charles Jose</div>
+                  <div className="font-normal text-gray-500">
+                    2020178789
+                  </div>
+                </div>
+              </th>
+              <td className="px-6 py-4">User</td>
+              <td className="px-6 py-4">
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                  Active
                 </div>
               </td>
               <td className="px-6 py-4">
@@ -209,7 +301,7 @@ const Users: React.FC = () => {
                   <input
                     id="checkbox-table-search-2"
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
                   />
                   <label
                     htmlFor="checkbox-table-search-2"
@@ -223,113 +315,21 @@ const Users: React.FC = () => {
               >
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-3.jpg"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Bonnie Green</div>
-                  <div className="font-normal text-gray-500">
-                    bonnie@flowbite.com
-                  </div>
-                </div>
-              </th>
-              <td className="px-6 py-4">Designer</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Online
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-2"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-2"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-2.jpg"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Jese Leos</div>
-                  <div className="font-normal text-gray-500">
-                    jese@flowbite.com
-                  </div>
-                </div>
-              </th>
-              <td className="px-6 py-4">Vue JS Developer</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Online
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-2"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-2"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-5.jpg"
+                  src="https://mymodernmet.com/wp/wp-content/uploads/2019/09/100k-ai-faces-5.jpg"
                   alt="Jese image"
                 />
                 <div className="ps-3">
                   <div className="text-base font-semibold">Thomas Lean</div>
                   <div className="font-normal text-gray-500">
-                    thomes@flowbite.com
+                    2020898721
                   </div>
                 </div>
               </th>
-              <td className="px-6 py-4">UI/UX Engineer</td>
+              <td className="px-6 py-4">User</td>
               <td className="px-6 py-4">
                 <div className="flex items-center">
                   <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Online
+                  Active
                 </div>
               </td>
               <td className="px-6 py-4">
@@ -347,7 +347,7 @@ const Users: React.FC = () => {
                   <input
                     id="checkbox-table-search-3"
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
                   />
                   <label
                     htmlFor="checkbox-table-search-3"
@@ -361,7 +361,7 @@ const Users: React.FC = () => {
               >
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-4.jpg"
+                  src="https://images.nightcafe.studio//assets/man-in-suit.jpg?tr=w-1600,c-at_max"
                   alt="Jese image"
                 />
                 <div className="ps-3">
@@ -369,15 +369,15 @@ const Users: React.FC = () => {
                     Leslie Livingston
                   </div>
                   <div className="font-normal text-gray-500">
-                    leslie@flowbite.com
+                    2020899829
                   </div>
                 </div>
               </th>
-              <td className="px-6 py-4">SEO Specialist</td>
+              <td className="px-6 py-4">User</td>
               <td className="px-6 py-4">
                 <div className="flex items-center">
                   <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
-                  Offline
+                  Deactivated
                 </div>
               </td>
               <td className="px-6 py-4">
