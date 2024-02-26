@@ -24,13 +24,20 @@ const App: FC = () => {
             element={
               <>
                 <SideNavbar />
+                <div className="p-4 sm:ml-64">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
                 <Routes>
+
                   <Route path="risk" element={<RiskInputForm />} />{" "}
                   {/* Ganto maglagay sa LINK /admin/risk */}
                   <Route path="grid" element={<DocumentGrid />} />{" "}
                   {/* Ganto maglagay sa LINK /admin/grid */}
                   <Route path="tracker" element={<RifTracker />} />
+   
                 </Routes>
+                </div>
+                </div>
+             
               </>
             }
           />

@@ -3,7 +3,8 @@ import React from "react";
 const SideNavbar: React.FC = () => {
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav         style={{ backgroundColor: "#121212" }}
+ className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -31,12 +32,12 @@ const SideNavbar: React.FC = () => {
               </button>
               <a href="https://flowbite.com" className="flex ms-2 md:me-24">
                 <img
-                  src="https://flowbite.com/docs/images/logo.svg"
+                  src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t1.15752-9/426963797_1083902849549118_5791859232688171486_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=SLqvOkzzRY4AX-eGOLW&_nc_ht=scontent.fmnl25-1.fna&oh=03_AdQg1yKPWUhRV8ynkQ8WmwT1SIV8OCwl_23mWq9ZTM8E3g&oe=65F263F0"
                   className="h-8 me-3"
                   alt="FlowBite Logo"
                 />
-                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  Flowbite
+                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-yellow-500">
+                  YellowAlert
                 </span>
               </a>
             </div>
@@ -121,12 +122,13 @@ const SideNavbar: React.FC = () => {
       </nav>
 
       <aside
-        id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidebar"
-      >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <ul className="space-y-2 font-medium">
+
+  id="logo-sidebar"
+  className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
+  aria-label="Sidebar"
+>
+  <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
+    <ul className="space-y-2 font-medium">
             <li>
               <a
                 href="#"
@@ -265,7 +267,7 @@ const SideNavbar: React.FC = () => {
         </div>
       </aside>
 
-
+      
     </>
   );
 };
