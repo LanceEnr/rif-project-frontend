@@ -4,16 +4,16 @@ import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
 import Contact from "./user-side/pages/Contact";
 import Navbar from "./user-side/components/Navbar";
-import NavbarAdmin from "./admin/components/Navbar";
 import Footer from "./user-side/components/Footer";
 import RIF from "./user-side/pages/RIF";
-import RiskInputForm from "./admin/pages/RiskInputForm";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RifTracker from "./admin/pages/RifTracker";
 import SideNavbar from "./admin/components/SideNavbar";
+import AddStakeholders from "./user-side/pages/AddStakeholders";
+import Prerequisites from "./user-side/pages/Prerequisites";
 
 const App: FC = () => {
   return (
@@ -29,10 +29,9 @@ const App: FC = () => {
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
                 <Routes>
 
-                  <Route path="risk" element={<RiskInputForm />} />{" "}
-                  {/* Ganto maglagay sa LINK /admin/risk */}
-                  <Route path="grid" element={<DocumentGrid />} />{" "}
-                  {/* Ganto maglagay sa LINK /admin/grid */}
+
+                  <Route path="grid" element={<DocumentGrid />} />
+ 
                   <Route path="tracker" element={<RifTracker />} />
                   <Route path="users" element={<Users />} />
                 </Routes>
@@ -53,6 +52,10 @@ const App: FC = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/Contact" element={<Contact />} />
                   <Route path="/RIF" element={<RIF />} />
+                  <Route path="/addstakeholders" element={<AddStakeholders />} />
+                  <Route path="/prerequisites" element={<Prerequisites />} />
+
+
                 </Routes>
                 <Footer />
               </>
