@@ -3,8 +3,8 @@ import React from "react";
 const EditUser: React.FC = () => {
   return (
     <div className="mx-4 min-h-screen max-w-screen-xl sm:mx-8 xl:mx-auto">
-  <h1 className="border-b py-6 text-4xl font-semibold">Edit User Settings</h1>
-
+  <h1 className="font-bold text-5xl mt-5 tracking-tight">Edit User Settings</h1>
+  <hr className="h-px my-8 border-yellow-500 border-2" />
     <div className="col-span-8 overflow-hidden rounded-xl sm:bg-gray-50 sm:px-8 sm:shadow">
       <div className="pt-4">
         <h1 className="py-2 text-2xl font-semibold">Edit Password</h1>
@@ -33,7 +33,7 @@ const EditUser: React.FC = () => {
       <hr className="mt-4 mb-8"/>
       <div className="mb-10">
       <div className='flex justify-between'>
-        <p className="py-2 text-xl font-semibold">Administrator Privilages</p>
+        <p className="py-2 text-xl font-semibold">Administrator Privileges</p>
           <label className="inline-flex items-center cursor-pointer">
             <input type="checkbox" value="" className="sr-only peer" checked/>
             <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-black-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div> 
@@ -65,7 +65,7 @@ const EditUser: React.FC = () => {
       <hr className="mt-4 mb-8"/>
       <div className="mb-10">
       <div className='flex justify-between'>
-        <p className="py-2 text-xl font-semibold">Administrator Privilages</p>
+        <p className="py-2 text-xl font-semibold">Administrator Privileges</p>
           <label className="inline-flex items-center cursor-pointer">
             <input type="checkbox" value="" className="sr-only peer" checked/>
             <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-black-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div> 
