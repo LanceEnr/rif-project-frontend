@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Users: React.FC = () => {
   return (
@@ -195,12 +196,9 @@ const Users: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit user
-                </a>
+              <Link to="/admin/editUser " className="font-medium text-blue-600 hover:underline">
+                Edit user
+              </Link>
               </td>
             </tr>
             <tr className="bg-white border-b hover:bg-gray-50 ">
@@ -265,7 +263,7 @@ const Users: React.FC = () => {
               </td>
               <th
                 scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
                 <img
                   className="w-10 h-10 rounded-full"
@@ -289,13 +287,13 @@ const Users: React.FC = () => {
               <td className="px-6 py-4">
                 <a
                   href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  className="font-medium text-blue-600 hover:underline"
                 >
                   Edit user
                 </a>
               </td>
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr className="bg-white border-b hover:bg-gray-50">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -311,7 +309,7 @@ const Users: React.FC = () => {
               </td>
               <th
                 scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
               >
                 <img
                   className="w-10 h-10 rounded-full"
@@ -335,13 +333,13 @@ const Users: React.FC = () => {
               <td className="px-6 py-4">
                 <a
                   href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  className="font-medium text-blue-600  hover:underline"
                 >
                   Edit user
                 </a>
               </td>
             </tr>
-            <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr className="bg-white hover:bg-gray-50 ">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -357,7 +355,7 @@ const Users: React.FC = () => {
               </td>
               <th
                 scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
                 <img
                   className="w-10 h-10 rounded-full"
@@ -383,7 +381,7 @@ const Users: React.FC = () => {
               <td className="px-6 py-4">
                 <a
                   href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  className="font-medium text-blue-600  hover:underline"
                 >
                   Edit user
                 </a>
