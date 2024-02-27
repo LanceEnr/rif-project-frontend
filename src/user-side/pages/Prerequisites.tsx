@@ -36,25 +36,7 @@ const Prerequisites: React.FC = () => {
 
 
       <div className="mb-10">
-      <form action="#">
-          <h3 className="mb-4 text-lg font-medium leading-none text-gray-900">Pre-requisites</h3>
-          <div className="grid gap-4 mb-4 sm:grid-cols-1">
-            <div>
-              <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Administrative/Academic Unit</label>
-              <input type="text" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" placeholder="e.g. College of Education"/>
-            </div>
-
-            <div className="relative w-full">
-  <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Internal Client/Stakeholder</label>
-  <div className="relative">
-  <input 
-  type="text" 
-  name="username" 
-  id="username" 
-  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
-  placeholder="e.g. Academic Staff" 
-  required 
-/>
+ 
       </div>
     </div>
   </div>
