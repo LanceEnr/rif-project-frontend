@@ -15,6 +15,8 @@ import RifTracker from "./admin/pages/RifTracker";
 import SideNavbar from "./admin/components/SideNavbar";
 import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
+import Esignature from "./user-side/pages/Esignature";
+
 
 const App: FC = () => {
   return (
@@ -55,6 +57,8 @@ const App: FC = () => {
                   <Route path="/RIF" element={<RIF />} />
                   <Route path="/addstakeholders" element={<AddStakeholders />} />
                   <Route path="/prerequisites" element={<Prerequisites />} />
+                  <Route path="/esignature" element={<Esignature />} />
+
 
 
                 </Routes>

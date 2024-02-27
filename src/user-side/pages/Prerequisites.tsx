@@ -1,10 +1,19 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 
 const Prerequisites: React.FC = () => {
   return (
     <>
- <div className="mx-4 my-16 min-h-screen max-w-screen-xl sm:mx-8 xl:mx-auto">
-  <h1 className="border-b py-6 text-4xl font-semibold">Settings</h1>
+    <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+ <div className="flex flex-col items-right">
+        <h2 className="font-bold text-5xl mt-5 tracking-tight">
+      Settings
+        </h2>
+  
+<hr className="h-px my-8 border-yellow-500 border-2"/>
+
+      </div>
   <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">
     <div className="relative my-4 w-56 sm:hidden">
       <input className="peer hidden" type="checkbox" name="select-1" id="select-1" />
@@ -21,8 +30,8 @@ const Prerequisites: React.FC = () => {
 
     <div className="col-span-2 hidden sm:block">
       <ul>
-      <li className="mt-5 cursor-pointer border-l-2 border-l-yellow-500 px-2 py-2 font-semibold text-yellow-500 transition hover:border-l-yellow-500 hover:text-yellow-500">Prerequisites</li>
-        <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-yellow-500 hover:text-yellow-500">E-Signature</li>
+   <li className="mt-5 cursor-pointer border-l-2 border-l-yellow-500 px-2 py-2 font-semibold text-yellow-500 transition hover:border-l-yellow-500 hover:text-yellow-500">Prerequisites</li>
+      <Link to="/esignature"> <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-yellow-500 hover:text-yellow-500">E-Signature Upload</li></Link>
 
       </ul>
     </div>
@@ -32,62 +41,64 @@ const Prerequisites: React.FC = () => {
         <h1 className="py-2 text-2xl font-semibold">Prerequisites</h1>
       </div>
       <hr className="mt-4 mb-8" />
-      <form action="#">
-          <h3 className="mb-4 text-lg font-medium leading-none text-gray-900">Pre-requisites</h3>
-          <div className="grid gap-4 mb-4 sm:grid-cols-1">
-            <div>
-              <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Administrative/Academic Unit</label>
-              <input type="text" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" placeholder="e.g. College of Education"/>
-            </div>
+     
 
-            <div className="relative w-full">
-  <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Internal Client/Stakeholder</label>
-  <div className="relative">
-  <input 
-  type="text" 
-  name="username" 
-  id="username" 
-  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
-  placeholder="e.g. Academic Staff" 
-  required 
+
+      <div className="mb-10">
+      
+
+<form action="#">
+    <div className="grid gap-4 mb-4 sm:grid-cols-1">
+      <div>
+        <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Administrative/Academic Unit</label>
+        <input type="text" name="username" id="username" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5" placeholder="e.g. College of Education"/>
+      </div>
+
+      <div className="relative w-full">
+<label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Internal Client/Stakeholder</label>
+<div className="relative">
+<input 
+type="text" 
+name="username" 
+id="username" 
+className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
+placeholder="e.g. Academic Staff" 
+required 
 />
-    <button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-      </svg>
-    </button>
-  </div>
+<button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+</svg>
+</button>
+</div>
 </div>
 
 
 
 <div className="relative w-full">
-  <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">External Client/Stakeholder</label>
-  <div className="relative">
-  <input 
-  type="text" 
-  name="username" 
-  id="username" 
-  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" 
-  placeholder="e.g. Parents & Guardians" 
-  required 
+<label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">External Client/Stakeholder</label>
+<div className="relative">
+<input 
+type="text" 
+name="username" 
+id="username" 
+className="block p-2.5 w-full bg-white z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" 
+placeholder="e.g. Parents & Guardians" 
+required 
 />
-    <button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-      </svg>
-    </button>
-  </div>
+<button type="button" className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 ">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+</svg>
+</button>
 </div>
-          </div>
-          <button type="submit" className="text-white bg-yellow-500 w-full font-medium rounded-lg text-sm px-5 py-2.5">
-            Save
-          </button>
-        </form>
+</div>
+    </div>
+    <button type="submit" className="text-white bg-yellow-500 hover:bg-yellow-600  font-medium rounded-lg text-sm px-5 py-2.5">
+      Save all
+    </button>
 
-
-      <div className="mb-10">
- 
+  </form>
       </div>
     </div>
   </div>
