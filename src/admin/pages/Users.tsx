@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Users: React.FC = () => {
   return (
@@ -195,12 +196,9 @@ const Users: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit user
-                </a>
+              <Link to="/admin/editUser " className="font-medium text-blue-600 hover:underline">
+                Edit user
+              </Link>
               </td>
             </tr>
             <tr className="bg-white border-b hover:bg-gray-50 ">

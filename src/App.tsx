@@ -10,6 +10,7 @@ import RIF from "./user-side/pages/RIF";
 import RiskInputForm from "./admin/pages/RiskInputForm";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
+import EditUser from "./admin/pages/EditUser";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RifTracker from "./admin/pages/RifTracker";
@@ -26,15 +27,15 @@ const App: FC = () => {
               <>
                 <SideNavbar />
                 <div className="p-4 sm:ml-64">
-        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+                <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
                 <Routes>
-
                   <Route path="risk" element={<RiskInputForm />} />{" "}
                   {/* Ganto maglagay sa LINK /admin/risk */}
                   <Route path="grid" element={<DocumentGrid />} />{" "}
                   {/* Ganto maglagay sa LINK /admin/grid */}
                   <Route path="tracker" element={<RifTracker />} />
                   <Route path="users" element={<Users />} />
+                  <Route path="editUser" element={<EditUser />} />
                 </Routes>
                 </div>
                 </div>
@@ -42,7 +43,6 @@ const App: FC = () => {
               </>
             }
           />
-
           <Route
             path="/*"
             element={
