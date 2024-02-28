@@ -17,6 +17,7 @@ import SideNavbar from "./admin/components/SideNavbar";
 import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
+import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
 
 
 const App: FC = () => {
@@ -59,6 +60,9 @@ const App: FC = () => {
                   <Route path="/addstakeholders" element={<AddStakeholders />} />
                   <Route path="/prerequisites" element={<Prerequisites />} />
                   <Route path="/esignature" element={<Esignature />} />
+                  <Route path="/form" element={<RiskIdentificationForm />} />
+
+
                   <Route path="/submissions" element={<SubmissionHistory />} />
 
 
