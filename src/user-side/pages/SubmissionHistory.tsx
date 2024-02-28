@@ -44,13 +44,7 @@ const SubmissionHistory: React.FC = () => {
         "img": "https://www.pdffiller.com/preview/332/872/332872673.png",
         "content": "Sample 6",
         "date": "2024-03-26"
-      },
-      {
-        "title": "Blank Document Upload",
-        "img": "data:image/png;base64,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",
-        "content": "Click to upload your Document",
-        "date": ""
-      },    
+      },   
   ];
 
   return (
@@ -94,14 +88,23 @@ const SubmissionHistory: React.FC = () => {
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
+
+    <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
+        <div style={{ cursor: 'pointer' }} className="bg-white hover:shadow-md rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400">
+            <svg className="h-16 w-24 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+        </div>
+
         {posts.map((item, index) => (
           <div className="w-full rounded-lg shadow-md lg:max-w-sm" key={index} style={{ cursor: 'pointer' }}>
             <img
               className="object-cover w-full h-64 rounded-t-lg"
               src={item.img}
               alt="image"
-              style={{ transition: 'transform .0.5s' }}
+              style={{ transition: 'transform .01s' }}
               onMouseOver={(e) => {
                 (e.target as HTMLImageElement).style.transform = 'scale(1.03)';
               }}
