@@ -9,6 +9,7 @@ import RIF from "./user-side/pages/RIF";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
+import SubmissionHistory from "./user-side/pages/SubmissionHistory";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RifTracker from "./admin/pages/RifTracker";
@@ -58,7 +59,7 @@ const App: FC = () => {
                   <Route path="/addstakeholders" element={<AddStakeholders />} />
                   <Route path="/prerequisites" element={<Prerequisites />} />
                   <Route path="/esignature" element={<Esignature />} />
-
+                  <Route path="/submissions" element={<SubmissionHistory />} />
 
 
                 </Routes>
