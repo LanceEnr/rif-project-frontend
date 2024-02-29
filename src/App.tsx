@@ -18,6 +18,7 @@ import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
+import Analytics from "./admin/pages/Analytics";
 
 
 const App: FC = () => {
@@ -40,6 +41,7 @@ const App: FC = () => {
                   <Route path="tracker" element={<RifTracker />} />
                   <Route path="users" element={<Users />} />
                   <Route path="editUser" element={<EditUser />} />
+                  <Route path="analytics" element={<Analytics />} />
                 </Routes>
                 </div>
                 </div>
