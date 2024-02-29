@@ -104,7 +104,7 @@ const SubmissionHistory: React.FC = () => {
               className="object-cover w-full h-64 rounded-t-lg"
               src={item.img}
               alt="image"
-              style={{ transition: 'transform .01s' }}
+              style={{ transition: 'transform 1s' }}
               onMouseOver={(e) => {
                 (e.target as HTMLImageElement).style.transform = 'scale(1.03)';
               }}
