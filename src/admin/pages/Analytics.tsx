@@ -7,7 +7,7 @@ const Analytics: React.FC = () => {
 
         {/* 1st tab */}
         <div className="flex items-center justify-center h-72 rounded bg-gray-100">
-        <div className="max-w-sm w-full bg-white rounded-lg h-64 shadow md:p-1">
+        <div className="max-w-sm w-full bg-white rounded-lg my-2 h-64 shadow md:p-3">
         <div>
         <h2 className="py-3 text-2xl font-bold">College of Information and Computing Sciences</h2>
         </div>
@@ -19,10 +19,10 @@ const Analytics: React.FC = () => {
             <div>
                 <h5 className="leading-none text-2xl font-bold text-gray-900 pb-1">3.4k</h5>
                 <p className="text-sm font-normal text-gray-500">Risk Generated</p>
-            </div>
+            </div>x
             </div>
             <div>
-            <span className="bg-yellow-400 text-white text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
+            <span className="bg-yellow-500 text-white text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
                 <svg className="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"/>
                 </svg>
@@ -93,7 +93,7 @@ const Analytics: React.FC = () => {
 
             {/* 2nd tab */}
             <div className="flex items-center justify-center h-72 rounded bg-gray-100">
-            <div className="max-w-sm w-full bg-white rounded-lg h-64 shadow p-10 md:p-3">
+            <div className="max-w-sm w-full bg-white rounded-lg h-64 my-2 shadow p-10 md:p-3">
             <div>
             <h2 className="py-3 text-2xl font-bold">College of Information and Computing Sciences</h2>
             </div>
@@ -184,7 +184,7 @@ const Analytics: React.FC = () => {
 
             {/* 3rd tab */}
             <div className="flex items-center justify-center h-72 rounded bg-gray-100">  
-            <div className="max-w-sm w-full bg-white rounded-lg h-64 shadow md:p-1">
+            <div className="max-w-sm w-full bg-white rounded-lg my-2 h-64 shadow md:p-1">
             <div>
             <h2 className="py-1 text-xl font-bold">College of Information and Computing Sciences</h2>
             </div>
@@ -206,11 +206,11 @@ const Analytics: React.FC = () => {
             <div className="grid grid-cols-2 py-3">
                 <dl>
                 <dt className="text-base font-normal text-gray-500 pb-1">Income</dt>
-                <dd className="leading-none text-xl font-bold text-green-500">$23,635</dd>
+                <dd className="leading-none text-xl font-bold text-green-800">$23,635</dd>
                 </dl>
                 <dl>
                 <dt className="text-base font-normal text-gray-500 pb-1">Expense</dt>
-                <dd className="leading-none text-xl font-bold text-red-600">-$18,230</dd>
+                <dd className="leading-none text-xl font-bold text-red-800">-$18,230</dd>
                 </dl>
             </div>
 
@@ -255,7 +255,7 @@ const Analytics: React.FC = () => {
                     </div>
                     <a
                     href="#"
-                    className="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 hover:bg-gray-100 px-3 py-2">
+                    className="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-yellow-500 hover:text-blue-700 hover:bg-gray-100 px-3 py-2">
                     Revenue Report
                     <svg className="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
