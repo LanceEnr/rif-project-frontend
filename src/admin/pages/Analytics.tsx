@@ -7,7 +7,8 @@ const Analytics: React.FC = () => {
 
         {/* 1st tab */}
         <div className="flex items-center justify-center h-72 rounded bg-gray-100">
-        <div className="max-w-sm w-full bg-white rounded-lg my-2 h-64 shadow md:p-3">
+        <div className="max-w-sm w-full bg-white rounded-lg  h-64 shadow md:p-3">
+        <div>
         <div>
         <h2 className="py-3 text-2xl font-bold">College of Information and Computing Sciences</h2>
         </div>
@@ -19,7 +20,7 @@ const Analytics: React.FC = () => {
             <div>
                 <h5 className="leading-none text-2xl font-bold text-gray-900 pb-1">3.4k</h5>
                 <p className="text-sm font-normal text-gray-500">Risk Generated</p>
-            </div>x
+            </div>
             </div>
             <div>
             <span className="bg-yellow-500 text-white text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
@@ -86,6 +87,7 @@ const Analytics: React.FC = () => {
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                 </svg>
                 </a>
+            </div>
             </div>
             </div>
             </div>
