@@ -77,21 +77,21 @@ const RiskIdentificationForm: React.FC = () => {
                 <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                   <div className="md:col-span-3">
                     <label
-                      for="number-input"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="number-input"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Upload RIF (Optional)
                     </label>
                     <input
-                      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50focus:outline-none"
                       id="file_input"
                       type="file"
                     />
                   </div>
                   <div className="md:col-span-2">
                     <label
-                      for="number-input"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="number-input"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       SDA number
                     </label>
@@ -99,15 +99,15 @@ const RiskIdentificationForm: React.FC = () => {
                       type="number"
                       id="number-input"
                       aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       placeholder="0-9"
                       required
                     />
                   </div>
                   <div className="md:col-span-5">
                     <label
-                      for="message"
-                      class="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-bold text-gray-900"
                     >
                       ISSUE/S
                     </label>
@@ -115,23 +115,23 @@ const RiskIdentificationForm: React.FC = () => {
 
                   <div className="md:col-span-3">
                     <label
-                      for="message"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Particulars
                     </label>
                     <textarea
                       id="message"
-                      rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Description"
                     ></textarea>
                   </div>
 
                   <div className="md:col-span-2">
                     <label
-                      for="message"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Check one
                     </label>
@@ -141,11 +141,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
                       />
                       <label
-                        for="default-radio-1"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-1"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         Internal
                       </label>
@@ -157,11 +157,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
                       />
                       <label
-                        for="default-radio-2"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-2"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         External
                       </label>
@@ -169,8 +169,8 @@ const RiskIdentificationForm: React.FC = () => {
                   </div>
                   <div className="md:col-span-5">
                     <label
-                      for="message"
-                      class="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-bold text-gray-900"
                     >
                       RISK/S
                     </label>
@@ -178,22 +178,22 @@ const RiskIdentificationForm: React.FC = () => {
 
                   <div className="md:col-span-5">
                     <label
-                      for="message"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Particulars
                     </label>
                     <textarea
                       id="message"
-                      rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Description"
                     ></textarea>
                   </div>
                   <div className="md:col-span-2">
                     <label
-                      for="number-input"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="number-input"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       SEV
                     </label>
@@ -201,15 +201,15 @@ const RiskIdentificationForm: React.FC = () => {
                       type="number"
                       id="number-input"
                       aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       placeholder="0-9"
                       required
                     />
                   </div>
                   <div className="md:col-span-2">
                     <label
-                      for="number-input"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="number-input"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       PROB
                     </label>
@@ -217,15 +217,15 @@ const RiskIdentificationForm: React.FC = () => {
                       type="number"
                       id="number-input"
                       aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       placeholder="0-9"
                       required
                     />
                   </div>
                   <div className="md:col-span-1">
                     <label
-                      for="number-input"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="number-input"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Risk Rating
                     </label>
@@ -233,16 +233,16 @@ const RiskIdentificationForm: React.FC = () => {
                       type="text"
                       id="disabled-input-2"
                       aria-label="disabled input 2"
-                      class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed"
                       value="9"
                       disabled
-                      readonly
+                      readOnly
                     />
                   </div>
                   <div className="md:col-span-5">
                     <label
-                      for="message"
-                      class="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-bold text-gray-900"
                     >
                       Risk Categorization
                     </label>
@@ -250,8 +250,8 @@ const RiskIdentificationForm: React.FC = () => {
 
                   <div className="md:col-span-2">
                     <label
-                      for="message"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Level
                     </label>
@@ -261,11 +261,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
                       />
                       <label
-                        for="default-radio-1"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-1"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         L
                       </label>
@@ -277,11 +277,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
                       />
                       <label
-                        for="default-radio-2"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-2"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         M
                       </label>
@@ -292,11 +292,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                       />
                       <label
-                        for="default-radio-3"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-3"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         H
                       </label>
@@ -304,8 +304,8 @@ const RiskIdentificationForm: React.FC = () => {
                   </div>
                   <div className="md:col-span-2">
                     <label
-                      for="message"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="message"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Check one
                     </label>
@@ -315,11 +315,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
                       />
                       <label
-                        for="default-radio-1"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-1"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         Initial
                       </label>
@@ -331,11 +331,11 @@ const RiskIdentificationForm: React.FC = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                       />
                       <label
-                        for="default-radio-2"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="default-radio-2"
+                        className="ms-2 text-sm font-medium text-gray-900"
                       >
                         Residual
                       </label>
@@ -369,7 +369,7 @@ const RiskIdentificationForm: React.FC = () => {
                         type="text"
                         name="username"
                         id="username"
-                        className="block p-2.5 w-full bg-white z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                        className="block p-2.5 w-full bg-white z-20 text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                         placeholder="e.g. Parents & Guardians"
                         required
                       />
