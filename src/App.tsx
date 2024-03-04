@@ -9,6 +9,7 @@ import RIF from "./user-side/pages/RIF";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
+import Logs from "./admin/pages/logs";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -42,6 +43,7 @@ const App: FC = () => {
                   <Route path="users" element={<Users />} />
                   <Route path="editUser" element={<EditUser />} />
                   <Route path="analytics" element={<Analytics />} />
+                  <Route path="logs" element={<Logs />} />
                 </Routes>
                 </div>
                 </div>
