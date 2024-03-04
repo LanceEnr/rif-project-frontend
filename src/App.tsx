@@ -19,7 +19,7 @@ import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
 import Analytics from "./admin/pages/Analytics";
-
+import RifTrackerTable from "./admin/pages/RifTrackerTable";
 
 const App: FC = () => {
   return (
@@ -32,20 +32,22 @@ const App: FC = () => {
               <>
                 <SideNavbar />
                 <div className="p-4 sm:ml-64">
-                <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
-                <Routes>
+                  <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+                    <Routes>
+                      <Route path="grid" element={<DocumentGrid />} />
 
+                      <Route path="tracker" element={<RifTracker />} />
+                      <Route
+                        path="trackertable"
+                        element={<RifTrackerTable />}
+                      />
 
-                  <Route path="grid" element={<DocumentGrid />} />
- 
-                  <Route path="tracker" element={<RifTracker />} />
-                  <Route path="users" element={<Users />} />
-                  <Route path="editUser" element={<EditUser />} />
-                  <Route path="analytics" element={<Analytics />} />
-                </Routes>
+                      <Route path="users" element={<Users />} />
+                      <Route path="editUser" element={<EditUser />} />
+                      <Route path="analytics" element={<Analytics />} />
+                    </Routes>
+                  </div>
                 </div>
-                </div>
-             
               </>
             }
           />
@@ -59,15 +61,15 @@ const App: FC = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/Contact" element={<Contact />} />
                   <Route path="/RIF" element={<RIF />} />
-                  <Route path="/addstakeholders" element={<AddStakeholders />} />
+                  <Route
+                    path="/addstakeholders"
+                    element={<AddStakeholders />}
+                  />
                   <Route path="/prerequisites" element={<Prerequisites />} />
                   <Route path="/esignature" element={<Esignature />} />
                   <Route path="/form" element={<RiskIdentificationForm />} />
 
-
                   <Route path="/submissions" element={<SubmissionHistory />} />
-
-
                 </Routes>
                 <Footer />
               </>
