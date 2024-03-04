@@ -46,16 +46,10 @@ const App: FC = () => {
                       <Route path="users" element={<Users />} />
                       <Route path="editUser" element={<EditUser />} />
                       <Route path="analytics" element={<Analytics />} />
+                      <Route path="logs" element={<Logs />} />
                     </Routes>
                   </div>
-                  <Route path="grid" element={<DocumentGrid />} />
- 
-                  <Route path="tracker" element={<RifTracker />} />
-                  <Route path="users" element={<Users />} />
-                  <Route path="editUser" element={<EditUser />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="logs" element={<Logs />} />
-                </Routes>
+                  x
                 </div>
               </>
             }
