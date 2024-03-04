@@ -49,7 +49,6 @@ const App: FC = () => {
                       <Route path="logs" element={<Logs />} />
                     </Routes>
                   </div>
-                  x
                 </div>
               </>
             }
