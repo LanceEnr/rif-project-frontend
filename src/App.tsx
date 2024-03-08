@@ -9,7 +9,7 @@ import RIF from "./user-side/pages/RIF";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
-import Logs from "./admin/pages/logs";
+import Logs from "./admin/pages/Logs";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
