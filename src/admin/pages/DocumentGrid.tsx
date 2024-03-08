@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface Post {
@@ -60,6 +60,12 @@ const DocumentGrid: React.FC = () => {
     },
   ];
 
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleDropdown = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <div className="w-screen-xl px-4 bg-white min-h-screen">
       <div className="flex flex-col items-right">
@@ -104,7 +110,7 @@ const DocumentGrid: React.FC = () => {
       <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
         {posts.map((item, index) => (
           <div
-            className="w-full rounded-lg shadow-md lg:max-w-sm"
+            className="w-full rounded-lg shadow-md lg:max-w-sm relative"
             key={index}
             style={{ cursor: "pointer" }}
           >
@@ -132,9 +138,9 @@ const DocumentGrid: React.FC = () => {
                     stroke="currentColor"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
                     />
                   </svg>
@@ -145,9 +151,9 @@ const DocumentGrid: React.FC = () => {
                     stroke="currentColor"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                     />
                   </svg>
@@ -158,20 +164,38 @@ const DocumentGrid: React.FC = () => {
                     {item.date}
                   </p>
                 </div>
-                <Link to="/admin/logs">
-                  <div className="svg-container">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="25"
-                      height="25"
-                      fill="currentColor"
-                      className="bi bi-three-dots-vertica"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                    </svg>
-                  </div>
-                </Link>
+                <div className="dropdown" style={{ zIndex: openIndex === index ? 1 : "auto" }}>
+                  <button
+                    className="dropdown-button"
+                    onClick={() => toggleDropdown(index)}
+                  >
+                    <div className="svg-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        fill="currentColor"
+                        className="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                  {openIndex === index && (
+                    <div className="dropdown-container absolute top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                      <div className="dropdown-content  p-2">
+                        <a href="/admin/logs">Logs</a>
+                        <a href="/admin/settings">Settings</a>
+                        <a href="/admin/profile">Profile</a>
+                        {/* Add more dropdown items as needed */}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
