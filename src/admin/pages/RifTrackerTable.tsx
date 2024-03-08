@@ -149,7 +149,10 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"></div>{" "}
+                  6
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -227,7 +230,10 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                  4
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -305,7 +311,10 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                  3
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -383,7 +392,10 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"></div>{" "}
+                  5
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -460,8 +472,12 @@ const RifTrackerTable: React.FC = () => {
                   Submitted
                 </div>
               </td>
+
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
+                  9
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -539,7 +555,10 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center">6</div>
+                <div className="flex items-center">
+                  <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
+                  9
+                </div>
               </td>
               <td className="px-6 py-4">
                 <button
