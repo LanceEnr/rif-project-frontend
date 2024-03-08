@@ -118,6 +118,9 @@ const RifTrackerTable: React.FC = () => {
                 Status
               </th>
               <th scope="col" className="px-6 py-3">
+                SDA
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Action
               </th>
             </tr>
@@ -144,6 +147,9 @@ const RifTrackerTable: React.FC = () => {
                   <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
                   Submitted
                 </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -221,6 +227,9 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
+              </td>
+              <td className="px-6 py-4">
                 <button
                   id="apple-imac-27-dropdown-button"
                   data-dropdown-toggle="apple-imac-27-dropdown"
@@ -291,9 +300,12 @@ const RifTrackerTable: React.FC = () => {
               </th>
               <td className="px-6 py-4">
                 <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Submitted
+                  <div className="h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"></div>{" "}
+                  Late
                 </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
               </td>
               <td className="px-6 py-4">
                 <button
@@ -371,6 +383,9 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
+              </td>
+              <td className="px-6 py-4">
                 <button
                   id="apple-imac-27-dropdown-button"
                   data-dropdown-toggle="apple-imac-27-dropdown"
@@ -446,6 +461,9 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
               <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
+              </td>
+              <td className="px-6 py-4">
                 <button
                   id="apple-imac-27-dropdown-button"
                   data-dropdown-toggle="apple-imac-27-dropdown"
@@ -519,6 +537,9 @@ const RifTrackerTable: React.FC = () => {
                   <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
                   Submitted
                 </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center">6</div>
               </td>
               <td className="px-6 py-4">
                 <button

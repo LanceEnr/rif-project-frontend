@@ -66,7 +66,7 @@ const DocumentGrid: React.FC = () => {
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
           <p className="text-neutral-500 text-xl mt-3">
-            For tracking RIF submissions by different units.
+            College of Computing Sciences
           </p>
           <form action="#" method="GET" className="hidden lg:block lg:pl-2">
             <label className="sr-only">Search</label>

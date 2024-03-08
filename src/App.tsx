@@ -19,8 +19,8 @@ import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
-import Analytics from "./admin/pages/Analytics";
 import RifTrackerTable from "./admin/pages/RifTrackerTable";
+import MicroAnalytics from "./admin/pages/MicroAnalytics";
 
 const App: FC = () => {
   return (
@@ -45,7 +45,10 @@ const App: FC = () => {
 
                       <Route path="users" element={<Users />} />
                       <Route path="editUser" element={<EditUser />} />
-                      <Route path="analytics" element={<Analytics />} />
+                      <Route
+                        path="microanalytics"
+                        element={<MicroAnalytics />}
+                      />
                       <Route path="logs" element={<Logs />} />
                     </Routes>
                   </div>
