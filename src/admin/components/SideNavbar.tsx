@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Avatar, Dropdown } from "flowbite-react";
 
 const SideNavbar: React.FC = () => {
   return (
@@ -46,95 +47,181 @@ const SideNavbar: React.FC = () => {
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
-                <button
-                  type="button"
-                  data-dropdown-toggle="notification-dropdown"
-                  className="p-2 mr-1 text-gray-500 rounded-lg hover:text-yellow-500 focus:ring-4 focus:ring-gray-300 "
-                >
-                  <span className="sr-only">View notifications</span>
+                <Dropdown
+                  label={
+                    <button
+                      type="button"
+                      data-dropdown-toggle="notification-dropdown"
+                      className="p-2 mr-1 text-gray-500 rounded-lg hover:text-yellow-500  "
+                    >
+                      <span className="sr-only">View notifications</span>
 
-                  <svg
-                    className="w-5 h-5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 14 20"
-                  >
-                    <path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
-                  </svg>
-                </button>
-                <div>
-                  <button
-                    type="button"
-                    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                    aria-expanded="false"
-                    data-dropdown-toggle="dropdown-user"
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                      alt="user photo"
-                    />
-                  </button>
-                </div>
-                <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="dropdown-user"
+                      <svg
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 14 20"
+                      >
+                        <path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
+                      </svg>
+                    </button>
+                  }
+                  placement="top"
+                  arrowIcon={false}
+                  inline
                 >
-                  <div className="px-4 py-3" role="none">
-                    <p
-                      className="text-sm text-gray-900 dark:text-white"
-                      role="none"
-                    >
-                      Neil Sims
-                    </p>
-                    <p
-                      className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                      role="none"
-                    >
-                      neil.sims@flowbite.com
-                    </p>
-                  </div>
-                  <ul className="py-1" role="none">
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
+                  <Dropdown.Header>
+                    <span className="text-center block truncate text-sm font-medium">
+                      Notifications
+                    </span>
+                  </Dropdown.Header>
+                  <Dropdown.Item>
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-11 h-11 rounded-full"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        alt="Bonnie Green avatar"
+                      />
+                      <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
+                        <svg
+                          className="w-2 h-2 text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 18 18"
+                        >
+                          <path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z" />
+                          <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="pl-3">
+                      <div className=" font-normal text-sm mb-1.5 ">
+                        Your RIF submission has been{" "}
+                        <span className="font-semibold text-green-600 ">
+                          Approved
+                        </span>
+                      </div>
+                      <div className="flex justify-start text-xs text-gray-500">
+                        4:20 PM, Monday, March 11, 2024
+                      </div>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+
+                  <Dropdown.Item>
+                    {" "}
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-11 h-11 rounded-full"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        alt="Bonnie Green avatar"
+                      />
+                      <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
+                        <svg
+                          className="w-2 h-2 text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 18 18"
+                        >
+                          <path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z" />
+                          <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="pl-3">
+                      <div className=" font-normal text-sm mb-1.5 ">
+                        Your RIF submission has been{" "}
+                        <span className="font-semibold text-red-600 ">
+                          Declined
+                        </span>
+                      </div>
+                      <div className="flex justify-start text-xs text-gray-500">
+                        4:20 PM, Monday, March 11, 2024
+                      </div>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+
+                  <Dropdown.Item>
+                    {" "}
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-11 h-11 rounded-full"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        alt="Bonnie Green avatar"
+                      />
+                      <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
+                        <svg
+                          className="w-2 h-2 text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 18 18"
+                        >
+                          <path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z" />
+                          <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="pl-3">
+                      <div className=" font-normal text-sm mb-1.5 ">
+                        Your RIF submission has been{" "}
+                        <span className="font-semibold text-green-600 ">
+                          Approved
+                        </span>
+                      </div>
+                      <div className="flex justify-start text-xs text-gray-500">
+                        4:20 PM, Monday, March 11, 2024
+                      </div>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item>
+                    <div className="inline-flex items-center ">
+                      <svg
+                        aria-hidden="true"
+                        className="mr-2 w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Earnings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Sign out
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                        <path
+                          fill-rule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      View all
+                    </div>
+                  </Dropdown.Item>
+                </Dropdown>
+
+                <Dropdown
+                  label={
+                    <Avatar
+                      alt="User settings"
+                      img="https://static.generated.photos/vue-static/face-generator/landing/wall/14.jpg"
+                      rounded
+                    />
+                  }
+                  arrowIcon={false}
+                  inline
+                >
+                  <Dropdown.Header>
+                    <span className="block text-sm">Lance Enriquez</span>
+                    <span className="block truncate text-sm font-medium">
+                      lancemikaelo@ust.edu.ph
+                    </span>
+                  </Dropdown.Header>
+                  <Dropdown.Item>Dashboard</Dropdown.Item>
+                  <Dropdown.Item>Settings</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item>Sign out</Dropdown.Item>
+                </Dropdown>
               </div>
             </div>
           </div>
@@ -190,7 +277,7 @@ const SideNavbar: React.FC = () => {
             </li>
             <li>
               <Link
-                to="grid"
+                to="macroanalytics"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
               >
                 <svg
@@ -203,7 +290,7 @@ const SideNavbar: React.FC = () => {
                   <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">
-                  Submissions
+                  Macro Analytics
                 </span>
                 <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                   3

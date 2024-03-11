@@ -21,6 +21,7 @@ import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
 import RifTrackerTable from "./admin/pages/RifTrackerTable";
 import MicroAnalytics from "./admin/pages/MicroAnalytics";
+import MacroAnalytics from "./admin/pages/MacroAnalytics";
 
 const App: FC = () => {
   return (
@@ -48,6 +49,10 @@ const App: FC = () => {
                       <Route
                         path="microanalytics"
                         element={<MicroAnalytics />}
+                      />
+                      <Route
+                        path="macroanalytics"
+                        element={<MacroAnalytics />}
                       />
                       <Route path="logs" element={<Logs />} />
                     </Routes>

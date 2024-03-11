@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Dropdown } from "flowbite-react";
+import { IoMdDownload } from "react-icons/io";
 
 interface Post {
   title: string;
@@ -143,32 +145,8 @@ const SubmissionHistory: React.FC = () => {
               <p className="mb-2 leading-normal text-xs">{item.content}</p>
               <div className="flex justify-between">
                 <div className="flex">
-                  <svg
-                    className="h-6 w-6  text-gray-800"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-                    />
-                  </svg>
-                  <svg
-                    className="h-6 w-6 text-gray-800 mx-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
+                  <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
+
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
@@ -176,18 +154,35 @@ const SubmissionHistory: React.FC = () => {
                     {item.date}
                   </p>
                 </div>
-                <div className="svg-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="25"
-                    fill="currentColor"
-                    className="bi bi-three-dots-vertica"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                  </svg>
-                </div>
+                <Dropdown
+                  label=""
+                  dismissOnClick={false}
+                  renderTrigger={() => (
+                    <button
+                      id="apple-imac-27-dropdown-button"
+                      data-dropdown-toggle="apple-imac-27-dropdown"
+                      className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
+                      type="button"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </svg>
+                    </button>
+                  )}
+                >
+                  <Dropdown.Item as={Link} to="/admin/microanalytics">
+                    Duplicate and Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/admin/logs">
+                    Edit Logs
+                  </Dropdown.Item>
+                </Dropdown>
               </div>
             </div>
           </div>

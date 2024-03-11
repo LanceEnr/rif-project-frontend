@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Dropdown } from "flowbite-react";
+import { IoMdDownload } from "react-icons/io";
 
 interface Post {
   title: string;
@@ -52,19 +54,7 @@ const DocumentGrid: React.FC = () => {
       content: "Sample 7",
       date: "2024-02-26",
     },
-    {
-      title: "Upload",
-      img: "https://scontent.xx.fbcdn.net/v/t1.15752-9/429637004_356724257234498_589925347412608636_n.png?stp=dst-png_p403x403&_nc_cat=101&ccb=1-7&_nc_sid=510075&_nc_ohc=cspa9hmF9mcAX-w4GCB&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8EJFYneb2zZQ-Qs-YJoR00ZaRGhpKtUA1mURQ7NIlJw&oe=6603960F",
-      content: "Document",
-      date: "2024-02-26",
-    },
   ];
-
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const toggleDropdown = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
 
   return (
     <div className="w-screen-xl px-4 bg-white min-h-screen">
@@ -131,32 +121,8 @@ const DocumentGrid: React.FC = () => {
               <p className="mb-2 leading-normal text-xs">{item.content}</p>
               <div className="flex justify-between">
                 <div className="flex">
-                  <svg
-                    className="h-6 w-6  text-gray-800"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-                    />
-                  </svg>
-                  <svg
-                    className="h-6 w-6 text-gray-800 mx-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
+                  <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
+
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
@@ -164,38 +130,35 @@ const DocumentGrid: React.FC = () => {
                     {item.date}
                   </p>
                 </div>
-                <div className="dropdown" style={{ zIndex: openIndex === index ? 1 : "auto" }}>
-                  <button
-                    className="dropdown-button"
-                    onClick={() => toggleDropdown(index)}
-                  >
-                    <div className="svg-container">
+                <Dropdown
+                  label=""
+                  dismissOnClick={false}
+                  renderTrigger={() => (
+                    <button
+                      id="apple-imac-27-dropdown-button"
+                      data-dropdown-toggle="apple-imac-27-dropdown"
+                      className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
+                      type="button"
+                    >
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="25"
-                        height="25"
+                        className="w-5 h-5"
+                        aria-hidden="true"
                         fill="currentColor"
-                        className="bi bi-three-dots-vertical"
-                        viewBox="0 0 16 16"
+                        viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
-                        />
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                       </svg>
-                    </div>
-                  </button>
-                  {openIndex === index && (
-                    <div className="dropdown-container absolute top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                      <div className="dropdown-content  p-2">
-                        <a href="/admin/logs">Logs</a>
-                        <a href="/admin/settings">Settings</a>
-                        <a href="/admin/profile">Profile</a>
-                        {/* Add more dropdown items as needed */}
-                      </div>
-                    </div>
+                    </button>
                   )}
-                </div>
+                >
+                  <Dropdown.Item as={Link} to="/admin/microanalytics">
+                    Generate Report
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/admin/logs">
+                    Edit Logs
+                  </Dropdown.Item>
+                </Dropdown>
               </div>
             </div>
           </div>
