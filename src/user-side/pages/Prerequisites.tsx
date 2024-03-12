@@ -137,7 +137,7 @@ const Prerequisites: React.FC = () => {
                         type="text"
                         name="username"
                         id="username"
-                        className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                        className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                         placeholder="e.g. Parents & Guardians"
                         required
                       />

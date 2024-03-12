@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { IoMdDownload } from "react-icons/io";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 interface Post {
   title: string;
@@ -64,38 +65,61 @@ const DocumentGrid: React.FC = () => {
           <p className="text-neutral-500 text-xl mt-3">
             College of Computing Sciences
           </p>
-          <form action="#" method="GET" className="hidden lg:block lg:pl-2">
-            <label className="sr-only">Search</label>
-            <div className="relative mt-1 lg:w-72">
-              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  {" "}
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />{" "}
-                </svg>
-              </div>
-              <input
-                type="text"
-                name="email"
-                id="topbar-search"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-9 p-2.5 "
-                placeholder="Search"
-              />
-            </div>
-          </form>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
+      </div>
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+        {/* Dropdown */}
+        <div>
+          <Dropdown
+            label=""
+            inline
+            dismissOnClick={false}
+            renderTrigger={() => (
+              <button
+                id="dropdownActionButton"
+                data-dropdown-toggle="dropdownAction"
+                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                type="button"
+              >
+                Filter
+                <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+              </button>
+            )}
+          >
+            <Dropdown.Item>Most Recent</Dropdown.Item>
+            <Dropdown.Item>Oldest</Dropdown.Item>
+          </Dropdown>
+        </div>
+        {/* Search input */}
+        <label htmlFor="table-search" className="sr-only">
+          Search
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="table-search-users"
+            className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search"
+          />
+        </div>
       </div>
       <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
         {posts.map((item, index) => (

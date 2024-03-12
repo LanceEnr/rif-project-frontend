@@ -22,6 +22,7 @@ import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
 import RifTrackerTable from "./admin/pages/RifTrackerTable";
 import MicroAnalytics from "./admin/pages/MicroAnalytics";
 import MacroAnalytics from "./admin/pages/MacroAnalytics";
+import Dashboard from "./admin/pages/Dashboard";
 
 const App: FC = () => {
   return (
@@ -36,6 +37,8 @@ const App: FC = () => {
                 <div className="p-4 sm:ml-64">
                   <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
                     <Routes>
+                      <Route path="" element={<Dashboard />} />
+
                       <Route path="grid" element={<DocumentGrid />} />
 
                       <Route path="tracker" element={<RifTracker />} />

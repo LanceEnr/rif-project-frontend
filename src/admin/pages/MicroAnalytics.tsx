@@ -2,7 +2,18 @@ import React from "react";
 
 const MicroAnalytics: React.FC = () => {
   return (
-    <div>
+    <div className="w-screen-xl px-4 bg-white min-h-screen">
+      <div className="flex flex-col items-right">
+        <h2 className="font-bold text-5xl mt-5 tracking-tight">
+          Micro Analytics
+        </h2>
+        <div className="flex justify-between items-center">
+          <p className="text-neutral-500 text-xl mt-3">
+            College of Information and Computing Sciences
+          </p>
+        </div>
+        <hr className="h-px my-8 border-yellow-500 border-2" />
+      </div>
       <div className="grid grid-cols-3 gap-4 py-2 mb-6">
         {/* 1st tab */}
 

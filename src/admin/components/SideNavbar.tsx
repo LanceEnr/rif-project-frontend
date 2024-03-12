@@ -80,7 +80,7 @@ const SideNavbar: React.FC = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="w-11 h-11 rounded-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        src="https://www.ust.edu.ph/wp-content/uploads/2020/02/UST-Seal-Institute-of-Information-Computing-Sciences-2014-Present-868x1024.png"
                         alt="Bonnie Green avatar"
                       />
                       <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
@@ -98,9 +98,9 @@ const SideNavbar: React.FC = () => {
                     </div>
                     <div className="pl-3">
                       <div className=" font-normal text-sm mb-1.5 ">
-                        Your RIF submission has been{" "}
-                        <span className="font-semibold text-green-600 ">
-                          Approved
+                        College of Computing Sciences made a{" "}
+                        <span className="font-semibold text-gray-700 ">
+                          submission
                         </span>
                       </div>
                       <div className="flex justify-start text-xs text-gray-500">
@@ -115,7 +115,7 @@ const SideNavbar: React.FC = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="w-11 h-11 rounded-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        src="https://www.ust.edu.ph/wp-content/uploads/2020/02/UST-Seal-Institute-of-Information-Computing-Sciences-2014-Present-868x1024.png"
                         alt="Bonnie Green avatar"
                       />
                       <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
@@ -133,9 +133,9 @@ const SideNavbar: React.FC = () => {
                     </div>
                     <div className="pl-3">
                       <div className=" font-normal text-sm mb-1.5 ">
-                        Your RIF submission has been{" "}
-                        <span className="font-semibold text-red-600 ">
-                          Declined
+                        College of Computing Sciences made a{" "}
+                        <span className="font-semibold text-gray-700 ">
+                          submission
                         </span>
                       </div>
                       <div className="flex justify-start text-xs text-gray-500">
@@ -150,7 +150,7 @@ const SideNavbar: React.FC = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="w-11 h-11 rounded-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        src="https://www.ust.edu.ph/wp-content/uploads/2020/02/UST-Seal-Institute-of-Information-Computing-Sciences-2014-Present-868x1024.png"
                         alt="Bonnie Green avatar"
                       />
                       <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 ">
@@ -168,9 +168,9 @@ const SideNavbar: React.FC = () => {
                     </div>
                     <div className="pl-3">
                       <div className=" font-normal text-sm mb-1.5 ">
-                        Your RIF submission has been{" "}
-                        <span className="font-semibold text-green-600 ">
-                          Approved
+                        College of Computing Sciences made a{" "}
+                        <span className="font-semibold text-gray-700 ">
+                          submission
                         </span>
                       </div>
                       <div className="flex justify-start text-xs text-gray-500">
@@ -236,8 +236,8 @@ const SideNavbar: React.FC = () => {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
           <ul className="space-y-2 font-medium">
             <li>
-              <a
-                href="#"
+              <Link
+                to=""
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
               >
                 <svg
@@ -251,7 +251,7 @@ const SideNavbar: React.FC = () => {
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                 </svg>
                 <span className="ms-3">Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link
