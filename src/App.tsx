@@ -23,6 +23,7 @@ import RifTrackerTable from "./admin/pages/RifTrackerTable";
 import MicroAnalytics from "./admin/pages/MicroAnalytics";
 import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
+import NotFoundPage from "./user-side/pages/NotFoundPage";
 
 const App: FC = () => {
   return (
@@ -57,6 +58,7 @@ const App: FC = () => {
                         path="macroanalytics"
                         element={<MacroAnalytics />}
                       />
+                      <Route path="*" element={<NotFoundPage />} />
                       <Route path="logs" element={<Logs />} />
                     </Routes>
                   </div>
@@ -81,7 +83,7 @@ const App: FC = () => {
                   <Route path="/prerequisites" element={<Prerequisites />} />
                   <Route path="/esignature" element={<Esignature />} />
                   <Route path="/form" element={<RiskIdentificationForm />} />
-
+                  <Route path="*" element={<NotFoundPage />} />
                   <Route path="/submissions" element={<SubmissionHistory />} />
                 </Routes>
                 <Footer />

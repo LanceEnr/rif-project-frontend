@@ -1,66 +1,51 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
-    <>
-      <section className="bg-white h-screen flex justify-center">
-        <div className="grid   max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-          <div className="mr-auto place-self-center lg:col-span-7">
-            <h1 className="text-5xl font-bold leading-none sm:text-6xl">
-              <span className="text-gray-500">Comprehensive</span>
-              <br />
-              <span className="">Risk Monitoring</span>
-              <br />
-              <span className="text-yellow-500">Platform</span>
-            </h1>
-
-            <p className="mt-6 mb-8 text-lg sm:mb-12">
-              Dictum aliquam porta in condimentum ac integer
-              <br className="hidden md:inline lg:hidden" />
-              turpis pulvinar, est scelerisque ligula sem
-              <br className="hidden md:inline lg:hidden" />
-              turpis pulvinar, est scelerisque ligula sem
-            </p>
+    <section class="relative bg-cover object-center bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/7b/400_Year_old_Beauty.jpg')] bg-gray-700 bg-blend-multiply">
+      <div class="relative">
+        <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
+          <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
+            Welcome to <span className="text-yellow-500">YellowAlert</span>
+          </h1>
+          <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
+            a comprehensive risk monitoring platform, designed to streamline the
+            process of risk identification and tracking within the University of
+            Santo Tomas.
+          </p>
+          <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
             <a
-              href="/RIF"
-              className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-yellow-500 hover:bg-primary-800 focus:ring-4 focus:ring-yellow-300"
+              href="#"
+              class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-yellow-500 hover:bg-yellow-600 "
             >
               Get started
               <svg
-                className="w-5 h-5 ml-2 -mr-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
+                class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                ></path>
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
               </svg>
             </a>
-            <a
-              href="/Faqs"
-              className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-yellow-500 border-2 border-yellow-500 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100"
+            <Link
+              to="/faqs"
+              class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100"
             >
-              Frequently Asked Questions
-            </a>
+              Learn more
+            </Link>
           </div>
-          <div className="hidden lg:flex lg:mt-10 lg:col-span-5 h-auto">
-  <div className="relative rounded-lg overflow-hidden">
-    <img
-      src="https://c0.wallpaperflare.com/preview/453/640/998/building-philippines-ust.jpg"
-      alt="mockup"
-      className="w-full h-full object-cover object-center"
-    />
-    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 opacity-50"></div>
-  </div>
-</div>
-
-
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
