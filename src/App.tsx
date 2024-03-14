@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import "./App.css";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";

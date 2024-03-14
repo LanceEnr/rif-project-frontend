@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const GetStarted: React.FC = () => {
   return (
     <>
-      <section class="relative bg-cover object-center bg-[url('https://planetofhotels.com/guide/sites/default/files/styles/paragraph__hero_banner__hb_image__1880bp/public/hero_banner/Arch-of-the-Centuries.jpg')] bg-gray-500 bg-blend-multiply">
-        <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-900 opacity-50"></div>
-        <div class="relative">
+      <section className="relative bg-cover object-center bg-[url('https://planetofhotels.com/guide/sites/default/files/styles/paragraph__hero_banner__hb_image__1880bp/public/hero_banner/Arch-of-the-Centuries.jpg')] bg-gray-500 bg-blend-multiply">
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-900 opacity-50"></div>
+        <div className="relative">
           <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="mx-auto max-w-screen-md text-center">
               <h2 className="mb-4 text-4xl font-extrabold leading-tight text-white">
