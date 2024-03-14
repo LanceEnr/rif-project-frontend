@@ -1,0 +1,49 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
+const GetStarted: React.FC = () => {
+  return (
+    <>
+      <section class="relative bg-cover object-center bg-[url('https://planetofhotels.com/guide/sites/default/files/styles/paragraph__hero_banner__hb_image__1880bp/public/hero_banner/Arch-of-the-Centuries.jpg')] bg-gray-500 bg-blend-multiply">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-900 opacity-50"></div>
+        <div class="relative">
+          <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+            <div className="mx-auto max-w-screen-md text-center">
+              <h2 className="mb-4 text-4xl font-extrabold leading-tight text-white">
+                Embrace the Future of Risk Management
+              </h2>
+              <p className="mb-6 font-light text-white dark:text-gray-400 md:text-lg">
+                Get Started with YellowAlert Now!
+              </p>
+              <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+                <a
+                  href="#"
+                  className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-yellow-500 hover:bg-yellow-600 "
+                >
+                  Fill up form
+                  <svg
+                    className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M1 5h12m0 0L9 1m4 4L9 9"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default GetStarted;

@@ -49,6 +49,84 @@ const SubmissionHistory: React.FC = () => {
       content: "Sample 6",
       date: "2024-03-26",
     },
+    {
+      title: "Document Sample 1",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 1",
+      date: "2024-02-26",
+    },
+    {
+      title: "Document Sample 2",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 2",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 3",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 3",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 4",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 4",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 5",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 5",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 6",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 6",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 4",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 4",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 5",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 5",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 6",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 6",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 4",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 4",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 5",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 5",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 6",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 6",
+      date: "2024-03-26",
+    },
+    {
+      title: "Document Sample 6",
+      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+      content: "Sample 6",
+      date: "2024-03-26",
+    },
   ];
 
   return (
