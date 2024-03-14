@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import { Label, Radio } from "flowbite-react";
 
 interface FormData {
   sdaNumber: number | string;
@@ -181,37 +182,27 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Check one
                       </label>
-                      <div className="flex items-center mb-4">
-                        <input
-                          id="issues-1"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-1"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          Internal
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          checked
-                          id="issues-2"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-2"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          External
-                        </label>
-                      </div>{" "}
+                      <fieldset className="flex max-w-md flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="issue-initial"
+                            name="issue"
+                            value="issue-initial"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            defaultChecked
+                          />
+                          <Label htmlFor="issue-initial">Initial</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="issue-residual"
+                            name="issue"
+                            value="issue-residual"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="issue-residual">Residual</Label>
+                        </div>
+                      </fieldset>
                     </div>
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
@@ -303,52 +294,35 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Level
                       </label>
-                      <div className="flex items-center mb-4">
-                        <input
-                          id="level-l"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-1"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          L
-                        </label>
-                      </div>
-                      <div className="flex items-center mb-4">
-                        <input
-                          checked
-                          id="level-m"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-2"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          M
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          id="level-h"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-3"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          H
-                        </label>
-                      </div>
+                      <fieldset className="flex max-w-md flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="risk-l"
+                            name="risk-level"
+                            value="risk-l"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="risk-l">L</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="risk-m"
+                            name="risk-level"
+                            value="risk-m"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="risk-m">M</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="risk-h"
+                            name="risk-level"
+                            value="risk-h"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="risk-h">H</Label>
+                        </div>
+                      </fieldset>
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -357,37 +331,27 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Check one
                       </label>
-                      <div className="flex items-center mb-4">
-                        <input
-                          id="risk-1"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-1"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          Initial
-                        </label>
-                      </div>
-                      <div className="flex items-center mb-4">
-                        <input
-                          checked
-                          id="risk-2"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-2"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          Residual
-                        </label>
-                      </div>
+                      <fieldset className="flex max-w-md flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="risk-initial"
+                            name="risk-categorization"
+                            value="risk-initial"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            defaultChecked
+                          />
+                          <Label htmlFor="risk-initial">Initial</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="risk-residual"
+                            name="risk-categorization"
+                            value="risk-residual"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="risk-residual">Residual</Label>
+                        </div>
+                      </fieldset>
                     </div>
 
                     <div className="md:col-span-5">
@@ -559,37 +523,27 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Check one
                       </label>
-                      <div className="flex items-center mb-4">
-                        <input
-                          id="action-1"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-1"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          Internal
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          checked
-                          id="action-2"
-                          type="radio"
-                          value=""
-                          name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500focus:ring-2"
-                        />
-                        <label
-                          htmlFor="default-radio-2"
-                          className="ms-2 text-sm font-medium text-gray-900"
-                        >
-                          External
-                        </label>
-                      </div>{" "}
+                      <fieldset className="flex max-w-md flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="action-internal"
+                            name="actions-taken"
+                            value="action-internal"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            defaultChecked
+                          />
+                          <Label htmlFor="action-internal">Internal</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Radio
+                            id="action-external"
+                            name="actions-taken"
+                            value="action-external"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          />
+                          <Label htmlFor="action-external">External</Label>
+                        </div>
+                      </fieldset>
                     </div>
 
                     <div className="md:col-span-5">
