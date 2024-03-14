@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 interface FormData {
-  sdaNumber: number;
+  sdaNumber: number | string;
   uploadRIF: string;
   issueParticulars: string;
   issueType: string;
@@ -12,12 +12,11 @@ interface FormData {
   riskLevel: string;
   actionPlan: string;
   responsiblePerson: string;
-  [key: string]: number | string; // Index signature
 }
 
 const RiskIdentificationForm: React.FC = () => {
   const initialState: FormData = {
-    sdaNumber: NaN,
+    sdaNumber: "",
     uploadRIF: "",
     issueParticulars: "",
     issueType: "",
@@ -28,7 +27,7 @@ const RiskIdentificationForm: React.FC = () => {
     riskLevel: "",
     actionPlan: "",
     responsiblePerson: "",
-  };  
+  };
 
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +57,7 @@ const RiskIdentificationForm: React.FC = () => {
       "actionPlan",
       "responsiblePerson",
     ];
-    const isValid = requiredFields.every(field => !!formData[field]);
+    const isValid = requiredFields.every(field => !!formData[field] || formData[field] === 0);
   
     if (!isValid) {
       setError("Please fill out all the required fields.");
@@ -66,7 +65,7 @@ const RiskIdentificationForm: React.FC = () => {
     }
   
     try {
-      const response = await fetch('/api/riskform', { 
+      const response = await fetch('/api/riskforms', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,6 +79,9 @@ const RiskIdentificationForm: React.FC = () => {
     
       // Clear error on successful submission
       setError(null);
+      
+      // Reset form fields
+      setFormData(initialState);
     } catch (error) {
       console.error('Error submitting form:', error);
       setError('Failed to submit form. Please try again later.');
@@ -89,7 +91,7 @@ const RiskIdentificationForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} method="post">
       {/* Input fields */}
-      <input 
+      <input
         type="number"
         name="sdaNumber"
         value={formData.sdaNumber}
@@ -112,8 +114,7 @@ const RiskIdentificationForm: React.FC = () => {
 
           <div className="col-span-8 overflow-hidden rounded-xl sm:bg-gray-50 sm:px-8 sm:shadow">
             <div className="mt-4 mb-10">
-              <form action="#">
-                <div className="grid gap-4 mb-4 sm:grid-cols-1">
+              <div className="grid gap-4 mb-4 sm:grid-cols-1">
                   <div className="lg:col-span-2">
                     <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                       <div className="md:col-span-3">
@@ -609,17 +610,14 @@ const RiskIdentificationForm: React.FC = () => {
                           >
                             Add Another Row
                           </button>
-                          {/* Error message */}
+                          {/* Submit button */}
                             {error && <div style={{ color: "red" }}>{error}</div>}
-                            
-                            {/* Submit button */}
-                            <button type="submit">Submit</button>
-                        </div>
+                            <button type="submit">Submit</button>  
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
-              </form>
             </div>
           </div>
         </div>
