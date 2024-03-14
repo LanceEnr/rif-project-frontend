@@ -3,28 +3,27 @@ import { Label, Radio } from "flowbite-react";
 
 interface FormData {
   sdaNumber: number | string;
-  uploadRIF: string;
+  uploadRIF: File | null;
   issueParticulars: string;
   issueType: string;
   riskParticulars: string;
   riskSEV: string;
   riskPROB: string;
-  riskRating: string;
   riskLevel: string;
   actionPlan: string;
   responsiblePerson: string;
+  [key: string]: number | string | File | null; // Index signature
 }
 
 const RiskIdentificationForm: React.FC = () => {
   const initialState: FormData = {
     sdaNumber: "",
-    uploadRIF: "",
+    uploadRIF: null,
     issueParticulars: "",
     issueType: "",
     riskParticulars: "",
     riskSEV: "",
     riskPROB: "",
-    riskRating: "",
     riskLevel: "",
     actionPlan: "",
     responsiblePerson: "",
@@ -33,33 +32,22 @@ const RiskIdentificationForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Form submitted");
 
     const requiredFields: (keyof FormData)[] = [
       "sdaNumber",
       "issueParticulars",
-      "issueType",
       "riskParticulars",
       "riskSEV",
       "riskPROB",
-      "riskRating",
-      "riskLevel",
       "actionPlan",
       "responsiblePerson",
     ];
-    const isValid = requiredFields.every(
-      (field) => !!formData[field] || formData[field] === 0
+
+    const isValid = requiredFields.every((field: keyof FormData) =>
+      formData[field]
     );
 
     if (!isValid) {
@@ -67,13 +55,39 @@ const RiskIdentificationForm: React.FC = () => {
       return;
     }
 
+    // Additional validation for numerical fields
+    if (isNaN(Number(formData.riskSEV)) || isNaN(Number(formData.riskPROB))) {
+      setError("Risk SEV and PROB must be numerical values.");
+      return;
+    }
+
+    // Additional validation for riskSEV and riskPROB within a specific range
+    const sev = Number(formData.riskSEV);
+    const prob = Number(formData.riskPROB);
+    if (sev < 0 || sev > 10 || prob < 0 || prob > 10) {
+      setError("Risk SEV and PROB must be between 0 and 10.");
+      return;
+    }
+
+    // Check if uploadRIF is a PDF file
+    if (formData.uploadRIF && !formData.uploadRIF.name.endsWith(".pdf")) {
+      setError("Please upload a PDF file for the RIF.");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/riskforms", {
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        if (key === "uploadRIF") {
+          formDataToSend.append(key, formData.uploadRIF as File);
+        } else {
+          formDataToSend.append(key, formData[key] as string);
+        }
+      }
+
+      const response = await fetch("/api/riskforms/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
 
       if (!response.ok) {
@@ -91,16 +105,31 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      uploadRIF: file || null,
+    }));
+  };
+
   return (
     <form onSubmit={handleSubmit} method="post">
-      {/* Input fields */}
-      <input
-        type="number"
-        name="sdaNumber"
-        value={formData.sdaNumber}
-        onChange={handleInputChange}
-        placeholder="SDA Number"
-      />
+        <input
+          type="text"
+          name="actionPlan"
+          value={formData.actionPlan}
+          onChange={handleChange} // Add this onChange handler
+          placeholder="Write here..."
+        />
       <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
         <div className="flex flex-col items-right">
           <h2 className="font-bold text-5xl mt-5 tracking-tight">
@@ -121,17 +150,18 @@ const RiskIdentificationForm: React.FC = () => {
                 <div className="lg:col-span-2">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     <div className="md:col-span-3">
-                      <label
-                        htmlFor="number-input"
+                    <label
+                        htmlFor="file_input"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
                         Upload RIF (Optional)
-                      </label>
-                      <input
-                        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none"
-                        id="file_input"
-                        type="file"
-                      />
+                        </label>
+                        <input
+                          type="file"
+                          name="uploadRIF"
+                          onChange={handleFileChange}
+                          accept=".pdf"
+                        />
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -142,11 +172,13 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        id="number-input"
+                        name="sdaNumber"
+                        value={formData.sdaNumber}
+                        onChange={handleChange} // Add this onChange handler
+                        id="number-input" // Ensure the id is unique
                         aria-describedby="helper-text-explanation"
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
-                        required
                       />
                     </div>
                     <div className="md:col-span-5">
@@ -168,13 +200,12 @@ const RiskIdentificationForm: React.FC = () => {
                         Particulars
                       </label>
                       <textarea
-                        id="message"
+                        name="issueParticulars"
                         rows={4}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
                       ></textarea>
                     </div>
-
                     <div className="md:col-span-2">
                       <label
                         htmlFor="message"
@@ -189,7 +220,6 @@ const RiskIdentificationForm: React.FC = () => {
                             name="issue"
                             value="issue-initial"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            defaultChecked
                           />
                           <Label htmlFor="issue-initial">Initial</Label>
                         </div>
@@ -223,7 +253,7 @@ const RiskIdentificationForm: React.FC = () => {
                         Particulars
                       </label>
                       <textarea
-                        id="message"
+                        name="riskParticulars"
                         rows={4}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
@@ -238,11 +268,10 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        id="number-input"
-                        aria-describedby="helper-text-explanation"
+                        name="riskSEV"
+                        id="riskSEV-input" // Unique id value
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
-                        required
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -254,11 +283,10 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <input
                         type="number"
+                        name="riskPROB"
                         id="number-input"
-                        aria-describedby="helper-text-explanation"
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
-                        required
                       />
                     </div>
                     <div className="md:col-span-1">
@@ -270,6 +298,7 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <input
                         type="text"
+                        name="riskRating"
                         id="disabled-input-2"
                         aria-label="disabled input 2"
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed"
@@ -333,23 +362,22 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
                         <div className="flex items-center gap-2">
-                          <Radio
+                        <Radio
                             id="risk-initial"
                             name="risk-categorization"
                             value="risk-initial"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            defaultChecked
                           />
-                          <Label htmlFor="risk-initial">Initial</Label>
+                        <Label htmlFor="risk-initial">Initial</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Radio
-                            id="risk-residual"
-                            name="risk-categorization"
-                            value="risk-residual"
-                            className="checked:bg-yellow-500 focus:ring-yellow-500"
-                          />
-                          <Label htmlFor="risk-residual">Residual</Label>
+                        <Radio
+                          id="risk-residual"
+                          name="risk-categorization"
+                          value="risk-residual"
+                          className="checked:bg-yellow-500 focus:ring-yellow-500"
+                        />
+                        <Label htmlFor="risk-residual">Residual</Label>
                         </div>
                       </fieldset>
                     </div>
@@ -380,7 +408,7 @@ const RiskIdentificationForm: React.FC = () => {
                               id="username"
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
-                              required
+                            
                             />
                             <button
                               type="button"
@@ -441,7 +469,7 @@ const RiskIdentificationForm: React.FC = () => {
                               id="username"
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
-                              required
+                            
                             />
                             <button
                               type="button"
@@ -487,7 +515,7 @@ const RiskIdentificationForm: React.FC = () => {
                           </svg>
                         </div>
                         <input
-                          id="datetpick"
+                          id="datepicker" // Changed the id value to "datepicker"
                           type="text"
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                           placeholder="Select date"
@@ -505,13 +533,16 @@ const RiskIdentificationForm: React.FC = () => {
                         </label>
                         <select
                           id="countries"
+                          name="responsiblePerson" // Ensure the name matches the FormData interface
+                          value={formData.responsiblePerson}
+                          onChange={handleChange} // Add this onChange handler
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         >
-                          <option selected>Choose one</option>
-                          <option value="US">Dean</option>
-                          <option value="CA">Asst. Dean</option>
-                          <option value="FR">Program Chairs</option>
-                          <option value="DE">Research Directors</option>
+                          <option value="">Choose one</option>
+                          <option value="Dean">Dean</option>
+                          <option value="Asst. Dean">Asst. Dean</option>
+                          <option value="Program Chairs">Program Chairs</option>
+                          <option value="Research Directors">Research Directors</option>
                         </select>
                       </form>
                     </div>
@@ -530,7 +561,6 @@ const RiskIdentificationForm: React.FC = () => {
                             name="actions-taken"
                             value="action-internal"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            defaultChecked
                           />
                           <Label htmlFor="action-internal">Internal</Label>
                         </div>
