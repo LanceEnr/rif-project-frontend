@@ -1,9 +1,101 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+
+interface FormData {
+  sdaNumber: number;
+  uploadRIF: string;
+  issueParticulars: string;
+  issueType: string;
+  riskParticulars: string;
+  riskSEV: string;
+  riskPROB: string;
+  riskRating: string;
+  riskLevel: string;
+  actionPlan: string;
+  responsiblePerson: string;
+  [key: string]: number | string; // Index signature
+}
 
 const RiskIdentificationForm: React.FC = () => {
+  const initialState: FormData = {
+    sdaNumber: NaN,
+    uploadRIF: "",
+    issueParticulars: "",
+    issueType: "",
+    riskParticulars: "",
+    riskSEV: "",
+    riskPROB: "",
+    riskRating: "",
+    riskLevel: "",
+    actionPlan: "",
+    responsiblePerson: "",
+  };  
+
+  const [formData, setFormData] = useState<FormData>(initialState);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const requiredFields: (keyof FormData)[] = [
+      "sdaNumber",
+      "issueParticulars",
+      "issueType",
+      "riskParticulars",
+      "riskSEV",
+      "riskPROB",
+      "riskRating",
+      "riskLevel",
+      "actionPlan",
+      "responsiblePerson",
+    ];
+    const isValid = requiredFields.every(field => !!formData[field]);
+  
+    if (!isValid) {
+      setError("Please fill out all the required fields.");
+      return;
+    }
+  
+    try {
+      const response = await fetch('/api/riskform', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+    
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+    
+      // Clear error on successful submission
+      setError(null);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Failed to submit form. Please try again later.');
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit} method="post">
+      {/* Input fields */}
+      <input 
+        type="number"
+        name="sdaNumber"
+        value={formData.sdaNumber}
+        onChange={handleInputChange}
+        placeholder="SDA Number"
+      />
       <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
         <div className="flex flex-col items-right">
           <h2 className="font-bold text-5xl mt-5 tracking-tight">
@@ -428,7 +520,7 @@ const RiskIdentificationForm: React.FC = () => {
                             </svg>
                           </div>
                           <input
-                            datepicker
+                            id="datetpick"
                             type="text"
                             className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                             placeholder="Select date"
@@ -517,12 +609,11 @@ const RiskIdentificationForm: React.FC = () => {
                           >
                             Add Another Row
                           </button>
-                          <button
-                            type="submit"
-                            className="text-white border-yellow-500 border-2 bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5"
-                          >
-                            Submit
-                          </button>
+                          {/* Error message */}
+                            {error && <div style={{ color: "red" }}>{error}</div>}
+                            
+                            {/* Submit button */}
+                            <button type="submit">Submit</button>
                         </div>
                       </div>
                     </div>
@@ -533,7 +624,7 @@ const RiskIdentificationForm: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 
