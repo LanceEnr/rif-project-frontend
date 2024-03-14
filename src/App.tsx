@@ -5,7 +5,6 @@ import Faqs from "./user-side/pages/Faqs";
 import Contact from "./user-side/pages/Contact";
 import Navbar from "./user-side/components/Navbar";
 import Footer from "./user-side/components/Footer";
-import RIF from "./user-side/pages/RIF";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
@@ -76,7 +75,6 @@ const App: FC = () => {
                   <Route path="/FAQS" element={<Faqs />} />
                   <Route path="/" element={<Home />} />
                   <Route path="/Contact" element={<Contact />} />
-                  <Route path="/RIF" element={<RIF />} />
                   <Route
                     path="/addstakeholders"
                     element={<AddStakeholders />}
