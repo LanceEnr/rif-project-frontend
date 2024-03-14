@@ -1,13 +1,12 @@
 @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  0% {
+    opacity: 0;
   }
-  
-  .group-open .fadeIn {
-    animation: fadeIn 0.2s ease-in-out forwards;
+  100% {
+    opacity: 1;
   }
-  
+}
+
+.group-open .fadeIn {
+  animation: fadeIn 0.2s ease-in-out forwards;
+}

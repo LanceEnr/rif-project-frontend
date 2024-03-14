@@ -205,7 +205,7 @@ const SubmissionHistory: React.FC = () => {
           className="bg-white rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
           onMouseOver={(event) =>
             (event.currentTarget.style.boxShadow =
-              "3px 3px 10px rgba(0,0,0,0.3)")
+              "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) ")
           }
           onMouseOut={(event) => (event.currentTarget.style.boxShadow = "none")}
         >

@@ -13,49 +13,55 @@ const HeroIcons: React.FC = () => {
             What do we have to offer?{" "}
           </h2>
           <div class="flex  flex-wrap -mx-4">
-            <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
-              <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
-              <div class="relative z-10 mx-auto max-w-md">
-                <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
-                  <FaMagnifyingGlass className="h-10 w-10 text-white transition-all" />
-                </span>
-                <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
-                  <h3 class="text-xl font-bold ">
-                    Comprehensive Risk Monitoring
-                  </h3>
-                  <p>Streamlining risk identification and tracking.</p>
+            <div class="w-full md:w-1/3 px-4 mb-8">
+              <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+                <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
+                <div class="relative z-10 mx-auto max-w-md">
+                  <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
+                    <FaMagnifyingGlass className="h-10 w-10 text-white transition-all" />
+                  </span>
+                  <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
+                    <h3 class="text-xl font-bold ">
+                      Comprehensive Risk Monitoring
+                    </h3>
+                    <p>Streamlining risk identification and tracking.</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
-              <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
-              <div class="relative z-10 mx-auto max-w-md">
-                <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
-                  <FaUsersCog className="h-10 w-10 text-white transition-all" />
-                </span>
-                <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
-                  <h3 class="text-xl font-bold ">Admin and User Functions</h3>
-                  <p>
-                    Tailored features for admins and users for enhanced risk
-                    management.
-                  </p>
+            <div class="w-full md:w-1/3 px-4 mb-8">
+              <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+                <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
+                <div class="relative z-10 mx-auto max-w-md">
+                  <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
+                    <FaUsersCog className="h-10 w-10 text-white transition-all" />
+                  </span>
+                  <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
+                    <h3 class="text-xl font-bold ">Admin and User Functions</h3>
+                    <p>
+                      Tailored features for admins and users for enhanced risk
+                      management.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
-              <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
-              <div class="relative z-10 mx-auto max-w-md">
-                <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
-                  <FaUserCheck className="h-10 w-10 text-white transition-all" />
-                </span>
-                <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
-                  <h3 class="text-xl font-bold ">
-                    Efficient and User-Friendly
-                  </h3>
-                  <p>
-                    Combining efficiency with user-friendly features for a
-                    seamless experience.
-                  </p>
+            <div class="w-full md:w-1/3 px-4 mb-8">
+              <div class="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+                <span class="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
+                <div class="relative z-10 mx-auto max-w-md">
+                  <span class="grid h-20 w-20 place-items-center rounded-full bg-yellow-500 transition-all duration-300 group-hover:bg-yellow-400">
+                    <FaUserCheck className="h-10 w-10 text-white transition-all" />
+                  </span>
+                  <div class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
+                    <h3 class="text-xl font-bold ">
+                      Efficient and User-Friendly
+                    </h3>
+                    <p>
+                      Combining efficiency with user-friendly features for a
+                      seamless experience.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
