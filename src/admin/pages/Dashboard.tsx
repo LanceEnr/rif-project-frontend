@@ -1,16 +1,15 @@
 import React from "react";
-import { Card } from "flowbite-react";
 import BarChart from "../components/BarChart";
 
 const MacroAnalytics: React.FC = () => {
   return (
     <div>
       <div className="grid grid-cols-4 gap-4 mb-4">
-        <div class="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
-          <div class="p-4 bg-green-500">
+        <div className="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
+          <div className="p-4 bg-green-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-12 text-white"
+              className="h-12 w-12 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -23,16 +22,16 @@ const MacroAnalytics: React.FC = () => {
               ></path>
             </svg>
           </div>
-          <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Users</h3>
-            <p class="text-3xl">12</p>
+          <div className="px-4 text-gray-700">
+            <h3 className="text-sm tracking-wider">Users</h3>
+            <p className="text-3xl">12</p>
           </div>
         </div>
-        <div class="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
-          <div class="p-4 bg-blue-500">
+        <div className="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
+          <div className="p-4 bg-blue-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-12 text-white"
+              className="h-12 w-12 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -45,16 +44,16 @@ const MacroAnalytics: React.FC = () => {
               ></path>
             </svg>
           </div>
-          <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Total Submissions</h3>
-            <p class="text-3xl">200</p>
+          <div className="px-4 text-gray-700">
+            <h3 className="text-sm tracking-wider">Total Submissions</h3>
+            <p className="text-3xl">200</p>
           </div>
         </div>
-        <div class="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
-          <div class="p-4 bg-green-500">
+        <div className="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
+          <div className="p-4 bg-green-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-12 text-white"
+              className="h-12 w-12 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -67,16 +66,16 @@ const MacroAnalytics: React.FC = () => {
               ></path>
             </svg>
           </div>
-          <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Complete Reports</h3>
-            <p class="text-3xl">23</p>
+          <div className="px-4 text-gray-700">
+            <h3 className="text-sm tracking-wider">Complete Reports</h3>
+            <p className="text-3xl">23</p>
           </div>
         </div>
-        <div class="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
-          <div class="p-4 bg-red-500">
+        <div className="flex items-center bg-white border  overflow-hidden rounded-lg  md:flex-row md:max-w-xl">
+          <div className="p-4 bg-red-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-12 text-white"
+              className="h-12 w-12 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -89,9 +88,9 @@ const MacroAnalytics: React.FC = () => {
               ></path>
             </svg>
           </div>
-          <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Incomplete Reports</h3>
-            <p class="text-3xl">49</p>
+          <div className="px-4 text-gray-700">
+            <h3 className="text-sm tracking-wider">Incomplete Reports</h3>
+            <p className="text-3xl">49</p>
           </div>
         </div>
       </div>

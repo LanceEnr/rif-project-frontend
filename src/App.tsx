@@ -58,8 +58,9 @@ const App: FC = () => {
                         path="macroanalytics"
                         element={<MacroAnalytics />}
                       />
-                      <Route path="*" element={<NotFoundPage />} />
                       <Route path="logs" element={<Logs />} />
+
+                      <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </div>
                 </div>
