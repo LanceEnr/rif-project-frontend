@@ -8,7 +8,6 @@ import Footer from "./user-side/components/Footer";
 import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
-import Logs from "./admin/pages/Logs";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -57,7 +56,6 @@ const App: FC = () => {
                         path="macroanalytics"
                         element={<MacroAnalytics />}
                       />
-                      <Route path="logs" element={<Logs />} />
 
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>
