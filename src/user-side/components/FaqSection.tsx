@@ -4,18 +4,18 @@ import { Link } from "react-router-dom";
 const FaqSection: React.FC = () => {
   return (
     <>
-      <section class="bg-white dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-          <h2 class="mb-8 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+      <section className="bg-white dark:bg-gray-900">
+        <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+          <h2 className="mb-8 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
             Some of our frequently asked questions
           </h2>
 
-          <div class="grid  pt-8    text-left md:gap-16 dark:border-gray-700 md:grid-cols-2">
+          <div className="grid  pt-8    text-left md:gap-16 dark:border-gray-700 md:grid-cols-2">
             <div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -28,17 +28,17 @@ const FaqSection: React.FC = () => {
                   </svg>
                   What do you mean by "Figma assets"?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   You will have access to download the full Figma project
                   including all of the pages, the components, responsive pages,
                   and also the icons, illustrations, and images included in the
                   screens.
                 </p>
               </div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -51,16 +51,16 @@ const FaqSection: React.FC = () => {
                   </svg>
                   What does "lifetime access" exactly mean?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   Once you have purchased either the design, code, or both
                   packages, you will have access to all of the future updates
                   based on the roadmap, free of charge.
                 </p>
               </div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -73,16 +73,16 @@ const FaqSection: React.FC = () => {
                   </svg>
                   How does support work?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   We're aware of the importance of well qualified support, that
                   is why we decided that support will only be provided by the
                   authors that actually worked on this project.
                 </p>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   Feel free to{" "}
                   <a
                     href="#"
-                    class="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
+                    className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -93,10 +93,10 @@ const FaqSection: React.FC = () => {
               </div>
             </div>
             <div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -109,11 +109,11 @@ const FaqSection: React.FC = () => {
                   </svg>
                   What does "free updates" include?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   The free updates that will be provided is based on the{" "}
                   <a
                     href="#"
-                    class="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
+                    className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
                   >
                     roadmap
                   </a>{" "}
@@ -122,10 +122,10 @@ const FaqSection: React.FC = () => {
                   well.
                 </p>
               </div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -138,11 +138,11 @@ const FaqSection: React.FC = () => {
                   </svg>
                   What does the free version include?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   The{" "}
                   <a
                     href="#"
-                    class="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
+                    className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
                   >
                     free version
                   </a>{" "}
@@ -150,15 +150,15 @@ const FaqSection: React.FC = () => {
                   variants, and a dashboard page with the mobile version
                   alongside it.
                 </p>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   You can use this version for any purposes, because it is
                   open-source under the MIT license.
                 </p>
               </div>
-              <div class="mb-10">
-                <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+              <div className="mb-10">
+                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
                   <svg
-                    class="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
+                    className="flex-shrink-0 mr-2 w-5 h-5 text-yellow-500 dark:text-gray-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -171,13 +171,13 @@ const FaqSection: React.FC = () => {
                   </svg>
                   What is the difference between Windster and Tailwind UI?
                 </h3>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   Although both Windster and Tailwind UI are built for
                   integration with Tailwind CSS, the main difference is in the
                   design, the pages, the extra components and UI elements that
                   Windster includes.
                 </p>
-                <p class="text-gray-500">
+                <p className="text-gray-500">
                   Additionally, Windster is a project that is still in
                   development, and later it will include both the application,
                   marketing, and e-commerce UI interfaces.
