@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Esignature: React.FC = () => {
   return (
     <>
-      <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+      <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
         <div className="flex flex-col items-right">
           <h2 className="font-bold text-5xl mt-5 tracking-tight">Settings</h2>
 
@@ -62,7 +62,7 @@ const Esignature: React.FC = () => {
             </ul>
           </div>
 
-          <div className="col-span-8 overflow-hidden rounded-xl sm:bg-gray-50 sm:px-8 sm:shadow">
+          <div className="col-span-8 overflow-hidden rounded-xl sm:bg-yellow-100 sm:px-8 sm:shadow-md">
             <div className="pt-4">
               <h1 className="py-2 text-2xl font-semibold">
                 E-Signature Upload

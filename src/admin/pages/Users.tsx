@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Users: React.FC = () => {
   return (
-    <div className="w-screen-xl px-4 bg-white min-h-screen">
+    <div className="w-screen-xl px-4  min-h-screen">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Users</h2>
         <div className="flex justify-between items-center">
@@ -14,7 +14,7 @@ const Users: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="relative overflow-x-auto">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
           {/* Dropdown */}
           <div>
             <Dropdown
@@ -25,7 +25,7 @@ const Users: React.FC = () => {
                 <button
                   id="dropdownActionButton"
                   data-dropdown-toggle="dropdownAction"
-                  className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                  className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 "
                   type="button"
                 >
                   Filter
@@ -64,14 +64,14 @@ const Users: React.FC = () => {
             <input
               type="text"
               id="table-search-users"
-              className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+              className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search for users"
             />
           </div>
         </div>
         {/* User Table */}
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
               <th scope="col" className="p-4">
                 <div className="flex items-center">
@@ -100,51 +100,7 @@ const Users: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-black-800 border-b  hover:bg-gray-80 ">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-black-600 bg-gray-100 border-black-300 rounded focus:ring-black-500    focus:ring-2 "
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-1"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/352821016_9573881405985280_623867098206874102_n.jpg?stp=cp6_dst-jpg&_nc_cat=107&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=fmqqGk02Tn4AX-R22bv&_nc_ht=scontent.fmnl25-4.fna&oh=00_AfBKXL2Zw3_yaGcP718sKI9HFGfia5A220jvZT5t66y8NA&oe=65E222AE"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Lance Enriquez</div>
-                  <div className="font-normal text-gray-500">2020145167</div>
-                </div>
-              </th>
-              <td className="px-6 py-4">Admin</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Active
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <Link
-                  to="/admin/editUser "
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  Edit user
-                </Link>
-              </td>
-            </tr>
-            <tr className="bg-white border-b hover:bg-gray-50 ">
+            <tr className="bg-white border-b hover:bg-gray-100 ">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -188,7 +144,7 @@ const Users: React.FC = () => {
                 </a>
               </td>
             </tr>
-            <tr className="bg-white border-b  hover:bg-gray-50 ">
+            <tr className="bg-white border-b  hover:bg-gray-100 ">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -232,7 +188,7 @@ const Users: React.FC = () => {
                 </a>
               </td>
             </tr>
-            <tr className="bg-white border-b hover:bg-gray-50">
+            <tr className="bg-white border-b hover:bg-gray-100">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -276,7 +232,7 @@ const Users: React.FC = () => {
                 </a>
               </td>
             </tr>
-            <tr className="bg-white hover:bg-gray-50 ">
+            <tr className="bg-white hover:bg-gray-100 ">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input

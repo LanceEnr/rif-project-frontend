@@ -2,7 +2,7 @@ import React from "react";
 
 const Faqs: React.FC = () => {
   return (
-    <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight flex">
           Frequently Asked Questions

@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 const RifTrackerTable: React.FC = () => {
   return (
-    <div className="w-screen-xl px-4 bg-white min-h-screen">
+    <div className="w-screen-xl px-4  min-h-screen">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">RIF Tracker</h2>
         <div className="flex justify-between items-center">
@@ -16,7 +16,7 @@ const RifTrackerTable: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="relative overflow-x-auto">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
           {/* Dropdown */}
           <Dropdown
             label=""
@@ -73,7 +73,7 @@ const RifTrackerTable: React.FC = () => {
         </div>
         {/* User Table */}
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Name
@@ -91,7 +91,7 @@ const RifTrackerTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
@@ -184,7 +184,7 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
             </tr>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
@@ -264,7 +264,7 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
             </tr>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
@@ -344,7 +344,7 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
             </tr>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
@@ -424,7 +424,7 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
             </tr>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
@@ -505,7 +505,7 @@ const RifTrackerTable: React.FC = () => {
                 </div>
               </td>
             </tr>
-            <tr className="border-b  bg-white hover:bg-gray-50 ">
+            <tr className="border-b  bg-white hover:bg-gray-100 ">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "

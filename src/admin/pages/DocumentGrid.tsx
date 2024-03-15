@@ -58,7 +58,7 @@ const DocumentGrid: React.FC = () => {
   ];
 
   return (
-    <div className="w-screen-xl px-4 bg-white min-h-screen">
+    <div className="w-screen-xl px-4  min-h-screen">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
@@ -68,7 +68,7 @@ const DocumentGrid: React.FC = () => {
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
         {/* Dropdown */}
         <div>
           <Dropdown
@@ -124,7 +124,7 @@ const DocumentGrid: React.FC = () => {
       <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
         {posts.map((item, index) => (
           <div
-            className="w-full rounded-lg shadow-md lg:max-w-sm relative"
+            className="w-full rounded-lg shadow-md bg-white lg:max-w-sm relative"
             key={index}
             style={{ cursor: "pointer" }}
           >

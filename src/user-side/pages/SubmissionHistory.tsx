@@ -130,7 +130,7 @@ const SubmissionHistory: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Submission History
@@ -142,7 +142,7 @@ const SubmissionHistory: React.FC = () => {
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
         {/* Dropdown */}
         <div>
           <Dropdown
@@ -202,7 +202,7 @@ const SubmissionHistory: React.FC = () => {
             cursor: "pointer",
             transition: "all 1s ease",
           }}
-          className="bg-white rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
+          className=" rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
           onMouseOver={(event) =>
             (event.currentTarget.style.boxShadow =
               "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) ")
@@ -225,7 +225,7 @@ const SubmissionHistory: React.FC = () => {
         </Link>
         {posts.map((item, index) => (
           <div
-            className="w-full rounded-lg shadow-md lg:max-w-sm"
+            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
             key={index}
             style={{ cursor: "pointer" }}
           >
@@ -276,10 +276,10 @@ const SubmissionHistory: React.FC = () => {
                     </button>
                   )}
                 >
-                  <Dropdown.Item as={Link} to="/admin/microanalytics">
+                  <Dropdown.Item as={Link} to="/form">
                     Duplicate and Edit
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/admin/logs">
+                  <Dropdown.Item as={Link} to="#">
                     Edit Logs
                   </Dropdown.Item>
                 </Dropdown>
