@@ -102,14 +102,17 @@ const RiskIdentificationForm: React.FC = () => {
         }
       }
 
-      const response = await fetch("http://localhost:8080/api/riskforms", {
-        method: "POST",
-        body: formDataToSend,
+      const response = await fetch("http://localhost:8080/api/riskforms/submit", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formDataToSend),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
-      }
+        if (!response.ok) {
+          throw new Error("Failed to submit form");
+        }
 
       // Clear error on successful submission
       setError(null);
