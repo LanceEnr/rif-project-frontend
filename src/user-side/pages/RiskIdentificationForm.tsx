@@ -11,7 +11,7 @@ interface FormData {
   riskPROB: string;
   riskLevel: string;
   riskType: string;
-  opportunities:string;
+  opportunities: string;
   actionPlan: string;
   date: string;
   responsiblePerson: string;
@@ -31,7 +31,7 @@ const RiskIdentificationForm: React.FC = () => {
     riskPROB: "",
     riskLevel: "",
     riskType: "",
-    opportunities:"",
+    opportunities: "",
     actionPlan: "",
     date: "",
     responsiblePerson: "",
@@ -62,7 +62,12 @@ const RiskIdentificationForm: React.FC = () => {
     ];
 
     const isValid = requiredFields.every((field: keyof FormData) => {
-      if (field === "issueType" || field === "riskLevel" || field === "riskType" || field === "actionRad") {
+      if (
+        field === "issueType" ||
+        field === "riskLevel" ||
+        field === "riskType" ||
+        field === "actionRad"
+      ) {
         return !!formData[field]; // Ensure that at least one option is selected
       }
       return !!formData[field];
@@ -86,7 +91,7 @@ const RiskIdentificationForm: React.FC = () => {
       setError("Please upload a PDF file for the RIF.");
       return;
     }
-    
+
     try {
       const formDataToSend = new FormData();
       for (const key in formData) {
@@ -117,13 +122,15 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-    
+
     // Validate the field
     if (!value.trim()) {
       setErrors((prevErrors) => ({
@@ -148,14 +155,14 @@ const RiskIdentificationForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} method="post">
-        <input
-          type="text"
-          name="actionPlan"
-          value={formData.actionPlan}
-          onChange={handleChange} // Add this onChange handler
-          placeholder="Write here..."
-        />
-      <div className="max-w-screen-xl mx-auto px-4 bg-white min-h-screen my-24">
+      <input
+        type="text"
+        name="actionPlan"
+        value={formData.actionPlan}
+        onChange={handleChange} // Add this onChange handler
+        placeholder="Write here..."
+      />
+      <div className="max-w-screen-xl mx-auto px-4   min-h-screen my-24">
         <div className="flex flex-col items-right">
           <h2 className="font-bold text-5xl mt-5 tracking-tight">
             Risk Identification Form
@@ -169,24 +176,24 @@ const RiskIdentificationForm: React.FC = () => {
             <p className="text-gray-600">Please fill out all the fields.</p>
           </div>
 
-          <div className="col-span-8 overflow-hidden rounded-xl sm:bg-gray-50 sm:px-8 sm:shadow">
+          <div className="col-span-8 overflow-hidden rounded-xl sm:bg-yellow-100 sm:px-8 sm:shadow">
             <div className="mt-4 mb-10">
               <div className="grid gap-4 mb-4 sm:grid-cols-1">
                 <div className="lg:col-span-2">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     <div className="md:col-span-3">
-                    <label
+                      <label
                         htmlFor="file_input"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
                         Upload RIF (Optional)
-                        </label>
-                        <input
-                          type="file"
-                          name="uploadRIF"
-                          onChange={handleFileChange}
-                          accept=".pdf"
-                        />
+                      </label>
+                      <input
+                        type="file"
+                        name="uploadRIF"
+                        onChange={handleFileChange}
+                        accept=".pdf"
+                      />
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -205,7 +212,9 @@ const RiskIdentificationForm: React.FC = () => {
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
                       />
-                      {errors.sdaNumber && <p className="text-red-500">{errors.sdaNumber}</p>}
+                      {errors.sdaNumber && (
+                        <p className="text-red-500">{errors.sdaNumber}</p>
+                      )}
                     </div>
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
@@ -232,10 +241,17 @@ const RiskIdentificationForm: React.FC = () => {
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
-                      {errors.issueParticulars && <p className="text-red-500">{errors.issueParticulars}</p>}
+                      {errors.issueParticulars && (
+                        <p className="text-red-500">
+                          {errors.issueParticulars}
+                        </p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
-                      <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900">
+                      <label
+                        htmlFor="message"
+                        className="block mb-2 text-sm font-medium text-gray-900"
+                      >
                         Issue Type
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
@@ -260,7 +276,9 @@ const RiskIdentificationForm: React.FC = () => {
                           <Label htmlFor="issue-residual">Residual</Label>
                         </div>
                       </fieldset>
-                      {errors.issueType && <p className="text-red-500">{errors.issueType}</p>}
+                      {errors.issueType && (
+                        <p className="text-red-500">{errors.issueType}</p>
+                      )}
                     </div>
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
@@ -287,7 +305,9 @@ const RiskIdentificationForm: React.FC = () => {
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
-                      {errors.riskParticulars && <p className="text-red-500">{errors.riskParticulars}</p>}
+                      {errors.riskParticulars && (
+                        <p className="text-red-500">{errors.riskParticulars}</p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -304,7 +324,9 @@ const RiskIdentificationForm: React.FC = () => {
                         placeholder="0-9"
                         onChange={handleChange}
                       />
-                      {errors.riskSEV && <p className="text-red-500">{errors.riskSEV}</p>}
+                      {errors.riskSEV && (
+                        <p className="text-red-500">{errors.riskSEV}</p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -321,7 +343,9 @@ const RiskIdentificationForm: React.FC = () => {
                         placeholder="0-9"
                         onChange={handleChange}
                       />
-                      {errors.riskPROB && <p className="text-red-500">{errors.riskPROB}</p>}
+                      {errors.riskPROB && (
+                        <p className="text-red-500">{errors.riskPROB}</p>
+                      )}
                     </div>
                     <div className="md:col-span-1">
                       <label
@@ -389,7 +413,9 @@ const RiskIdentificationForm: React.FC = () => {
                           <Label htmlFor="risk-h">H</Label>
                         </div>
                       </fieldset>
-                      {errors.riskLevel && <p className="text-red-500">{errors.riskLevel}</p>}
+                      {errors.riskLevel && (
+                        <p className="text-red-500">{errors.riskLevel}</p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -400,27 +426,29 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
                         <div className="flex items-center gap-2">
-                        <Radio
+                          <Radio
                             id="risk-initial"
                             name="riskType"
                             value="risk-initial"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
-                        <Label htmlFor="risk-initial">Initial</Label>
+                          <Label htmlFor="risk-initial">Initial</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                        <Radio
-                          id="risk-residual"
-                          name="riskType"
-                          value="risk-residual"
-                          className="checked:bg-yellow-500 focus:ring-yellow-500"
-                          onChange={handleChange}
-                        />
-                        <Label htmlFor="risk-residual">Residual</Label>
+                          <Radio
+                            id="risk-residual"
+                            name="riskType"
+                            value="risk-residual"
+                            className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
+                          />
+                          <Label htmlFor="risk-residual">Residual</Label>
                         </div>
                       </fieldset>
-                      {errors.riskType && <p className="text-red-500">{errors.riskType}</p>}
+                      {errors.riskType && (
+                        <p className="text-red-500">{errors.riskType}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-5">
@@ -449,7 +477,6 @@ const RiskIdentificationForm: React.FC = () => {
                               id="opportunities"
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
-                            
                             />
                             <button
                               type="button"
@@ -512,7 +539,11 @@ const RiskIdentificationForm: React.FC = () => {
                               placeholder="Write here..."
                               onChange={handleChange}
                             />
-                            {errors.actionPlan && <p className="text-red-500">{errors.actionPlan}</p>}
+                            {errors.actionPlan && (
+                              <p className="text-red-500">
+                                {errors.actionPlan}
+                              </p>
+                            )}
                             <button
                               type="button"
                               className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
@@ -574,9 +605,15 @@ const RiskIdentificationForm: React.FC = () => {
                           <option value="Dean">Dean</option>
                           <option value="Asst. Dean">Asst. Dean</option>
                           <option value="Program Chairs">Program Chairs</option>
-                          <option value="Research Directors">Research Directors</option>
+                          <option value="Research Directors">
+                            Research Directors
+                          </option>
                         </select>
-                        {errors.responsiblePerson && <p className="text-red-500">{errors.responsiblePerson}</p>}
+                        {errors.responsiblePerson && (
+                          <p className="text-red-500">
+                            {errors.responsiblePerson}
+                          </p>
+                        )}
                       </form>
                     </div>
 
@@ -609,7 +646,9 @@ const RiskIdentificationForm: React.FC = () => {
                           <Label htmlFor="action-external">External</Label>
                         </div>
                       </fieldset>
-                      {errors.actionRad && <p className="text-red-500">{errors.actionRad}</p>}
+                      {errors.actionRad && (
+                        <p className="text-red-500">{errors.actionRad}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-5">
