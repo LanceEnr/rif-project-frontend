@@ -10,8 +10,13 @@ interface FormData {
   riskSEV: string;
   riskPROB: string;
   riskLevel: string;
+  riskType: string;
+  opportunities:string;
   actionPlan: string;
+  date: string;
   responsiblePerson: string;
+  riskRating: string;
+  actionRad: string;
   [key: string]: number | string | File | null; // Index signature
 }
 
@@ -25,12 +30,18 @@ const RiskIdentificationForm: React.FC = () => {
     riskSEV: "",
     riskPROB: "",
     riskLevel: "",
+    riskType: "",
+    opportunities:"",
     actionPlan: "",
+    date: "",
     responsiblePerson: "",
+    actionRad: "",
+    riskRating: "", // Set riskRating to "9"
   };
 
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Partial<FormData>>({});
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,20 +55,21 @@ const RiskIdentificationForm: React.FC = () => {
       "riskPROB",
       "actionPlan",
       "responsiblePerson",
+      "issueType",
+      "riskLevel",
+      "riskType",
+      "actionRad",
     ];
 
-    const isValid = requiredFields.every((field: keyof FormData) =>
-      formData[field]
-    );
+    const isValid = requiredFields.every((field: keyof FormData) => {
+      if (field === "issueType" || field === "riskLevel" || field === "riskType" || field === "actionRad") {
+        return !!formData[field]; // Ensure that at least one option is selected
+      }
+      return !!formData[field];
+    });
 
     if (!isValid) {
       setError("Please fill out all the required fields.");
-      return;
-    }
-
-    // Additional validation for numerical fields
-    if (isNaN(Number(formData.riskSEV)) || isNaN(Number(formData.riskPROB))) {
-      setError("Risk SEV and PROB must be numerical values.");
       return;
     }
 
@@ -74,7 +86,7 @@ const RiskIdentificationForm: React.FC = () => {
       setError("Please upload a PDF file for the RIF.");
       return;
     }
-
+    
     try {
       const formDataToSend = new FormData();
       for (const key in formData) {
@@ -105,12 +117,25 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
+    
+    // Validate the field
+    if (!value.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "This field is required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "", // Clear the error message for this field
+      }));
+    }
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -180,6 +205,7 @@ const RiskIdentificationForm: React.FC = () => {
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
                       />
+                      {errors.sdaNumber && <p className="text-red-500">{errors.sdaNumber}</p>}
                     </div>
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
@@ -204,35 +230,37 @@ const RiskIdentificationForm: React.FC = () => {
                         rows={4}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
+                        onChange={handleChange}
                       ></textarea>
+                      {errors.issueParticulars && <p className="text-red-500">{errors.issueParticulars}</p>}
                     </div>
                     <div className="md:col-span-2">
-                      <label
-                        htmlFor="message"
-                        className="block mb-2 text-sm font-medium text-gray-900"
-                      >
-                        Check one
+                      <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900">
+                        Issue Type
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
                             id="issue-initial"
-                            name="issue"
-                            value="issue-initial"
+                            name="issueType"
+                            value="Initial"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="issue-initial">Initial</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="issue-residual"
-                            name="issue"
-                            value="issue-residual"
+                            name="issueType"
+                            value="Residual"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="issue-residual">Residual</Label>
                         </div>
                       </fieldset>
+                      {errors.issueType && <p className="text-red-500">{errors.issueType}</p>}
                     </div>
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
@@ -257,7 +285,9 @@ const RiskIdentificationForm: React.FC = () => {
                         rows={4}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
+                        onChange={handleChange}
                       ></textarea>
+                      {errors.riskParticulars && <p className="text-red-500">{errors.riskParticulars}</p>}
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -272,7 +302,9 @@ const RiskIdentificationForm: React.FC = () => {
                         id="riskSEV-input" // Unique id value
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
+                        onChange={handleChange}
                       />
+                      {errors.riskSEV && <p className="text-red-500">{errors.riskSEV}</p>}
                     </div>
                     <div className="md:col-span-2">
                       <label
@@ -287,7 +319,9 @@ const RiskIdentificationForm: React.FC = () => {
                         id="number-input"
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
+                        onChange={handleChange}
                       />
+                      {errors.riskPROB && <p className="text-red-500">{errors.riskPROB}</p>}
                     </div>
                     <div className="md:col-span-1">
                       <label
@@ -327,59 +361,66 @@ const RiskIdentificationForm: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-l"
-                            name="risk-level"
+                            name="riskLevel"
                             value="risk-l"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="risk-l">L</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-m"
-                            name="risk-level"
+                            name="riskLevel"
                             value="risk-m"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="risk-m">M</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-h"
-                            name="risk-level"
+                            name="riskLevel"
                             value="risk-h"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="risk-h">H</Label>
                         </div>
                       </fieldset>
+                      {errors.riskLevel && <p className="text-red-500">{errors.riskLevel}</p>}
                     </div>
                     <div className="md:col-span-2">
                       <label
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Check one
+                        Issue Type
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
                         <div className="flex items-center gap-2">
                         <Radio
                             id="risk-initial"
-                            name="risk-categorization"
+                            name="riskType"
                             value="risk-initial"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                         <Label htmlFor="risk-initial">Initial</Label>
                         </div>
                         <div className="flex items-center gap-2">
                         <Radio
                           id="risk-residual"
-                          name="risk-categorization"
+                          name="riskType"
                           value="risk-residual"
                           className="checked:bg-yellow-500 focus:ring-yellow-500"
+                          onChange={handleChange}
                         />
                         <Label htmlFor="risk-residual">Residual</Label>
                         </div>
                       </fieldset>
+                      {errors.riskType && <p className="text-red-500">{errors.riskType}</p>}
                     </div>
 
                     <div className="md:col-span-5">
@@ -404,8 +445,8 @@ const RiskIdentificationForm: React.FC = () => {
                           <div className="relative flex-grow">
                             <input
                               type="text"
-                              name="username"
-                              id="username"
+                              name="opportunities"
+                              id="opportunities"
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
                             
@@ -465,12 +506,13 @@ const RiskIdentificationForm: React.FC = () => {
                           <div className="relative flex-grow">
                             <input
                               type="text"
-                              name="username"
-                              id="username"
+                              name="actionPlan"
+                              id="Entries"
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
-                            
+                              onChange={handleChange}
                             />
+                            {errors.actionPlan && <p className="text-red-500">{errors.actionPlan}</p>}
                             <button
                               type="button"
                               className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
@@ -500,23 +542,13 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="number-input"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        SDA number
+                        Date
                       </label>
                       <div className="relative max-w-sm">
-                        <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                          <svg
-                            className="w-4 h-4 text-gray-500"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                          </svg>
-                        </div>
                         <input
-                          id="datepicker" // Changed the id value to "datepicker"
-                          type="text"
+                          id="datepicker"
+                          name="Date" // Changed the id value to "datepicker"
+                          type="date"
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                           placeholder="Select date"
                         />
@@ -532,7 +564,7 @@ const RiskIdentificationForm: React.FC = () => {
                           Person Responsible
                         </label>
                         <select
-                          id="countries"
+                          id="personResponsible"
                           name="responsiblePerson" // Ensure the name matches the FormData interface
                           value={formData.responsiblePerson}
                           onChange={handleChange} // Add this onChange handler
@@ -544,6 +576,7 @@ const RiskIdentificationForm: React.FC = () => {
                           <option value="Program Chairs">Program Chairs</option>
                           <option value="Research Directors">Research Directors</option>
                         </select>
+                        {errors.responsiblePerson && <p className="text-red-500">{errors.responsiblePerson}</p>}
                       </form>
                     </div>
 
@@ -558,22 +591,25 @@ const RiskIdentificationForm: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <Radio
                             id="action-internal"
-                            name="actions-taken"
+                            name="actionRad"
                             value="action-internal"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="action-internal">Internal</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="action-external"
-                            name="actions-taken"
+                            name="actionRad"
                             value="action-external"
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
+                            onChange={handleChange}
                           />
                           <Label htmlFor="action-external">External</Label>
                         </div>
                       </fieldset>
+                      {errors.actionRad && <p className="text-red-500">{errors.actionRad}</p>}
                     </div>
 
                     <div className="md:col-span-5">
@@ -583,22 +619,14 @@ const RiskIdentificationForm: React.FC = () => {
                     <div className="md:col-span-5 flex justify-between">
                       <div className="inline-flex items-start">
                         <button
-                          type="button"
-                          className="text-white border-yellow-500 border-2 bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5"
+                          type="submit"
+                          className="inline-flex items-center justify-center h-9 px-4 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
-                          Go Back
+                          Submit
                         </button>
-                      </div>
-                      <div className="inline-flex items-end">
-                        <button
-                          type="button"
-                          className="text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 border-2 mr-2"
-                        >
-                          Add Another Row
-                        </button>
-                        {/* Submit button */}
-                        {error && <div style={{ color: "red" }}>{error}</div>}
-                        <button type="submit">Submit</button>
+                        {error && (
+                          <p className="ml-2 text-sm text-red-600">{error}</p>
+                        )}
                       </div>
                     </div>
                   </div>
