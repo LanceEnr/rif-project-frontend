@@ -10,3 +10,6 @@
 .group-open .fadeIn {
   animation: fadeIn 0.2s ease-in-out forwards;
 }
+body {
+  background-color: #f9fafb; /* This is the equivalent of bg-gray-50 in Tailwind CSS */
+}

@@ -6,7 +6,7 @@ import { FaUserCheck } from "react-icons/fa";
 const HeroIcons: React.FC = () => {
   return (
     <>
-      <section className="bg-white ">
+      <section className="bg-gray-50 ">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
           <h2 className="mb-8 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 lg:mb-16 dark:text-white md:text-4xl">
             What do we have to offer?{" "}
