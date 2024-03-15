@@ -7,8 +7,8 @@ interface FormData {
   issueParticulars: string;
   issueType: string;
   riskParticulars: string;
-  riskSEV: string;
-  riskPROB: string;
+  riskSEV: number;
+  riskPROB: number;
   riskLevel: string;
   riskType: string;
   opportunities:string;
@@ -27,8 +27,8 @@ const RiskIdentificationForm: React.FC = () => {
     issueParticulars: "",
     issueType: "",
     riskParticulars: "",
-    riskSEV: "",
-    riskPROB: "",
+    riskSEV: 0,
+    riskPROB: 0,
     riskLevel: "",
     riskType: "",
     opportunities:"",
@@ -97,7 +97,7 @@ const RiskIdentificationForm: React.FC = () => {
         }
       }
 
-      const response = await fetch("/api/riskforms/submit", {
+      const response = await fetch("http://localhost:8080/api/riskforms", {
         method: "POST",
         body: formDataToSend,
       });
