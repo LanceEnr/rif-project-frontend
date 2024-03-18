@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Label, Radio } from "flowbite-react";
 
+// Define the interface for form data
 interface FormData {
   sdaNumber: number | string;
   uploadRIF: File | null;
@@ -20,7 +21,9 @@ interface FormData {
   [key: string]: number | string | File | null; // Index signature
 }
 
+// Component
 const RiskIdentificationForm: React.FC = () => {
+  // Initial form state
   const initialState: FormData = {
     sdaNumber: "",
     uploadRIF: null,
@@ -43,6 +46,7 @@ const RiskIdentificationForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -125,6 +129,7 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
+  // Handle form field changes
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -148,6 +153,7 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
+  // Handle file input change
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     setFormData((prevFormData) => ({
