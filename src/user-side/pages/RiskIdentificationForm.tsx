@@ -38,13 +38,14 @@ const RiskIdentificationForm: React.FC = () => {
     actionPlan: "",
     date: "",
     responsiblePerson: "",
+    riskRating: "",
     actionRad: "",
-    riskRating: "", // Set riskRating to "9"
-  };
+  };  
 
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [date, setDate] = useState(""); // Add state for managing date input
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -118,11 +119,12 @@ const RiskIdentificationForm: React.FC = () => {
           throw new Error("Failed to submit form");
         }
 
-      // Clear error on successful submission
-      setError(null);
+        // Clear error on successful submission
+    setError(null);
 
-      // Reset form fields
+      // Reset form fields to initial state
       setFormData(initialState);
+      setDate(""); // Reset date input field
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Failed to submit form. Please try again later.");
@@ -137,7 +139,7 @@ const RiskIdentificationForm: React.FC = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-    }));
+    }))
 
     // Validate the field
     if (!value.trim()) {
@@ -160,6 +162,16 @@ const RiskIdentificationForm: React.FC = () => {
       ...prevFormData,
       uploadRIF: file || null,
     }));
+  };
+  
+  // Update the handleDateChange function to handle changes in the date input field
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      date: value,
+    }));
+    setDate(value);
   };
 
   return (
@@ -246,6 +258,7 @@ const RiskIdentificationForm: React.FC = () => {
                       <textarea
                         name="issueParticulars"
                         rows={4}
+                        value={formData.issueParticulars}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
                         onChange={handleChange}
@@ -269,6 +282,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="issue-initial"
                             name="issueType"
                             value="Initial"
+                            checked={formData.issueType === "Initial"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -279,6 +293,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="issue-residual"
                             name="issueType"
                             value="Residual"
+                            checked={formData.issueType === "Residual"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -310,6 +325,7 @@ const RiskIdentificationForm: React.FC = () => {
                       <textarea
                         name="riskParticulars"
                         rows={4}
+                        value={formData.riskParticulars}
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
                         onChange={handleChange}
@@ -329,6 +345,7 @@ const RiskIdentificationForm: React.FC = () => {
                         type="number"
                         name="riskSEV"
                         id="riskSEV-input" // Unique id value
+                        value={formData.riskSEV}
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
                         onChange={handleChange}
@@ -348,6 +365,7 @@ const RiskIdentificationForm: React.FC = () => {
                         type="number"
                         name="riskPROB"
                         id="number-input"
+                        value={formData.riskPROB}
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="0-9"
                         onChange={handleChange}
@@ -395,7 +413,8 @@ const RiskIdentificationForm: React.FC = () => {
                           <Radio
                             id="risk-l"
                             name="riskLevel"
-                            value="risk-l"
+                            value="riskL"
+                            checked={formData.riskLevel === "riskL"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -406,6 +425,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="risk-m"
                             name="riskLevel"
                             value="risk-m"
+                            checked={formData.riskLevel === "risk-m"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -416,6 +436,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="risk-h"
                             name="riskLevel"
                             value="risk-h"
+                            checked={formData.riskLevel === "risk-h"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -439,6 +460,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="risk-initial"
                             name="riskType"
                             value="risk-initial"
+                            checked={formData.riskType === "risk-initial"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -449,6 +471,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="risk-residual"
                             name="riskType"
                             value="risk-residual"
+                            checked={formData.riskType === "risk-residual"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -484,6 +507,8 @@ const RiskIdentificationForm: React.FC = () => {
                               type="text"
                               name="opportunities"
                               id="opportunities"
+                              value={formData.opportunities}
+                              onChange={handleChange} // Add this line
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
                             />
@@ -544,6 +569,7 @@ const RiskIdentificationForm: React.FC = () => {
                               type="text"
                               name="actionPlan"
                               id="Entries"
+                              value={formData.actionPlan}
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
                               onChange={handleChange}
@@ -576,19 +602,21 @@ const RiskIdentificationForm: React.FC = () => {
                         </div>
                       </div>
                     </div>
-
+                    
                     <div className="md:col-span-2">
                       <label
-                        htmlFor="number-input"
+                        htmlFor="datepicker"
                         className="block mb-2 text-sm font-medium text-gray-900"
-                      >
+                    >
                         Date
                       </label>
                       <div className="relative max-w-sm">
-                        <input
+                      <input
                           id="datepicker"
-                          name="Date" // Changed the id value to "datepicker"
+                          name="date"
                           type="date"
+                          value={date}
+                          onChange={handleDateChange}
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                           placeholder="Select date"
                         />
@@ -639,6 +667,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="action-internal"
                             name="actionRad"
                             value="action-internal"
+                            checked={formData.actionRad === "action-internal"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
@@ -649,6 +678,7 @@ const RiskIdentificationForm: React.FC = () => {
                             id="action-external"
                             name="actionRad"
                             value="action-external"
+                            checked={formData.actionRad === "action-external"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
