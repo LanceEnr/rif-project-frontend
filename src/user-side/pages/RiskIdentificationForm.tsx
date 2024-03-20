@@ -115,7 +115,7 @@ const RiskIdentificationForm: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formDataToSend),
+          body: JSON.stringify(formData), // send formData directly
         }
       );
 
@@ -152,7 +152,14 @@ const RiskIdentificationForm: React.FC = () => {
           ? Number(value) * Number(formData.riskPROB)
           : Number(formData.riskSEV) * Number(value);
       setRiskRating(newRiskRating);
+
+      // Update formData state with the new riskRating
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        riskRating: newRiskRating,
+      }));
     }
+
     // Validate the field
     if (!value.trim()) {
       setErrors((prevErrors) => ({
@@ -416,7 +423,6 @@ const RiskIdentificationForm: React.FC = () => {
                         aria-label="disabled input 2"
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed"
                         value={riskRating}
-                        disabled
                         readOnly
                       />
                     </div>
