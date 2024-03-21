@@ -727,12 +727,25 @@ const RiskIdentificationForm: React.FC = () => {
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
                     </div>
-
                     <div className="md:col-span-5 flex justify-between">
                       <div className="inline-flex items-start">
                         <button
+                          type="button"
+                          className="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  "
+                        >
+                          Go back
+                        </button>
+                      </div>
+                      <div className="inline-flex items-end">
+                        <button
                           type="submit"
-                          className="inline-flex items-center justify-center h-9 px-4 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600  mr-2"
+                        >
+                          Add another row
+                        </button>
+                        <button
+                          type="submit"
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600 " // Added margin-right (mr-2)
                         >
                           Submit
                         </button>
