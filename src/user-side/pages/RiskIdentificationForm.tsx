@@ -47,6 +47,7 @@ const RiskIdentificationForm: React.FC = () => {
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [date, setDate] = useState(""); // Add state for managing date input
   const [riskRating, setRiskRating] = useState(0);
+  const [rowsData, setRowsData] = useState<FormData[]>([]);
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -193,6 +194,43 @@ const RiskIdentificationForm: React.FC = () => {
     setDate(value);
   };
 
+  // Handle adding a row
+  const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setRowsData((prevRows) => [...prevRows, formData]);
+    setFormData(initialState); // Reset the form for the next entry
+  };
+
+  // Adjusted handle submit for final submission
+  const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const finalData = [...rowsData, formData]; // Include the current formData
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/riskforms/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(finalData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to submit report");
+      }
+
+      setError(null);
+      setRowsData([]); // Clear the accumulated rows data
+      setFormData(initialState); // Reset the form
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      setError("Failed to submit report. Please try again later.");
+    }
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-4   min-h-screen my-24">
       <div className="flex flex-col items-right">
@@ -212,7 +250,7 @@ const RiskIdentificationForm: React.FC = () => {
           <div className="mt-4 mb-10">
             <div className="grid gap-4 mb-4 sm:grid-cols-1">
               <div className="lg:col-span-2">
-                <form onSubmit={handleSubmit} method="post">
+                <form onSubmit={handleSubmitFinal} method="post">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     <div className="md:col-span-3">
                       <label
@@ -738,14 +776,25 @@ const RiskIdentificationForm: React.FC = () => {
                       </div>
                       <div className="inline-flex items-end">
                         <button
-                          type="submit"
-                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600  mr-2"
+                          type="button" // This prevents the form from being submitted
+                          onClick={handleAddRow} // This calls the handleAddRow function
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 mr-2"
                         >
-                          Add another row
+                          Add Another Row
                         </button>
+
                         <button
                           type="submit"
-                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600 " // Added margin-right (mr-2)
+                          disabled={
+                            rowsData.length === 0 &&
+                            !Object.values(formData).some((value) => value)
+                          } // Disable if rowsData is empty and current form data is not filled
+                          className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md ${
+                            rowsData.length === 0 &&
+                            !Object.values(formData).some((value) => value)
+                              ? "bg-gray-500"
+                              : "bg-green-500 hover:bg-green-600"
+                          }`}
                         >
                           Submit
                         </button>
