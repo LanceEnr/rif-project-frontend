@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent} from "react";
 import { Label, Radio } from "flowbite-react";
 
 // Define the interface for form data
