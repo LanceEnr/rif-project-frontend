@@ -49,94 +49,6 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
 
-  // Handle form submission
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-
-    const requiredFields: (keyof FormData)[] = [
-      "sdaNumber",
-      "issueParticulars",
-      "riskParticulars",
-      "riskSEV",
-      "riskPROB",
-      "actionPlan",
-      "responsiblePerson",
-      "issueType",
-      "riskLevel",
-      "riskType",
-      "actionRad",
-    ];
-
-    const isValid = requiredFields.every((field: keyof FormData) => {
-      if (
-        field === "issueType" ||
-        field === "riskLevel" ||
-        field === "riskType" ||
-        field === "actionRad"
-      ) {
-        return !!formData[field]; // Ensure that at least one option is selected
-      }
-      return !!formData[field];
-    });
-
-    if (!isValid) {
-      setError("Please fill out all the required fields.");
-      return;
-    }
-
-    // Additional validation for riskSEV and riskPROB within a specific range
-    const sev = Number(formData.riskSEV);
-    const prob = Number(formData.riskPROB);
-    if (sev < 0 || sev > 10 || prob < 0 || prob > 10) {
-      setError("Risk SEV and PROB must be between 0 and 10.");
-      return;
-    }
-
-    // Check if uploadRIF is a PDF file
-    if (formData.uploadRIF && !formData.uploadRIF.name.endsWith(".pdf")) {
-      setError("Please upload a PDF file for the RIF.");
-      return;
-    }
-
-    try {
-      const formDataToSend = new FormData();
-      for (const key in formData) {
-        if (key === "uploadRIF") {
-          formDataToSend.append(key, formData.uploadRIF as File);
-        } else {
-          formDataToSend.append(key, formData[key] as string);
-        }
-      }
-
-      const response = await fetch(
-        "http://localhost:8080/api/riskforms/submit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData), // send formData directly
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
-      }
-
-      // Clear error on successful submission
-      setError(null);
-
-      // Reset form fields to initial state
-      setFormData(initialState);
-      setDate(""); // Reset date input field
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setError("Failed to submit form. Please try again later.");
-    }
-  };
-
-  // Handle form field changes
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -146,36 +58,30 @@ const RiskIdentificationForm: React.FC = () => {
       [name]: value,
     }));
 
-    // Calculate risk rating if SEV or PROB changed
     if (name === "riskSEV" || name === "riskPROB") {
       const newRiskRating =
         name === "riskSEV"
           ? Number(value) * Number(formData.riskPROB)
           : Number(formData.riskSEV) * Number(value);
       setRiskRating(newRiskRating);
-
-      // Update formData state with the new riskRating
       setFormData((prevFormData) => ({
         ...prevFormData,
         riskRating: newRiskRating,
       }));
     }
 
-    // Validate the field
-    if (!value.trim()) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "This field is required",
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "", // Clear the error message for this field
-      }));
+    // Update errors state for the current field
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value.trim() ? "" : "This field is required",
+    }));
+
+    // Clear global error if it's set and all fields are now valid
+    if (error && validateForm()) {
+      setError(null);
     }
   };
 
-  // Handle file input change
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     setFormData((prevFormData) => ({
@@ -184,50 +90,76 @@ const RiskIdentificationForm: React.FC = () => {
     }));
   };
 
-  // Update the handleDateChange function to handle changes in the date input field
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    setDate(value);
     setFormData((prevFormData) => ({
       ...prevFormData,
       date: value,
     }));
-    setDate(value);
+
+    // Clear date error if date is now valid
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      date: value.trim() ? "" : "This field is required",
+    }));
   };
 
-  // Handle adding a row
+  // Validation function for the whole form
+  const validateForm = () => {
+    for (const [key, value] of Object.entries(formData)) {
+      if (key !== "uploadRIF" && (value === "" || value === 0)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setRowsData((prevRows) => [...prevRows, formData]);
-    setFormData(initialState); // Reset the form for the next entry
+    if (validateForm()) {
+      setRowsData((prevRows) => [...prevRows, formData]);
+      setFormData(initialState);
+      setDate("");
+      setError(null); // Clear any global error
+    } else {
+      setError("Please fill out all fields before adding another row.");
+    }
   };
 
-  // Adjusted handle submit for final submission
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const finalData = [...rowsData, formData]; // Include the current formData
-
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/riskforms/submit",
-        {
+    // Validate only the current form data, not the rowsData length
+    if (validateForm()) {
+      const finalData = rowsData.length > 0 ? [...rowsData, formData] : [formData]; // Include the current formData, with rowsData if present
+      
+      try {
+        const response = await fetch("http://localhost:8080/api/riskforms/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(finalData),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to submit report");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to submit report");
+  
+        // Reset form to initial state after successful submission
+        setFormData(initialState);
+        setRowsData([]);
+        setDate("");
+        setRiskRating(0);
+        setError(null); // Clear any global error
+        alert("Form submitted successfully!");
+      } catch (error) {
+        console.error("Error submitting report:", error);
+        setError("Failed to submit report. Please try again later.");
       }
-
-      setError(null);
-      setRowsData([]); // Clear the accumulated rows data
-      setFormData(initialState); // Reset the form
-    } catch (error) {
-      console.error("Error submitting report:", error);
-      setError("Failed to submit report. Please try again later.");
+    } else {
+      // This error is for the overall form validation
+      setError("Please fill out all fields before submitting.");
     }
   };
 
@@ -775,14 +707,22 @@ const RiskIdentificationForm: React.FC = () => {
                         </button>
                       </div>
                       <div className="inline-flex items-end">
-                        <button
-                          type="button" // This prevents the form from being submitted
-                          onClick={handleAddRow} // This calls the handleAddRow function
-                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 mr-2"
-                        >
-                          Add Another Row
-                        </button>
-
+                      <button
+                        type="button"
+                        onClick={handleAddRow}
+                        disabled={
+                          rowsData.length === 0 &&
+                          !Object.values(formData).some((value) => value)
+                        }
+                        className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md mr-2 ${
+                          rowsData.length === 0 &&
+                          !Object.values(formData).some((value) => value)
+                            ? "bg-gray-500"
+                            : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                      >
+                        Add Another Row
+                      </button>
                         <button
                           type="submit"
                           disabled={
