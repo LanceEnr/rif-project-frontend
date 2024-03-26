@@ -1,5 +1,6 @@
-import React, { useState, ChangeEvent} from "react";
-import { Label, Radio } from "flowbite-react";
+import React, { useState, ChangeEvent } from "react";
+import { Label, Radio, Dropdown } from "flowbite-react";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 // Define the interface for form data
 interface FormData {
@@ -131,21 +132,25 @@ const RiskIdentificationForm: React.FC = () => {
     e.preventDefault();
     // Validate only the current form data, not the rowsData length
     if (validateForm()) {
-      const finalData = rowsData.length > 0 ? [...rowsData, formData] : [formData]; // Include the current formData, with rowsData if present
-      
+      const finalData =
+        rowsData.length > 0 ? [...rowsData, formData] : [formData]; // Include the current formData, with rowsData if present
+
       try {
-        const response = await fetch("http://localhost:8080/api/riskforms/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(finalData),
-        });
-  
+        const response = await fetch(
+          "http://localhost:8080/api/riskforms/submit",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(finalData),
+          }
+        );
+
         if (!response.ok) {
           throw new Error("Failed to submit report");
         }
-  
+
         // Reset form to initial state after successful submission
         setFormData(initialState);
         setRowsData([]);
@@ -173,9 +178,40 @@ const RiskIdentificationForm: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">
+        <div className="relative my-4 w-56 sm:hidden">
+          <Dropdown
+            label=""
+            inline
+            dismissOnClick={false}
+            renderTrigger={() => (
+              <button
+                id="dropdownActionButton"
+                data-dropdown-toggle="dropdownAction"
+                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 "
+                type="button"
+              >
+                Rows
+                <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+              </button>
+            )}
+          >
+            <Dropdown.Item>Row 1</Dropdown.Item>
+            <Dropdown.Item>Row 2</Dropdown.Item>
+            <Dropdown.Item>Row 3</Dropdown.Item>
+            <Dropdown.Item>Row 4</Dropdown.Item>
+            <Dropdown.Item>Row 5</Dropdown.Item>
+          </Dropdown>
+        </div>
+
         <div className="col-span-2 hidden sm:block">
-          <p className="py-2 text-2xl font-semibold">Get Started</p>
-          <p className="text-gray-600">Please fill out all the fields.</p>
+          <ul>
+            <li className="mt-5 cursor-pointer border-l-2 border-l-yellow-500 px-2 py-2 font-semibold text-yellow-500 transition hover:border-l-yellow-500 hover:text-yellow-500">
+              Row 1
+            </li>
+            <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-yellow-500 hover:text-yellow-500">
+              Row 2
+            </li>
+          </ul>
         </div>
 
         <div className="col-span-8 overflow-hidden rounded-xl sm:bg-yellow-100 sm:px-8 sm:shadow">
@@ -707,22 +743,22 @@ const RiskIdentificationForm: React.FC = () => {
                         </button>
                       </div>
                       <div className="inline-flex items-end">
-                      <button
-                        type="button"
-                        onClick={handleAddRow}
-                        disabled={
-                          rowsData.length === 0 &&
-                          !Object.values(formData).some((value) => value)
-                        }
-                        className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md mr-2 ${
-                          rowsData.length === 0 &&
-                          !Object.values(formData).some((value) => value)
-                            ? "bg-gray-500"
-                            : "bg-blue-500 hover:bg-blue-600"
-                        }`}
-                      >
-                        Add Another Row
-                      </button>
+                        <button
+                          type="button"
+                          onClick={handleAddRow}
+                          disabled={
+                            rowsData.length === 0 &&
+                            !Object.values(formData).some((value) => value)
+                          }
+                          className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md mr-2 ${
+                            rowsData.length === 0 &&
+                            !Object.values(formData).some((value) => value)
+                              ? "bg-gray-500"
+                              : "bg-blue-500 hover:bg-blue-600"
+                          }`}
+                        >
+                          Add Another Row
+                        </button>
                         <button
                           type="submit"
                           disabled={
