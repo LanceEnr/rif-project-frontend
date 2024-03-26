@@ -1,6 +1,10 @@
-<html>
-  <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+import React from "react";
+
+const OPQM_FO54_RiskIdentificationFormrev05: React.FC = () => {
+  return (
+    <div>
+      <head>
+        <meta content="text/html; charset=UTF-8" httpEquiv="content-type" />
     <style type="text/css">
       @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLW4KJDKkfsODW2Xa-qzP7ON5E2yjjvZBKj5ny4Zw4TYPg_NW0mmFWnn4zL5LHqGPIw);
       .lst-kix_list_4-1 > li {
@@ -10,7 +14,7 @@
         list-style-type: none;
       }
       ol.lst-kix_list_3-2 {
-        list-style-type: none;
+        list-style-type: none;  
       }
       .lst-kix_list_3-1 > li {
         counter-increment: lst-ctn-kix_list_3-1;
@@ -2294,8 +2298,8 @@
         text-align: left;
       }
     </style>
-  </head>
-  <body class="c20 doc-content">
+    </head>
+      <body className="c20 doc-content">
     <div>
       <p class="c89">
         <span
@@ -2663,16 +2667,13 @@
         </tr>
       </thead>
     </table>
-    <p class="c6">
-      <span>*Adjust number/columns, as applicable</span
-      ><span class="c60 c117">&nbsp;</span>
-    </p>
-    <p class="c6" id="h.gjdgxs">
-      <span class="c5"
-        >Note: IN = Internal issue; EX = External issue; SEV = Severity; PROB =
-        Probability; L = Low; M = Medium; H = High</span
-      >
-    </p>
+    <p className="c6">
+          <span>*Adjust number/columns, as applicable</span>
+          <span className="c60 c117">&nbsp;</span>
+        </p>
+        <p className="c6" id="h.gjdgxs">
+          <span className="c5">Note: IN = Internal issue; EX = External issue; SEV = Severity; PROB = Probability; L = Low; M = Medium; H = High</span>
+        </p>
     <p class="c1"><span class="c36"></span></p>
     <p class="c1"><span class="c36"></span></p>
     <p class="c6 c121">
@@ -3164,6 +3165,9 @@
         >
       </p>
       <p class="c1"><span class="c5"></span></p>
+      </body>
     </div>
-  </body>
-</html>
+  );
+};
+
+export default OPQM_FO54_RiskIdentificationFormrev05;
