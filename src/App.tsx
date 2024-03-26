@@ -22,6 +22,7 @@ import MicroAnalytics from "./admin/pages/MicroAnalytics";
 import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
+import DisplayForm from "./user-side/pages/DisplayForm";
 
 const App: FC = () => {
   return (
@@ -82,6 +83,7 @@ const App: FC = () => {
                   <Route path="/form" element={<RiskIdentificationForm />} />
                   <Route path="*" element={<NotFoundPage />} />
                   <Route path="/submissions" element={<SubmissionHistory />} />
+                  <Route path="/displayform" element={<DisplayForm />} />
                 </Routes>
                 <Footer />
               </>
