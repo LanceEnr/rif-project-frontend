@@ -49,35 +49,91 @@ const RiskIdentificationForm: React.FC = () => {
   const [date, setDate] = useState(""); // Add state for managing date input
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
+  const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+
+  const rowsDropdownItems =
+    rowsData.length > 0
+      ? rowsData.map((_, index) => (
+          <Dropdown.Item key={index} onClick={() => setActiveRowIndex(index)}>
+            Row {index + 1}
+          </Dropdown.Item>
+        ))
+      : [
+          <Dropdown.Item key="no-rows" className="text-gray-500">
+            No rows available
+          </Dropdown.Item>,
+        ];
+
+  // Adjustments for the desktop version to include "No rows available" placeholder
+  const rowsListItems =
+    rowsData.length > 0 ? (
+      rowsData.map((_, index) => (
+        <li
+          key={index}
+          className={`mt-5 cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${
+            activeRowIndex === index
+              ? "border-l-yellow-500 text-yellow-500"
+              : "border-transparent hover:border-l-yellow-500 hover:text-yellow-500"
+          }`}
+          onClick={() => setActiveRowIndex(index)}
+        >
+          Row {index + 1}
+        </li>
+      ))
+    ) : (
+      <li className="text-gray-500">No rows available</li>
+    );
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
 
-    if (name === "riskSEV" || name === "riskPROB") {
-      const newRiskRating =
-        name === "riskSEV"
-          ? Number(value) * Number(formData.riskPROB)
-          : Number(formData.riskSEV) * Number(value);
-      setRiskRating(newRiskRating);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        riskRating: newRiskRating,
-      }));
+    // Convert numeric fields to numbers; keep others as strings.
+    const isNumericField = [
+      "riskSEV",
+      "riskPROB",
+      "sdaNumber",
+      "riskRating",
+    ].includes(name);
+    let newValue: string | number = isNumericField ? Number(value) : value; // Ensures numeric fields are always numbers.
+
+    if (activeRowIndex !== null) {
+      // Update specific row in rowsData and recalculate the riskRating for that row if necessary
+      const updatedRowsData = rowsData.map((rowData, index) => {
+        if (index === activeRowIndex) {
+          const updatedRow = { ...rowData, [name]: newValue };
+          if (name === "riskSEV" || name === "riskPROB") {
+            updatedRow.riskRating = updatedRow.riskSEV * updatedRow.riskPROB;
+          }
+          return updatedRow;
+        }
+        return rowData;
+      });
+      setRowsData(updatedRowsData);
+      // Additionally, update the riskRating in the UI if SEV or PROB of the active row is changed
+      if (name === "riskSEV" || name === "riskPROB") {
+        const updatedRow = updatedRowsData[activeRowIndex];
+        setRiskRating(updatedRow.riskRating);
+      }
+    } else {
+      // Update formData for new input and recalculate riskRating if necessary
+      const updatedFormData = { ...formData, [name]: newValue };
+      if (name === "riskSEV" || name === "riskPROB") {
+        updatedFormData.riskRating =
+          updatedFormData.riskSEV * updatedFormData.riskPROB;
+        setRiskRating(updatedFormData.riskRating);
+      }
+      setFormData(updatedFormData);
     }
 
-    // Update errors state for the current field
+    // Handle error states
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: value.trim() ? "" : "This field is required",
+      [name]: newValue.toString().trim() ? "" : "This field is required",
     }));
 
-    // Clear global error if it's set and all fields are now valid
+    // Clear global error if form is now valid
     if (error && validateForm()) {
       setError(null);
     }
@@ -119,10 +175,19 @@ const RiskIdentificationForm: React.FC = () => {
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      setRowsData((prevRows) => [...prevRows, formData]);
+      const newRowData =
+        activeRowIndex !== null
+          ? rowsData.map((rowData, index) =>
+              index === activeRowIndex ? formData : rowData
+            )
+          : [...rowsData, formData];
+
+      setRowsData(newRowData);
       setFormData(initialState);
-      setDate("");
-      setError(null); // Clear any global error
+      setActiveRowIndex(null); // Clear active row selection
+      setDate(""); // Reset any additional state, like date
+      setRiskRating(0); // Reset risk rating if it's dynamically calculated
+      setError(null); // Clear any global error messages
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -130,42 +195,49 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Validate only the current form data, not the rowsData length
-    if (validateForm()) {
-      const finalData =
-        rowsData.length > 0 ? [...rowsData, formData] : [formData]; // Include the current formData, with rowsData if present
 
-      try {
-        const response = await fetch(
-          "http://localhost:8080/api/riskforms/submit",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(finalData),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to submit report");
-        }
-
-        // Reset form to initial state after successful submission
-        setFormData(initialState);
-        setRowsData([]);
-        setDate("");
-        setRiskRating(0);
-        setError(null); // Clear any global error
-        alert("Form submitted successfully!");
-      } catch (error) {
-        console.error("Error submitting report:", error);
-        setError("Failed to submit report. Please try again later.");
-      }
+    // Checking if there are unsaved changes in formData when trying to submit
+    if (activeRowIndex === null && validateForm()) {
+      // Add the current formData to rowsData before submitting
+      setRowsData([...rowsData, formData]);
+      await submitData([...rowsData, formData]); // Pass the combined array to the submission function
+    } else if (rowsData.length > 0) {
+      await submitData(rowsData); // Submit existing rowsData
     } else {
-      // This error is for the overall form validation
-      setError("Please fill out all fields before submitting.");
+      setError("Please fill out the form before submitting.");
     }
+  };
+
+  // Abstracted function for data submission to keep handleSubmitFinal clean
+  const submitData = async (data: FormData[]) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/riskforms/submit",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to submit report");
+
+      alert("Form submitted successfully!");
+      resetFormState(); // Resetting form state after successful submission
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      setError("Failed to submit report. Please try again later.");
+    }
+  };
+
+  // Function to reset form state, abstracted for reuse
+  const resetFormState = () => {
+    setFormData(initialState);
+    setRowsData([]);
+    setActiveRowIndex(null);
+    setDate("");
+    setRiskRating(0);
+    setError(null);
   };
 
   return (
@@ -190,28 +262,16 @@ const RiskIdentificationForm: React.FC = () => {
                 className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 "
                 type="button"
               >
-                Rows
-                <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                Rows <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
               </button>
             )}
           >
-            <Dropdown.Item>Row 1</Dropdown.Item>
-            <Dropdown.Item>Row 2</Dropdown.Item>
-            <Dropdown.Item>Row 3</Dropdown.Item>
-            <Dropdown.Item>Row 4</Dropdown.Item>
-            <Dropdown.Item>Row 5</Dropdown.Item>
+            {rowsDropdownItems}
           </Dropdown>
         </div>
 
         <div className="col-span-2 hidden sm:block">
-          <ul>
-            <li className="mt-5 cursor-pointer border-l-2 border-l-yellow-500 px-2 py-2 font-semibold text-yellow-500 transition hover:border-l-yellow-500 hover:text-yellow-500">
-              Row 1
-            </li>
-            <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-yellow-500 hover:text-yellow-500">
-              Row 2
-            </li>
-          </ul>
+          <ul>{rowsListItems}</ul>
         </div>
 
         <div className="col-span-8 overflow-hidden rounded-xl sm:bg-yellow-100 sm:px-8 sm:shadow">
@@ -244,8 +304,12 @@ const RiskIdentificationForm: React.FC = () => {
                       <select
                         id="sdaNumber"
                         name="sdaNumber"
-                        value={formData.sdaNumber}
-                        onChange={handleChange} // Add this onChange handler
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].sdaNumber
+                            : formData.sdaNumber
+                        }
+                        onChange={handleChange}
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       >
                         <option value="">Select an option</option>
@@ -288,11 +352,16 @@ const RiskIdentificationForm: React.FC = () => {
                       <textarea
                         name="issueParticulars"
                         rows={4}
-                        value={formData.issueParticulars}
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].issueParticulars
+                            : formData.issueParticulars
+                        }
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
+
                       {errors.issueParticulars && (
                         <p className="text-red-500">
                           {errors.issueParticulars}
@@ -312,10 +381,16 @@ const RiskIdentificationForm: React.FC = () => {
                             id="issue-internal"
                             name="issueType"
                             value="Internal"
-                            checked={formData.issueType === "Internal"}
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].issueType ===
+                                  "Internal"
+                                : formData.issueType === "Internal"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="issue-internal">Internal</Label>
                         </div>
                         <div className="flex items-center gap-2">
@@ -323,10 +398,16 @@ const RiskIdentificationForm: React.FC = () => {
                             id="issue-external"
                             name="issueType"
                             value="External"
-                            checked={formData.issueType === "External"}
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].issueType ===
+                                  "External"
+                                : formData.issueType === "External"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="issue-external">External</Label>
                         </div>
                       </fieldset>
@@ -355,7 +436,11 @@ const RiskIdentificationForm: React.FC = () => {
                       <textarea
                         name="riskParticulars"
                         rows={4}
-                        value={formData.riskParticulars}
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].riskParticulars
+                            : formData.riskParticulars
+                        }
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Description"
                         onChange={handleChange}
@@ -374,8 +459,12 @@ const RiskIdentificationForm: React.FC = () => {
                       <select
                         id="riskSEV"
                         name="riskSEV"
-                        value={formData.riskSEV}
-                        onChange={handleChange} // Add this onChange handler
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].riskSEV
+                            : formData.riskSEV
+                        }
+                        onChange={handleChange}
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       >
                         <option value="">Select an option</option>
@@ -397,9 +486,13 @@ const RiskIdentificationForm: React.FC = () => {
                         Probability (PROB)
                       </label>
                       <select
-                        id="probability"
+                        id="riskPROB"
                         name="riskPROB"
-                        value={formData.riskPROB}
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].riskPROB
+                            : formData.riskPROB
+                        }
                         onChange={handleChange}
                         className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       >
@@ -453,33 +546,48 @@ const RiskIdentificationForm: React.FC = () => {
                           <Radio
                             id="risk-l"
                             name="riskLevel"
-                            value="riskL"
-                            checked={formData.riskLevel === "riskL"}
+                            value="L"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].riskLevel === "L"
+                                : formData.riskLevel === "L"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="risk-l">L</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-m"
                             name="riskLevel"
-                            value="risk-m"
-                            checked={formData.riskLevel === "risk-m"}
+                            value="M"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].riskLevel === "M"
+                                : formData.riskLevel === "M"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="risk-m">M</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-h"
                             name="riskLevel"
-                            value="risk-h"
-                            checked={formData.riskLevel === "risk-h"}
+                            value="H"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].riskLevel === "H"
+                                : formData.riskLevel === "H"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="risk-h">H</Label>
                         </div>
                       </fieldset>
@@ -499,22 +607,34 @@ const RiskIdentificationForm: React.FC = () => {
                           <Radio
                             id="risk-initial"
                             name="riskType"
-                            value="risk-initial"
-                            checked={formData.riskType === "risk-initial"}
+                            value="Initial"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].riskType ===
+                                  "Initial"
+                                : formData.riskType === "Initial"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="risk-initial">Initial</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-residual"
                             name="riskType"
-                            value="risk-residual"
-                            checked={formData.riskType === "risk-residual"}
+                            value="Residual"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].riskType ===
+                                  "Residual"
+                                : formData.riskType === "Residual"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="risk-residual">Residual</Label>
                         </div>
                       </fieldset>
@@ -547,11 +667,16 @@ const RiskIdentificationForm: React.FC = () => {
                               type="text"
                               name="opportunities"
                               id="opportunities"
-                              value={formData.opportunities}
-                              onChange={handleChange} // Add this line
+                              value={
+                                activeRowIndex !== null
+                                  ? rowsData[activeRowIndex].opportunities
+                                  : formData.opportunities
+                              }
+                              onChange={handleChange}
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
                             />
+
                             <button
                               type="button"
                               className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
@@ -609,11 +734,16 @@ const RiskIdentificationForm: React.FC = () => {
                               type="text"
                               name="actionPlan"
                               id="Entries"
-                              value={formData.actionPlan}
+                              value={
+                                activeRowIndex !== null
+                                  ? rowsData[activeRowIndex].actionPlan
+                                  : formData.actionPlan
+                              }
+                              onChange={handleChange}
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
-                              onChange={handleChange}
                             />
+
                             {errors.actionPlan && (
                               <p className="text-red-500">
                                 {errors.actionPlan}
@@ -655,7 +785,11 @@ const RiskIdentificationForm: React.FC = () => {
                           id="datepicker"
                           name="date"
                           type="date"
-                          value={date}
+                          value={
+                            activeRowIndex !== null
+                              ? rowsData[activeRowIndex].date
+                              : date
+                          }
                           onChange={handleDateChange}
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                           placeholder="Select date"
@@ -673,9 +807,13 @@ const RiskIdentificationForm: React.FC = () => {
                         </label>
                         <select
                           id="personResponsible"
-                          name="responsiblePerson" // Ensure the name matches the FormData interface
-                          value={formData.responsiblePerson}
-                          onChange={handleChange} // Add this onChange handler
+                          name="responsiblePerson"
+                          value={
+                            activeRowIndex !== null
+                              ? rowsData[activeRowIndex].responsiblePerson
+                              : formData.responsiblePerson
+                          }
+                          onChange={handleChange}
                           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         >
                           <option value="">Choose one</option>
@@ -706,22 +844,34 @@ const RiskIdentificationForm: React.FC = () => {
                           <Radio
                             id="action-internal"
                             name="actionRad"
-                            value="action-internal"
-                            checked={formData.actionRad === "action-internal"}
+                            value="Internal"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].actionRad ===
+                                  "Internal"
+                                : formData.actionRad === "Internal"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="action-internal">Internal</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="action-external"
                             name="actionRad"
-                            value="action-external"
-                            checked={formData.actionRad === "action-external"}
+                            value="External"
+                            checked={
+                              activeRowIndex !== null
+                                ? rowsData[activeRowIndex].actionRad ===
+                                  "External"
+                                : formData.actionRad === "External"
+                            }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
+
                           <Label htmlFor="action-external">External</Label>
                         </div>
                       </fieldset>
@@ -737,28 +887,13 @@ const RiskIdentificationForm: React.FC = () => {
                       <div className="inline-flex items-start">
                         <button
                           type="button"
-                          className="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  "
-                        >
-                          Go back
-                        </button>
-                      </div>
-                      <div className="inline-flex items-end">
-                        <button
-                          type="button"
                           onClick={handleAddRow}
-                          disabled={
-                            rowsData.length === 0 &&
-                            !Object.values(formData).some((value) => value)
-                          }
-                          className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md mr-2 ${
-                            rowsData.length === 0 &&
-                            !Object.values(formData).some((value) => value)
-                              ? "bg-gray-500"
-                              : "bg-blue-500 hover:bg-blue-600"
-                          }`}
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md bg-blue-500 hover:bg-blue-600"
                         >
                           Add Another Row
                         </button>
+                      </div>
+                      <div className="inline-flex items-end">
                         <button
                           type="submit"
                           disabled={
