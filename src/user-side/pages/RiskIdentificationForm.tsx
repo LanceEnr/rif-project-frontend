@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent } from "react";
 import { Label, Radio, Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { FiPlus } from "react-icons/fi";
 
 // Define the interface for form data
 interface FormData {
@@ -52,32 +54,38 @@ const RiskIdentificationForm: React.FC = () => {
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
   const rowsDropdownItems =
-    rowsData.length > 0
-      ? rowsData.map((_, index) => (
-          <Dropdown.Item key={index} onClick={() => setActiveRowIndex(index)}>
-            Row {index + 1}
-          </Dropdown.Item>
-        ))
-      : [
-          <Dropdown.Item key="no-rows" className="text-gray-500">
-            No rows available
-          </Dropdown.Item>,
-        ];
+    rowsData.length > 0 ? (
+      rowsData.map((_, index) => (
+        <Dropdown.Item key={index} onClick={() => selectRow(index)}>
+          Row {index + 1}
+        </Dropdown.Item>
+      ))
+    ) : (
+      <Dropdown.Item key="no-rows" className="text-gray-500">
+        No rows available
+      </Dropdown.Item>
+    );
 
-  // Adjustments for the desktop version to include "No rows available" placeholder
   const rowsListItems =
     rowsData.length > 0 ? (
       rowsData.map((_, index) => (
         <li
           key={index}
-          className={`mt-5 cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${
+          className={`group mt-5 flex justify-between cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${
             activeRowIndex === index
               ? "border-l-yellow-500 text-yellow-500"
               : "border-transparent hover:border-l-yellow-500 hover:text-yellow-500"
           }`}
-          onClick={() => setActiveRowIndex(index)}
+          onClick={() => selectRow(index)}
         >
-          Row {index + 1}
+          <span>Row {index + 1}</span>
+          {activeRowIndex !== index && (
+            <MdEdit
+              className="opacity-0 group-hover:opacity-100 mr-2"
+              // Adjust size as needed
+              size="20px"
+            />
+          )}
         </li>
       ))
     ) : (
@@ -150,10 +158,23 @@ const RiskIdentificationForm: React.FC = () => {
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setDate(value);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      date: value,
-    }));
+
+    if (activeRowIndex !== null) {
+      // Update date in the specific row in rowsData for edits
+      const updatedRowsData = rowsData.map((rowData, index) => {
+        if (index === activeRowIndex) {
+          return { ...rowData, date: value };
+        }
+        return rowData;
+      });
+      setRowsData(updatedRowsData);
+    } else {
+      // Update formData for new entries
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        date: value,
+      }));
+    }
 
     // Clear date error if date is now valid
     setErrors((prevErrors) => ({
@@ -171,10 +192,11 @@ const RiskIdentificationForm: React.FC = () => {
     }
     return true;
   };
-
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (validateForm()) {
+
+    // Function to add row or update existing one
+    const addOrUpdateRow = () => {
       const newRowData =
         activeRowIndex !== null
           ? rowsData.map((rowData, index) =>
@@ -188,6 +210,18 @@ const RiskIdentificationForm: React.FC = () => {
       setDate(""); // Reset any additional state, like date
       setRiskRating(0); // Reset risk rating if it's dynamically calculated
       setError(null); // Clear any global error messages
+    };
+
+    if (validateForm()) {
+      addOrUpdateRow();
+    } else if (activeRowIndex !== null) {
+      // User is editing an existing row but form is not fully filled out,
+      // reset to add a new row instead of showing an error.
+      setFormData(initialState);
+      setActiveRowIndex(null); // Clear active row selection
+      setDate("");
+      setRiskRating(0);
+      setError(null); // Clear any global error messages
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -196,16 +230,21 @@ const RiskIdentificationForm: React.FC = () => {
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Checking if there are unsaved changes in formData when trying to submit
-    if (activeRowIndex === null && validateForm()) {
-      // Add the current formData to rowsData before submitting
-      setRowsData([...rowsData, formData]);
-      await submitData([...rowsData, formData]); // Pass the combined array to the submission function
-    } else if (rowsData.length > 0) {
-      await submitData(rowsData); // Submit existing rowsData
-    } else {
+    // Validate only if there's no active row (indicating a new submission is intended)
+    if (activeRowIndex === null && !validateForm()) {
       setError("Please fill out the form before submitting.");
+      return; // Prevent further execution
     }
+
+    // Prepare the data to submit
+    let dataToSubmit = rowsData;
+    if (validateForm()) {
+      dataToSubmit = [...rowsData, formData]; // Include the current form data if valid
+    }
+
+    // Proceed to submit the data
+    await submitData(dataToSubmit);
+    resetFormState(); // Resetting form state after submission
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -230,13 +269,19 @@ const RiskIdentificationForm: React.FC = () => {
     }
   };
 
-  // Function to reset form state, abstracted for reuse
+  // Update the resetFormState function to ensure it properly resets everything
   const resetFormState = () => {
     setFormData(initialState);
     setRowsData([]);
     setActiveRowIndex(null);
     setDate("");
     setRiskRating(0);
+    setError(null);
+  };
+
+  const selectRow = (index: number) => {
+    setActiveRowIndex(index);
+    // Resetting the error state when a row is selected
     setError(null);
   };
 
@@ -647,25 +692,33 @@ const RiskIdentificationForm: React.FC = () => {
                       <hr className="mt-4 mb-8" />
 
                       <div className="relative w-full">
-                        <label
-                          htmlFor="number-input"
-                          className="block text-sm font-medium mb-2 text-gray-900"
-                        >
-                          Opportunities
-                        </label>
-                        <p
-                          id="floating_helper_text"
-                          className="my-2 text-xs text-gray-500"
-                        >
-                          Click on the plus button to add more entries...
-                        </p>
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <label
+                              htmlFor="number-input"
+                              className="block text-sm font-medium mb-2 text-gray-900"
+                            >
+                              Opportunities
+                            </label>
+                            <p
+                              id="floating_helper_text"
+                              className="my-2 text-xs text-gray-500"
+                            >
+                              Use the "Add" button to include more entries.
+                            </p>
+                          </div>
+                          <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center">
+                            <FiPlus className="mr-2" />
+                            <span>Add</span>
+                          </button>
+                        </div>
 
                         <div className="relative flex items-center">
                           <div className="mr-3">1.</div>
                           <div className="relative flex-grow">
-                            <input
-                              type="text"
+                            <textarea
                               name="opportunities"
+                              rows={2}
                               id="opportunities"
                               value={
                                 activeRowIndex !== null
@@ -676,26 +729,6 @@ const RiskIdentificationForm: React.FC = () => {
                               className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                               placeholder="Write here..."
                             />
-
-                            <button
-                              type="button"
-                              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="h-5 w-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                ></path>
-                              </svg>
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -714,24 +747,32 @@ const RiskIdentificationForm: React.FC = () => {
 
                     <div className="md:col-span-5">
                       <div className="relative w-full">
-                        <label
-                          htmlFor="number-input"
-                          className="block text-sm font-medium mb-2 text-gray-900"
-                        >
-                          Action Plan
-                        </label>
-                        <p
-                          id="floating_helper_text"
-                          className="my-2 text-xs text-gray-500"
-                        >
-                          Click on the plus button to add more entries...
-                        </p>
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <label
+                              htmlFor="number-input"
+                              className="block text-sm font-medium mb-2 text-gray-900"
+                            >
+                              Action Plan
+                            </label>
+                            <p
+                              id="floating_helper_text"
+                              className="my-2 text-xs text-gray-500"
+                            >
+                              Use the "Add" button to include more entries.
+                            </p>
+                          </div>
+                          <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center">
+                            <FiPlus className="mr-2" />
+                            <span>Add</span>
+                          </button>
+                        </div>
 
                         <div className="relative flex items-center">
                           <div className="mr-3">1.</div>
                           <div className="relative flex-grow">
-                            <input
-                              type="text"
+                            <textarea
+                              rows={2}
                               name="actionPlan"
                               id="Entries"
                               value={
@@ -749,25 +790,6 @@ const RiskIdentificationForm: React.FC = () => {
                                 {errors.actionPlan}
                               </p>
                             )}
-                            <button
-                              type="button"
-                              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="h-5 w-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                ></path>
-                              </svg>
-                            </button>
                           </div>
                         </div>
                       </div>
