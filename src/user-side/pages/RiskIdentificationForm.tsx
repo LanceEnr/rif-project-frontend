@@ -3,8 +3,8 @@ import { Label, Radio, Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 
-// Define the interface for form data
 interface FormData {
   sdaNumber: number;
   uploadRIF: File | null;
@@ -15,13 +15,20 @@ interface FormData {
   riskPROB: number;
   riskLevel: string;
   riskType: string;
-  opportunities: string;
-  actionPlan: string;
+  opportunities: { description: string }[];
+  actionPlans: { description: string }[];
   date: string;
   responsiblePerson: string;
   riskRating: number;
   actionRad: string;
-  [key: string]: number | string | File | null; // Index signature
+  // Updated index signature to include both string[] and { description: string }[] types
+  [key: string]:
+    | number
+    | string
+    | File
+    | null
+    | string[]
+    | { description: string }[];
 }
 
 // Component
@@ -37,8 +44,8 @@ const RiskIdentificationForm: React.FC = () => {
     riskPROB: 0,
     riskLevel: "",
     riskType: "",
-    opportunities: "",
-    actionPlan: "",
+    opportunities: [{ description: "" }],
+    actionPlans: [{ description: "" }],
     date: "",
     responsiblePerson: "",
     riskRating: 0,
@@ -52,6 +59,66 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+
+  const handleAddOpportunity = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      opportunities: [...prevFormData.opportunities, { description: "" }],
+    }));
+  };
+
+  const handleRemoveOpportunity = (index: number) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      opportunities:
+        prevFormData.opportunities.length > 1
+          ? prevFormData.opportunities.filter((_, i) => i !== index)
+          : prevFormData.opportunities,
+    }));
+  };
+
+  const handleAddActionPlan = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      actionPlans: [...prevFormData.actionPlans, { description: "" }],
+    }));
+  };
+
+  const handleRemoveActionPlan = (index: number) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      actionPlans:
+        prevFormData.actionPlans.length > 1
+          ? prevFormData.actionPlans.filter((_, i) => i !== index)
+          : prevFormData.actionPlans,
+    }));
+  };
+
+  const handleOpportunityChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const updatedOpportunities = formData.opportunities.map((item, i) => {
+      if (i === index) {
+        return { ...item, description: e.target.value };
+      }
+      return item;
+    });
+    setFormData({ ...formData, opportunities: updatedOpportunities });
+  };
+
+  const handleActionPlanChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const updatedActionPlans = formData.actionPlans.map((item, i) => {
+      if (i === index) {
+        return { ...item, description: e.target.value };
+      }
+      return item;
+    });
+    setFormData({ ...formData, actionPlans: updatedActionPlans });
+  };
 
   const rowsDropdownItems =
     rowsData.length > 0 ? (
@@ -280,11 +347,23 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const selectRow = (index: number) => {
+    const selectedRow = rowsData[index];
     setActiveRowIndex(index);
-    // Resetting the error state when a row is selected
-    setError(null);
-  };
 
+    // Update formData with the data from the selected row, ensuring opportunities and actionPlans are also updated
+    setFormData({
+      ...selectedRow,
+      opportunities: selectedRow.opportunities.map((opportunity) => ({
+        ...opportunity,
+      })),
+      actionPlans: selectedRow.actionPlans.map((actionPlan) => ({
+        ...actionPlan,
+      })),
+    });
+
+    // Additional UI state updates, if necessary
+    setError(null); // Resetting the error state when a row is selected
+  };
   return (
     <div className="max-w-screen-xl mx-auto px-4   min-h-screen my-24">
       <div className="flex flex-col items-right">
@@ -689,8 +768,6 @@ const RiskIdentificationForm: React.FC = () => {
                     </div>
 
                     <div className="md:col-span-5">
-                      <hr className="mt-4 mb-8" />
-
                       <div className="relative w-full">
                         <div className="flex justify-between items-start mb-2">
                           <div>
@@ -707,30 +784,43 @@ const RiskIdentificationForm: React.FC = () => {
                               Use the "Add" button to include more entries.
                             </p>
                           </div>
-                          <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center">
+                          <button
+                            onClick={handleAddOpportunity}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                          >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
                           </button>
                         </div>
-
-                        <div className="relative flex items-center">
-                          <div className="mr-3">1.</div>
-                          <div className="relative flex-grow">
+                        {formData.opportunities.map((opportunity, index) => (
+                          <div
+                            key={index}
+                            className="relative flex items-center mb-2"
+                          >
+                            <div className="mr-3">{index + 1}.</div>
                             <textarea
                               name="opportunities"
                               rows={2}
-                              id="opportunities"
-                              value={
-                                activeRowIndex !== null
-                                  ? rowsData[activeRowIndex].opportunities
-                                  : formData.opportunities
+                              value={opportunity.description}
+                              onChange={(e) =>
+                                handleOpportunityChange(e, index)
                               }
-                              onChange={handleChange}
-                              className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                               placeholder="Write here..."
                             />
+                            <button
+                              onClick={() => handleRemoveOpportunity(index)}
+                              className={`ml-2 py-1 px-3 rounded ${
+                                index === 0
+                                  ? "bg-gray-500 cursor-not-allowed"
+                                  : "bg-red-500 hover:bg-red-700 text-white"
+                              }`}
+                              disabled={index === 0}
+                            >
+                              <AiOutlineClose />
+                            </button>
                           </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -762,36 +852,41 @@ const RiskIdentificationForm: React.FC = () => {
                               Use the "Add" button to include more entries.
                             </p>
                           </div>
-                          <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center">
+                          <button
+                            onClick={handleAddActionPlan}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                          >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
                           </button>
                         </div>
-
-                        <div className="relative flex items-center">
-                          <div className="mr-3">1.</div>
-                          <div className="relative flex-grow">
+                        {formData.actionPlans.map((action, index) => (
+                          <div
+                            key={index}
+                            className="relative flex items-center mb-2"
+                          >
+                            <div className="mr-3">{index + 1}.</div>
                             <textarea
-                              rows={2}
                               name="actionPlan"
-                              id="Entries"
-                              value={
-                                activeRowIndex !== null
-                                  ? rowsData[activeRowIndex].actionPlan
-                                  : formData.actionPlan
-                              }
-                              onChange={handleChange}
-                              className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                              rows={2}
+                              value={action.description}
+                              onChange={(e) => handleActionPlanChange(e, index)}
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                               placeholder="Write here..."
                             />
-
-                            {errors.actionPlan && (
-                              <p className="text-red-500">
-                                {errors.actionPlan}
-                              </p>
-                            )}
+                            <button
+                              onClick={() => handleRemoveActionPlan(index)}
+                              className={`ml-2 py-1 px-3 rounded ${
+                                index === 0
+                                  ? "bg-gray-500 cursor-not-allowed"
+                                  : "bg-red-500 hover:bg-red-700 text-white"
+                              }`}
+                              disabled={index === 0}
+                            >
+                              <AiOutlineClose />
+                            </button>
                           </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
