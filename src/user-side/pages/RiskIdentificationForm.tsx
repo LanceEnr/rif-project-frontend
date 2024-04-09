@@ -68,13 +68,21 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const handleRemoveOpportunity = (index: number) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      opportunities:
-        prevFormData.opportunities.length > 1
-          ? prevFormData.opportunities.filter((_, i) => i !== index)
-          : prevFormData.opportunities,
-    }));
+    const updatedOpportunities = formData.opportunities.filter(
+      (_, i) => i !== index
+    );
+    const updatedFormData = {
+      ...formData,
+      opportunities: updatedOpportunities,
+    };
+
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex ? updatedFormData : data
+      );
+      setRowsData(updatedRowsData);
+    }
+    setFormData(updatedFormData);
   };
 
   const handleAddActionPlan = () => {
@@ -85,13 +93,18 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const handleRemoveActionPlan = (index: number) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      actionPlans:
-        prevFormData.actionPlans.length > 1
-          ? prevFormData.actionPlans.filter((_, i) => i !== index)
-          : prevFormData.actionPlans,
-    }));
+    const updatedActionPlans = formData.actionPlans.filter(
+      (_, i) => i !== index
+    );
+    const updatedFormData = { ...formData, actionPlans: updatedActionPlans };
+
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex ? updatedFormData : data
+      );
+      setRowsData(updatedRowsData);
+    }
+    setFormData(updatedFormData);
   };
 
   const handleOpportunityChange = (
@@ -261,34 +274,14 @@ const RiskIdentificationForm: React.FC = () => {
   };
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    // Function to add row or update existing one
-    const addOrUpdateRow = () => {
-      const newRowData =
-        activeRowIndex !== null
-          ? rowsData.map((rowData, index) =>
-              index === activeRowIndex ? formData : rowData
-            )
-          : [...rowsData, formData];
-
-      setRowsData(newRowData);
-      setFormData(initialState);
-      setActiveRowIndex(null); // Clear active row selection
-      setDate(""); // Reset any additional state, like date
-      setRiskRating(0); // Reset risk rating if it's dynamically calculated
-      setError(null); // Clear any global error messages
-    };
-
     if (validateForm()) {
-      addOrUpdateRow();
-    } else if (activeRowIndex !== null) {
-      // User is editing an existing row but form is not fully filled out,
-      // reset to add a new row instead of showing an error.
-      setFormData(initialState);
-      setActiveRowIndex(null); // Clear active row selection
-      setDate("");
-      setRiskRating(0);
-      setError(null); // Clear any global error messages
+      const newData =
+        activeRowIndex !== null ? [...rowsData] : [...rowsData, formData];
+      if (activeRowIndex !== null) {
+        newData[activeRowIndex] = formData;
+      }
+      setRowsData(newData);
+      resetForm(); // Reset form to initial state after adding/updating a row
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -296,22 +289,16 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Validate only if there's no active row (indicating a new submission is intended)
-    if (activeRowIndex === null && !validateForm()) {
+    if (!validateForm() && activeRowIndex === null) {
       setError("Please fill out the form before submitting.");
-      return; // Prevent further execution
+      return;
     }
 
-    // Prepare the data to submit
-    let dataToSubmit = rowsData;
-    if (validateForm()) {
-      dataToSubmit = [...rowsData, formData]; // Include the current form data if valid
-    }
+    const dataToSubmit =
+      activeRowIndex === null ? [...rowsData, formData] : rowsData;
 
-    // Proceed to submit the data
     await submitData(dataToSubmit);
-    resetFormState(); // Resetting form state after submission
+    resetFormState(); // Resetting form state after submission, including clearing rowsData
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -334,6 +321,12 @@ const RiskIdentificationForm: React.FC = () => {
       console.error("Error submitting report:", error);
       setError("Failed to submit report. Please try again later.");
     }
+  };
+
+  const resetForm = () => {
+    setFormData(initialState);
+    setActiveRowIndex(null);
+    setError(null);
   };
 
   // Update the resetFormState function to ensure it properly resets everything
