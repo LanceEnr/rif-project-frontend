@@ -5,6 +5,14 @@ import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 
+interface Opportunity {
+  description: string;
+}
+
+interface ActionPlan {
+  description: string;
+}
+
 interface FormData {
   sdaNumber: number;
   uploadRIF: File | null;
@@ -61,10 +69,17 @@ const RiskIdentificationForm: React.FC = () => {
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
   const handleAddOpportunity = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      opportunities: [...prevFormData.opportunities, { description: "" }],
-    }));
+    // Prevent adding a new opportunity if the last one is empty
+    if (
+      formData.opportunities[
+        formData.opportunities.length - 1
+      ]?.description.trim() !== ""
+    ) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        opportunities: [...prevFormData.opportunities, { description: "" }],
+      }));
+    }
   };
 
   const handleRemoveOpportunity = (index: number) => {
@@ -86,10 +101,17 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const handleAddActionPlan = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      actionPlans: [...prevFormData.actionPlans, { description: "" }],
-    }));
+    // Prevent adding a new action plan if the last one is empty
+    if (
+      formData.actionPlans[
+        formData.actionPlans.length - 1
+      ]?.description.trim() !== ""
+    ) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        actionPlans: [...prevFormData.actionPlans, { description: "" }],
+      }));
+    }
   };
 
   const handleRemoveActionPlan = (index: number) => {
@@ -263,25 +285,42 @@ const RiskIdentificationForm: React.FC = () => {
     }));
   };
 
-  // Validation function for the whole form
   const validateForm = () => {
-    for (const [key, value] of Object.entries(formData)) {
-      if (key !== "uploadRIF" && (value === "" || value === 0)) {
-        return false;
+    // Check for any required fields that are empty or have the default value
+    const requiredFieldsFilled = Object.entries(formData).every(
+      ([key, value]) => {
+        if (key === "opportunities" || key === "actionPlans") {
+          // Skip here, check separately below
+          return true;
+        }
+        return value !== "" && value !== 0;
       }
-    }
-    return true;
+    );
+
+    // Ensure there's at least one non-empty opportunity and action plan
+    const hasValidOpportunities = formData.opportunities.some(
+      (opportunity) => opportunity.description.trim() !== ""
+    );
+    const hasValidActionPlans = formData.actionPlans.some(
+      (actionPlan) => actionPlan.description.trim() !== ""
+    );
+
+    return requiredFieldsFilled && hasValidOpportunities && hasValidActionPlans;
   };
+
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (validateForm()) {
       const newData =
-        activeRowIndex !== null ? [...rowsData] : [...rowsData, formData];
+        activeRowIndex !== null
+          ? [...rowsData]
+          : [...rowsData, { ...formData, date: date }];
       if (activeRowIndex !== null) {
-        newData[activeRowIndex] = formData;
+        newData[activeRowIndex] = { ...formData, date: date };
       }
       setRowsData(newData);
       resetForm(); // Reset form to initial state after adding/updating a row
+      setDate(""); // Reset the date state
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -289,16 +328,35 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm() && activeRowIndex === null) {
-      setError("Please fill out the form before submitting.");
+
+    if (!validateForm()) {
+      setError("Please fill out the form correctly before submitting.");
       return;
     }
 
-    const dataToSubmit =
-      activeRowIndex === null ? [...rowsData, formData] : rowsData;
+    // Prepare formData and rowsData for submission, filtering out empty descriptions
+    const prepareDataForSubmission = (data: FormData) => ({
+      ...data,
+      opportunities: data.opportunities.filter(
+        (opportunity: Opportunity) => opportunity.description.trim() !== ""
+      ),
+      actionPlans: data.actionPlans.filter(
+        (actionPlan: ActionPlan) => actionPlan.description.trim() !== ""
+      ),
+    });
+
+    const preparedFormData = prepareDataForSubmission(formData);
+    const preparedRowsData = rowsData.map((rowData: FormData) =>
+      prepareDataForSubmission(rowData)
+    );
+
+    let dataToSubmit = [...preparedRowsData];
+    if (activeRowIndex === null) {
+      dataToSubmit = [...dataToSubmit, preparedFormData];
+    }
 
     await submitData(dataToSubmit);
-    resetFormState(); // Resetting form state after submission, including clearing rowsData
+    resetFormState();
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -337,6 +395,7 @@ const RiskIdentificationForm: React.FC = () => {
     setDate("");
     setRiskRating(0);
     setError(null);
+    setErrors({});
   };
 
   const selectRow = (index: number) => {
@@ -778,6 +837,7 @@ const RiskIdentificationForm: React.FC = () => {
                             </p>
                           </div>
                           <button
+                            type="button"
                             onClick={handleAddOpportunity}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
                           >
@@ -846,6 +906,7 @@ const RiskIdentificationForm: React.FC = () => {
                             </p>
                           </div>
                           <button
+                            type="button"
                             onClick={handleAddActionPlan}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
                           >
