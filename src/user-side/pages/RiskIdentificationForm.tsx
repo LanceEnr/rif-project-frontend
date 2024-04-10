@@ -3,7 +3,7 @@ import { Label, Radio, Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
-import { AiOutlineClose } from "react-icons/ai";
+import { FaTrashCan } from "react-icons/fa6";
 
 interface FormData {
   sdaNumber: number;
@@ -805,12 +805,12 @@ const RiskIdentificationForm: React.FC = () => {
                               onClick={() => handleRemoveOpportunity(index)}
                               className={`ml-2 py-1 px-3 rounded ${
                                 index === 0
-                                  ? "bg-gray-500 cursor-not-allowed"
-                                  : "bg-red-500 hover:bg-red-700 text-white"
+                                  ? "text-gray-500 cursor-not-allowed"
+                                  : "text-red-500 hover:text-red-600 "
                               }`}
                               disabled={index === 0}
                             >
-                              <AiOutlineClose />
+                              <FaTrashCan />
                             </button>
                           </div>
                         ))}
@@ -871,12 +871,12 @@ const RiskIdentificationForm: React.FC = () => {
                               onClick={() => handleRemoveActionPlan(index)}
                               className={`ml-2 py-1 px-3 rounded ${
                                 index === 0
-                                  ? "bg-gray-500 cursor-not-allowed"
-                                  : "bg-red-500 hover:bg-red-700 text-white"
+                                  ? "text-gray-500 cursor-not-allowed"
+                                  : "text-red-500 hover:text-red-600 "
                               }`}
                               disabled={index === 0}
                             >
-                              <AiOutlineClose />
+                              <FaTrashCan />
                             </button>
                           </div>
                         ))}
