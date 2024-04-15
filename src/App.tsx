@@ -21,7 +21,6 @@ import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
 import DisplayForm from "./user-side/pages/DisplayForm";
-import DataDisplayTable from "./user-side/components/DataDisplayTable"; // Adjust the import path as necessary
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -50,7 +49,6 @@ const AdminLayout: FC = () => (
           <Route path="editUser" element={<EditUser />} />
           <Route path="microanalytics" element={<MicroAnalytics />} />
           <Route path="macroanalytics" element={<MacroAnalytics />} />
-          <Route path="data" element={<DataDisplayTable />} /> {/* Added this route */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
