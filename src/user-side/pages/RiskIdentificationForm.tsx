@@ -28,7 +28,7 @@ interface FormData {
   date: string;
   responsiblePerson: string;
   riskRating: number;
-  actionRad: string;
+  status: string;
   // Updated index signature to include both string[] and { description: string }[] types
   [key: string]:
     | number
@@ -57,7 +57,7 @@ const RiskIdentificationForm: React.FC = () => {
     date: "",
     responsiblePerson: "",
     riskRating: 0,
-    actionRad: "",
+    status: "",
   };
 
   const [formData, setFormData] = useState<FormData>(initialState);
@@ -518,7 +518,7 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                     </div>
 
-                    <div className="md:col-span-3">
+                    <div className="md:col-span-5">
                       <label
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
@@ -544,14 +544,14 @@ const RiskIdentificationForm: React.FC = () => {
                         </p>
                       )}
                     </div>
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-5 mt-4">
                       <label
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Choose one
+                        Issue Type
                       </label>
-                      <fieldset className="flex max-w-md flex-col gap-4">
+                      <fieldset className="flex max-w-md flex-row gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
                             id="issue-internal"
@@ -602,7 +602,7 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                     </div>
 
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-5 mb-2">
                       <label
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
@@ -701,6 +701,7 @@ const RiskIdentificationForm: React.FC = () => {
                         readOnly
                       />
                     </div>
+
                     <div className="md:col-span-5">
                       <label
                         htmlFor="message"
@@ -717,7 +718,7 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Level
                       </label>
-                      <fieldset className="flex max-w-md flex-col gap-4">
+                      <fieldset className="flex max-w-md flex-row gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-l"
@@ -778,7 +779,7 @@ const RiskIdentificationForm: React.FC = () => {
                       >
                         Issue Type
                       </label>
-                      <fieldset className="flex max-w-md flex-col gap-4">
+                      <fieldset className="flex max-w-md flex-row gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-initial"
@@ -818,8 +819,7 @@ const RiskIdentificationForm: React.FC = () => {
                         <p className="text-red-500">{errors.riskType}</p>
                       )}
                     </div>
-
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-5 mt-4">
                       <div className="relative w-full">
                         <div className="flex justify-between items-start mb-2">
                           <div>
@@ -1008,46 +1008,45 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Choose one
+                        Status
                       </label>
                       <fieldset className="flex max-w-md flex-col gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
-                            id="action-internal"
-                            name="actionRad"
-                            value="Internal"
+                            id="action-ongoing"
+                            name="status"
+                            value="Ongoing"
                             checked={
                               activeRowIndex !== null
-                                ? rowsData[activeRowIndex].actionRad ===
-                                  "Internal"
-                                : formData.actionRad === "Internal"
+                                ? rowsData[activeRowIndex].status === "Ongoing"
+                                : formData.status === "Ongoing"
                             }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
 
-                          <Label htmlFor="action-internal">Internal</Label>
+                          <Label htmlFor="action-internal">Ongoing</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
-                            id="action-external"
-                            name="actionRad"
-                            value="External"
+                            id="action-completed"
+                            name="status"
+                            value="Completed"
                             checked={
                               activeRowIndex !== null
-                                ? rowsData[activeRowIndex].actionRad ===
-                                  "External"
-                                : formData.actionRad === "External"
+                                ? rowsData[activeRowIndex].status ===
+                                  "Completed"
+                                : formData.status === "Completed"
                             }
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
                             onChange={handleChange}
                           />
 
-                          <Label htmlFor="action-external">External</Label>
+                          <Label htmlFor="action-external">Completed</Label>
                         </div>
                       </fieldset>
-                      {errors.actionRad && (
-                        <p className="text-red-500">{errors.actionRad}</p>
+                      {errors.status && (
+                        <p className="text-red-500">{errors.status}</p>
                       )}
                     </div>
 

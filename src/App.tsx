@@ -21,7 +21,6 @@ import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
 import DisplayForm from "./user-side/pages/DisplayForm";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App: FC = () => {
