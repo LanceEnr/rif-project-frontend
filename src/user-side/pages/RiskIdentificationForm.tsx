@@ -23,20 +23,13 @@ interface FormData {
   riskPROB: number;
   riskLevel: string;
   riskType: string;
-  opportunities: { description: string }[];
-  actionPlans: { description: string }[];
-  date: string;
+  opportunities: Opportunity[];
+  actionPlans: ActionPlan[];
+  date: string; // Existing date field
+  submissionDate?: string; // Optional submission date field
   responsiblePerson: string;
   riskRating: number;
   status: string;
-  // Updated index signature to include both string[] and { description: string }[] types
-  [key: string]:
-    | number
-    | string
-    | File
-    | null
-    | string[]
-    | { description: string }[];
 }
 
 // Component
@@ -67,6 +60,18 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const [submissionDate, setSubmissionDate] = useState("");
+
+  const prepareData = (data: FormData): FormData => ({
+    ...data,
+    opportunities: data.opportunities.filter(
+      (opportunity: Opportunity) => opportunity.description.trim() !== ""
+    ),
+    actionPlans: data.actionPlans.filter(
+      (actionPlan: ActionPlan) => actionPlan.description.trim() !== ""
+    ),
+    submissionDate: new Date().toISOString().split("T")[0], // Add the current date as submissionDate
+  });
 
   const handleAddOpportunity = () => {
     // Prevent adding a new opportunity if the last one is empty
@@ -334,21 +339,8 @@ const RiskIdentificationForm: React.FC = () => {
       return;
     }
 
-    // Prepare formData and rowsData for submission, filtering out empty descriptions
-    const prepareDataForSubmission = (data: FormData) => ({
-      ...data,
-      opportunities: data.opportunities.filter(
-        (opportunity: Opportunity) => opportunity.description.trim() !== ""
-      ),
-      actionPlans: data.actionPlans.filter(
-        (actionPlan: ActionPlan) => actionPlan.description.trim() !== ""
-      ),
-    });
-
-    const preparedFormData = prepareDataForSubmission(formData);
-    const preparedRowsData = rowsData.map((rowData: FormData) =>
-      prepareDataForSubmission(rowData)
-    );
+    const preparedFormData = prepareData(formData);
+    const preparedRowsData = rowsData.map(prepareData);
 
     let dataToSubmit = [...preparedRowsData];
     if (activeRowIndex === null) {
