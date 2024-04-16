@@ -1,56 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/form.css";
 import image1 from "../../assets/image1.png";
 
 import image4 from "../../assets/image4.png";
 
+interface Opportunity {
+  description: string;
+}
+
+interface ActionPlan {
+  description: string;
+}
+
+interface RiskFormData {
+  sdaNumber?: number;
+  issueParticulars?: string;
+  issueType?: string;
+  riskParticulars?: string;
+  riskSEV?: number;
+  riskPROB?: number;
+  riskLevel?: string;
+  riskType?: string;
+  opportunities: Opportunity[];
+  actionPlans: ActionPlan[];
+  date?: string;
+  responsiblePerson?: string;
+  riskRating?: number;
+}
+
 const WebForm: React.FC = () => {
+  const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
+
+  useEffect(() => {
+    fetchRiskForms();
+  }, []);
+
+  const fetchRiskForms = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/riskforms/report/105");
+      const data = await response.json();
+      console.log("Fetched data:", data);  // Check the fetched data
+      if (data && Array.isArray(data.riskFormData)) {
+        setRiskForms(data.riskFormData);
+      } else {
+        console.error("Data is not in expected format:", data);
+        setRiskForms([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      setRiskForms([]);
+    }
+  };
+
+  //date today and completion
+  const isFormComplete = (form: RiskFormData) => {
+    const requiredFields = [
+      form.sdaNumber,
+      form.issueParticulars,
+      form.issueType,
+      form.riskParticulars,
+      form.riskSEV,
+      form.riskPROB,
+      form.riskLevel,
+      form.riskType,
+      form.date,
+      form.responsiblePerson,
+      form.riskRating,
+      ...(form.opportunities || []),
+      ...(form.actionPlans || [])
+    ];
+    return requiredFields.every((value) => value !== undefined && value !== null && value !== '');
+  };
+
+  const todayDate = () => new Date().toISOString().split('T')[0];
+
   return (
     <>
       <body className="c20 doc-content">
         <div>
-          <p className="c89">
-            <span
-              style={{
-                overflow: "hidden",
-                display: "inline-block",
-                margin: "0px 0px",
-                border: "0px solid #000000",
-                transform: "rotate(0rad) translateZ(0px)",
-                WebkitTransform: "rotate(0rad) translateZ(0px)",
-                width: "75.48px",
-                height: "86.4px",
-              }}
-            >
-              <img
-                alt=""
-                src={image1}
-                style={{
-                  width: "75.48px",
-                  height: "86.4px",
-                  marginLeft: "0px",
-                  marginTop: "0px",
-                  transform: "rotate(0rad) translateZ(0px)",
-                  WebkitTransform: "rotate(0rad) translateZ(0px)",
-                }}
-                title=""
-              />
-            </span>
-          </p>
-          <p className="c89">
-            <span className="c40">
-              &nbsp;Office of Planning and Quality Management
-            </span>
-          </p>
-          <p className="c89">
-            <span className="c108">University of Santo Tomas</span>
-          </p>
-          <p className="c99">
-            <span className="c115">
-              Contact No. 3406-1611 loc. 8506 or 8413; email:
-              iso-opqm@ust.edu.ph
-            </span>
-          </p>
+          <div className="flex justify-between">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p className="image">
+                <span
+                  style={{
+                    overflow: "hidden",
+                    display: "flex",
+                    margin: "0 auto",
+                    border: "0px solid #000000",
+                    transform: "rotate(0rad) translateZ(0px)",
+                    WebkitTransform: "rotate(0rad) translateZ(0px)",
+                    width: "75.48px",
+                    height: "86.4px",
+                  }}
+                >
+                  <img
+                    alt=""
+                    src={image1}
+                    style={{
+                      width: "75.48px",
+                      height: "86.4px",
+                      marginLeft: "0px",
+                      marginTop: "0px",
+                      transform: "rotate(0rad) translateZ(0px)",
+                      WebkitTransform: "rotate(0rad) translateZ(0px)",
+                    }}
+                    title=""
+                  />
+                </span>
+              </p>
+            </div>
+            <div>
+              <p className="office title mt-5">
+                <span className="c40">
+                  &nbsp;Office of Planning and Quality Management
+                </span>
+              </p>
+              <p className="UST">
+                <span className="c108">University of Santo Tomas</span>
+              </p>
+              <p className="Contact Information">
+                <span className="c115">
+                  Contact No. 3406-1611 loc. 8506 or 8413; email:
+                  iso-opqm@ust.edu.ph
+                </span>
+              </p>
+            </div>
+          </div>
+          <hr style={{ border: "2px solid black" }}></hr>
           <p className="c89">
             <span className="c45">RISK IDENTIFICATION FORM</span>
           </p>
@@ -362,93 +438,99 @@ const WebForm: React.FC = () => {
               </td>
               <tbody></tbody>
             </tr>
+            {riskForms.map((form, index) => (
             <tr className="c137">
               <td className="c23" colSpan={1} rowSpan={1}>
-                <p className="item_no">
-                  <span className="c5"></span>
-                </p>
-              </td>
+                        <p className="item_no">
+                            <span className="c5">{index + 1}</span> {/* Assuming you want to display a sequential number */}
+                        </p>
+                    </td>
               <td className="c11" colSpan={1} rowSpan={1}>
                 <p className="sda_number">
-                  <span className="c5"></span>
+                  <span className="c5">{form.sdaNumber}</span>
                 </p>
               </td>
               <td className="c44" colSpan={1} rowSpan={1}>
                 <p className="issue_particulars">
-                  <span className="c5"></span>
+                  <span className="c5">{form.issueParticulars}</span>
                 </p>
               </td>
               <td className="c13" colSpan={1} rowSpan={1}>
-                <p className="issue_type">
-                  <span className="c5"></span>
-                </p>
+                  <p className="issue_typeInternal">
+                      <span className="c5">
+                          {form.issueType === "Internal" ? "✓" : ""}
+                      </span>
+                  </p>
               </td>
               <td className="c53" colSpan={1} rowSpan={1}>
-                <p className="issue_type">
-                  <span className="c5"></span>
-                </p>
-              </td>
+                  <p className="issue_typeExternal">
+                      <span className="c5">
+                          {form.issueType === "External" ? "✓" : ""}
+                      </span>
+                  </p>
+              </td> 
               <td className="c35" colSpan={1} rowSpan={1}>
                 <p className="risk_particulars">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskParticulars}</span>
                 </p>
               </td>
               <td className="c13" colSpan={1} rowSpan={1}>
                 <p className="risksev">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskSEV}</span>
                 </p>
               </td>
               <td className="c59" colSpan={1} rowSpan={1}>
                 <p className="riskprob">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskPROB}</span>
                 </p>
               </td>
               <td className="c70" colSpan={1} rowSpan={1}>
                 <p className="risk_rating">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskRating}</span>
                 </p>
               </td>
               <td className="c83" colSpan={1} rowSpan={1}>
                 <p className="risk_level">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskLevel}</span>
                 </p>
               </td>
               <td className="c25" colSpan={1} rowSpan={1}>
                 <p className="risk_type">
-                  <span className="c5"></span>
+                  <span className="c5">{form.riskType}</span>
                 </p>
               </td>
               <td className="c32" colSpan={1} rowSpan={1}>
                 <p className="opportunities">
-                  <span className="c5"></span>
+                  <span className="c5">{form.opportunities.map((o) => o.description).join(", ")}</span>
                 </p>
               </td>
               <td className="c67" colSpan={1} rowSpan={1}>
                 <p className="action_plan">
-                  <span className="c5"></span>
+                  <span className="c5">{form.actionPlans.map((a) => a.description).join(", ")}</span>
                 </p>
               </td>
               <td className="c24" colSpan={1} rowSpan={1}>
                 <p className="date">
-                  <span className="c5"></span>
+                  <span className="c5">{form.date}</span>
                 </p>
               </td>
               <td className="c24" colSpan={1} rowSpan={1}>
                 <p className="responsible_person">
-                  <span className="c5"></span>
+                  <span className="c5">{form.responsiblePerson}</span>
                 </p>
               </td>
               <td className="c55" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c5"></span>
-                </p>
-              </td>
-              <td className="c11" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c5"></span>
-                </p>
-              </td>
+                  <p className="status">
+                    <span className="c5">{isFormComplete(form) ? "Completed" : ""}</span>
+                  </p>
+                </td>
+                <td className="c11" colSpan={1} rowSpan={1}>
+                  <p className="date_finished">
+                    <span className="c5">{isFormComplete(form) ? todayDate() : ""}</span>
+                  </p>
+                </td>
             </tr>
+            ))}
           </thead>
         </table>
         <p className="c6">

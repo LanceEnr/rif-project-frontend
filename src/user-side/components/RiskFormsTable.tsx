@@ -35,7 +35,7 @@ const RiskFormsTable: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/4"
+        "http://localhost:8080/api/riskforms/report/103"
       );
       const data = await response.json();
       console.log(data); // Log the data to check its structure
