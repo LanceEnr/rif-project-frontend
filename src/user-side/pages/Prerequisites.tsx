@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FiPlus } from "react-icons/fi";
+import { FaTrashCan } from "react-icons/fa6";
 
 const Prerequisites: React.FC = () => {
   return (
@@ -87,78 +89,78 @@ const Prerequisites: React.FC = () => {
                     />
                   </div>
 
-                  <div className="relative w-full">
-                    <label
-                      htmlFor="username"
-                      className="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      Internal Client/Stakeholder
-                    </label>
-                    <div className="relative">
+                  <div className="relative w-full mt-2">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <label
+                          htmlFor="username"
+                          className="block mb-2 text-sm font-medium text-gray-900"
+                        >
+                          Internal Client/Stakeholder
+                        </label>
+                        <p
+                          id="floating_helper_text"
+                          className="my-2 text-xs text-gray-500"
+                        >
+                          Use the "Add" button to include more entries.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                      >
+                        <FiPlus className="mr-2" />
+                        <span>Add</span>
+                      </button>
+                    </div>
+                    <div className="relative flex items-center mb-2">
                       <input
                         type="text"
                         name="username"
                         id="username"
-                        className="block p-2.5 w-full z-20 mb-2 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         placeholder="e.g. Academic Staff"
-                        required
                       />
-                      <button
-                        type="button"
-                        className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          className="h-5 w-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          ></path>
-                        </svg>
+                      <button className="ml-2 py-1 px-3 rounded  text-red-500 hover:text-red-600 ">
+                        <FaTrashCan />
                       </button>
                     </div>
                   </div>
 
-                  <div className="relative w-full">
-                    <label
-                      htmlFor="username"
-                      className="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      External Client/Stakeholder
-                    </label>
-                    <div className="relative">
+                  <div className="relative w-full mt-2">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <label
+                          htmlFor="username"
+                          className="block mb-2 text-sm font-medium text-gray-900"
+                        >
+                          External Client/Stakeholder
+                        </label>
+                        <p
+                          id="floating_helper_text"
+                          className="my-2 text-xs text-gray-500"
+                        >
+                          Use the "Add" button to include more entries.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                      >
+                        <FiPlus className="mr-2" />
+                        <span>Add</span>
+                      </button>
+                    </div>
+                    <div className="relative flex items-center mb-2">
                       <input
                         type="text"
                         name="username"
                         id="username"
-                        className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         placeholder="e.g. Parents & Guardians"
-                        required
                       />
-                      <button
-                        type="button"
-                        className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-yellow-500 rounded-r-lg border border-yellow-500 hover:bg-yellow-600 "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          className="h-5 w-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          ></path>
-                        </svg>
+                      <button className="ml-2 py-1 px-3 rounded  text-red-500 hover:text-red-600 ">
+                        <FaTrashCan />
                       </button>
                     </div>
                   </div>
