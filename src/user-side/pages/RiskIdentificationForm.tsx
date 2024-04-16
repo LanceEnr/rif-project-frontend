@@ -60,7 +60,6 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
-  const [submissionDate, setSubmissionDate] = useState("");
 
   const prepareData = (data: FormData): FormData => ({
     ...data,
