@@ -22,7 +22,8 @@ interface RiskFormData {
   date: string;
   responsiblePerson: string;
   riskRating: number;
-  actionRad: string;
+  status: string;
+  submissionDate: string;
 }
 
 const RiskFormsTable: React.FC = () => {
@@ -35,7 +36,7 @@ const RiskFormsTable: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/103"
+        "http://localhost:8080/api/riskforms/report/17"
       );
       const data = await response.json();
       console.log(data); // Log the data to check its structure
@@ -97,7 +98,10 @@ const RiskFormsTable: React.FC = () => {
               Responsible Person
             </th>
             <th scope="col" className="py-3 px-6">
-              Action Rad
+              Status
+            </th>
+            <th scope="col" className="py-3 px-6">
+              Date
             </th>
           </tr>
         </thead>
@@ -124,7 +128,8 @@ const RiskFormsTable: React.FC = () => {
               </td>
               <td className="py-4 px-6">{form.date}</td>
               <td className="py-4 px-6">{form.responsiblePerson}</td>
-              <td className="py-4 px-6">{form.actionRad}</td>
+              <td className="py-4 px-6">{form.status}</td>
+              <td className="py-4 px-6">{form.submissionDate}</td>
             </tr>
           ))}
         </tbody>
