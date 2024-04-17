@@ -26,18 +26,51 @@ interface RiskFormData {
   date?: string;
   responsiblePerson?: string;
   riskRating?: number;
+  status?: string;
+  submissionDate?: string;
 }
 
-const WebForm: React.FC = () => {
+  const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
 
   useEffect(() => {
     fetchRiskForms();
   }, []);
 
+  const printForm = () => {
+    const docContentElement = document.querySelector('.doc-content');
+
+    if (docContentElement) {
+      const printContents = docContentElement.innerHTML;
+      const printWindow = window.open('', '_blank', 'height=600,width=800');
+
+      if (printWindow) {
+        printWindow.document.write(`
+        <html>
+        <head>
+            <title>Print Document</title>
+            <link rel="stylesheet" type="text/css" href="../../styles/form.css">
+        </head>
+        <body>
+            ${printContents}
+        </body>
+        </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.onload = function() {
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 1000); // Adjust timeout to ensure CSS loads
+        };
+    }
+  }
+  };
+
   const fetchRiskForms = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/riskforms/report/105");
+      const response = await fetch("http://localhost:8080/api/riskforms/report/107");
       const data = await response.json();
       console.log("Fetched data:", data);  // Check the fetched data
       if (data && Array.isArray(data.riskFormData)) {
@@ -51,28 +84,6 @@ const WebForm: React.FC = () => {
       setRiskForms([]);
     }
   };
-
-  //date today and completion
-  const isFormComplete = (form: RiskFormData) => {
-    const requiredFields = [
-      form.sdaNumber,
-      form.issueParticulars,
-      form.issueType,
-      form.riskParticulars,
-      form.riskSEV,
-      form.riskPROB,
-      form.riskLevel,
-      form.riskType,
-      form.date,
-      form.responsiblePerson,
-      form.riskRating,
-      ...(form.opportunities || []),
-      ...(form.actionPlans || [])
-    ];
-    return requiredFields.every((value) => value !== undefined && value !== null && value !== '');
-  };
-
-  const todayDate = () => new Date().toISOString().split('T')[0];
 
   return (
     <>
@@ -521,12 +532,12 @@ const WebForm: React.FC = () => {
               </td>
               <td className="c55" colSpan={1} rowSpan={1}>
                   <p className="status">
-                    <span className="c5">{isFormComplete(form) ? "Completed" : ""}</span>
+                    <span className="c5">{form.status}</span>
                   </p>
                 </td>
                 <td className="c11" colSpan={1} rowSpan={1}>
-                  <p className="date_finished">
-                    <span className="c5">{isFormComplete(form) ? todayDate() : ""}</span>
+                  <p className="submission_date">
+                    <span className="c5">{form.submissionDate}</span>
                   </p>
                 </td>
             </tr>
@@ -1166,6 +1177,7 @@ const WebForm: React.FC = () => {
           </p>
         </div>
       </body>
+      <button onClick={printForm}>Print Form</button>
     </>
   );
 };
