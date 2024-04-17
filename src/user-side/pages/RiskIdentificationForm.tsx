@@ -417,7 +417,10 @@ const RiskIdentificationForm: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">
-        <div className="relative my-4 w-56 sm:hidden">
+        <div className="my-4 col-span-8 sm:hidden">
+          <label className="block mb-2 text-sm font-medium text-gray-900">
+            Existing Rows
+          </label>
           <Dropdown
             label=""
             inline
@@ -426,15 +429,19 @@ const RiskIdentificationForm: React.FC = () => {
               <button
                 id="dropdownActionButton"
                 data-dropdown-toggle="dropdownAction"
-                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 "
+                className="inline-flex w-full py-2.5 items-center  bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100  rounded-lg text-sm px-3 "
                 type="button"
               >
-                Rows <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                <div className="flex justify-between w-full">
+                  <span>Choose one</span>
+                  <MdKeyboardArrowDown className="h-5 w-5" />
+                </div>
               </button>
             )}
           >
             {rowsDropdownItems}
           </Dropdown>
+          <hr className="my-4" />
         </div>
 
         <div className="col-span-2 hidden sm:block">
@@ -965,7 +972,7 @@ const RiskIdentificationForm: React.FC = () => {
                           htmlFor="countries"
                           className="block mb-2 text-sm font-medium text-gray-900"
                         >
-                          Person Responsible
+                          Person/s Responsible
                         </label>
                         <select
                           id="personResponsible"
