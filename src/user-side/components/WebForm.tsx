@@ -38,39 +38,35 @@ interface RiskFormData {
   }, []);
 
   const printForm = () => {
-    const docContentElement = document.querySelector('.doc-content');
-
-    if (docContentElement) {
-      const printContents = docContentElement.innerHTML;
+    // Select the element you want to print
+    const element = document.querySelector('.doc-content') as HTMLElement;
+  
+    if (element) {
       const printWindow = window.open('', '_blank', 'height=600,width=800');
-
       if (printWindow) {
-        printWindow.document.write(`
-        <html>
-        <head>
-            <title>Print Document</title>
-            <link rel="stylesheet" type="text/css" href="../../styles/form.css">
-        </head>
-        <body>
-            ${printContents}
-        </body>
-        </html>
-        `);
+        // Properly handle the printing of the document
+        printWindow.document.write('<html><head><title>Print Document</title>');
+        printWindow.document.write('<link rel="stylesheet" href="../../styles/form.css" type="text/css" media="print">');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(element.innerHTML); // Copy the specific content to print
+        printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.focus();
-        printWindow.onload = function() {
-            setTimeout(() => {
-                printWindow.print();
-                printWindow.close();
-            }, 1000); // Adjust timeout to ensure CSS loads
+  
+        // Ensure the window loads the content before printing
+        printWindow.onload = function () {
+          setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+          }, 1000); // Adjust timeout as needed
         };
+      }
     }
-  }
-  };
+  };  
 
   const fetchRiskForms = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/riskforms/report/107");
+      const response = await fetch("http://localhost:8080/api/riskforms/report/109");
       const data = await response.json();
       console.log("Fetched data:", data);  // Check the fetched data
       if (data && Array.isArray(data.riskFormData)) {
@@ -512,17 +508,27 @@ interface RiskFormData {
               </td>
               <td className="c32" colSpan={1} rowSpan={1}>
                 <p className="opportunities">
-                  <span className="c5">{form.opportunities.map((o) => o.description).join(", ")}</span>
+                  {form.opportunities.map((opportunity, idx) => (
+                    <span key={idx}>{idx + 1}. {opportunity.description}<br /></span>
+                  ))}
                 </p>
               </td>
               <td className="c67" colSpan={1} rowSpan={1}>
                 <p className="action_plan">
-                  <span className="c5">{form.actionPlans.map((a) => a.description).join(", ")}</span>
+                  {form.actionPlans.map((action, idx) => (
+                    <span key={idx}>{idx + 1}. {action.description}<br /></span>
+                  ))}
                 </p>
               </td>
               <td className="c24" colSpan={1} rowSpan={1}>
                 <p className="date">
-                  <span className="c5">{form.date}</span>
+                  <span className="c5">
+                    {form.date ? new Date(form.date).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric'
+                    }) : 'No Date Provided'}
+                  </span>
                 </p>
               </td>
               <td className="c24" colSpan={1} rowSpan={1}>
@@ -537,7 +543,13 @@ interface RiskFormData {
                 </td>
                 <td className="c11" colSpan={1} rowSpan={1}>
                   <p className="submission_date">
-                    <span className="c5">{form.submissionDate}</span>
+                    <span className="c5">
+                      {form.submissionDate ? `As of ${new Date(form.submissionDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}` : 'No Date Provided'}
+                    </span>
                   </p>
                 </td>
             </tr>
