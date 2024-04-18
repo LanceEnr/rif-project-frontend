@@ -37,6 +37,10 @@ interface RiskFormData {
     fetchRiskForms();
   }, []);
 
+  const paragraphStyle: React.CSSProperties = {
+      whiteSpace: 'nowrap'
+  };
+
   const printForm = () => {
     // Select the element you want to print
     const element = document.querySelector('.doc-content');
@@ -103,7 +107,7 @@ interface RiskFormData {
 
   return (
     <>
-      <body className="c20 hidden doc-content">
+      <body className="c20 doc-content">
         <div>
           <div className="flex justify-between">
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -136,8 +140,8 @@ interface RiskFormData {
                 </span>
               </p>
             </div>
-            <div>
-              <p className="office title mt-5">
+            <div style={{ textAlign: 'right' }}>
+              <p className="office title mt-5 pl-5">
                 <span className="c40">
                   &nbsp;Office of Planning and Quality Management
                 </span>
@@ -147,8 +151,7 @@ interface RiskFormData {
               </p>
               <p className="Contact Information">
                 <span className="c115">
-                  Contact No. 3406-1611 loc. 8506 or 8413; email:
-                  iso-opqm@ust.edu.ph
+                  Contact No. 3406-1611 loc. 8506 or 8413; email: iso-opqm@ust.edu.ph
                 </span>
               </p>
             </div>
@@ -169,7 +172,7 @@ interface RiskFormData {
                   <span className="c45"></span>
                 </p>
                 <p className="c6">
-                  <span className="c9 c61">Administrative/Academic Unit:</span>
+                    <span className="c9 c61" style={{ whiteSpace: 'nowrap' }}>Administrative/Academic Unit:</span>
                 </p>
               </td>
               <td className="c135" colSpan={1} rowSpan={1}>
@@ -592,38 +595,33 @@ interface RiskFormData {
         <p className="c1">
           <span className="c36"></span>
         </p>
-        <p className="c6 c121">
-          <span className="c92">Prepared by</span>
-          <span className="c56">: </span>
-          <span className="c56 c129">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ________________________ &nbsp;
-          </span>
-          <span className="c56">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{" "}
-          </span>
-          <span className="c92">Reviewed/Approved by</span>
-          <span className="c56">: ___</span>
-          <span className="c129 c56">
-            ______________________.____ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-          </span>
-        </p>
-        <p className="c6">
-          <span className="c14">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
-            &nbsp; &nbsp; Signature over Printed Name/Date
-          </span>
-        </p>
+        <div style={{ whiteSpace: 'nowrap' }}>
+            <p className="c6 c121" style={paragraphStyle}>
+                <span className="c92">Prepared by</span>
+                <span className="c56">: </span>
+                <span className="c56 c129">________________________</span>
+                <span className="c56">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>
+                <span className="c92">Reviewed/Approved by:</span>
+                <span className="c129 c56">______________________</span>
+            </p>
+            <p className="c6" style={{ display: 'inline' }}>
+                <span className="c14">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                    &nbsp; &nbsp; Signature over Printed Name/Date
+                </span>
+            </p>
+        </div>
         <p className="c21">
           <span className="c14"></span>
         </p>
@@ -1166,48 +1164,47 @@ interface RiskFormData {
         <p className="c86">
           <span className="c5"></span>
         </p>
-        <div>
-          <p className="c6 c102">
-            <span
-              style={{
-                overflow: "hidden",
-                display: "inline-block",
-                margin: "0px",
-                border: "0px solid #000000",
-                transform: "rotate(0rad) translateZ(0px)",
-                WebkitTransform: "rotate(0rad) translateZ(0px)",
-                width: "47.73px",
-                height: "45.07px",
-              }}
-            >
-              <img
-                alt=""
-                src={image4}
-                style={{
-                  width: "47.73px",
-                  height: "45.07px",
-                  marginLeft: "0px",
-                  marginTop: "0px",
-                  transform: "rotate(0rad) translateZ(0px)",
-                  WebkitTransform: "rotate(0rad) translateZ(0px)",
-                }}
-                title=""
-              />
-            </span>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <p className="c6 c57" style={{ margin: '0', padding: '0' }}>
+              <span className="c26 c111">
+                  UST: S029-00-FO54 rev05 01/10/24
+              </span>
           </p>
-          <p className="c6 c57">
-            <span className="c26 c111">&nbsp;</span>
+          <p className="c1" style={{ margin: '0', padding: '0', marginLeft: '5px', marginRight: '5px' }}>
+              <span className="c5"></span>
           </p>
-          <p className="c6 c57">
-            <span className="c26 c111">
-              UST: S029-00-FO54 rev05
-              01/10/24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
+          <p className="c6 c57" style={{ margin: '0', padding: '0' }}>
+              <span className="c26 c111">&nbsp;</span>
           </p>
-          <p className="c1">
-            <span className="c5"></span>
+          <p className="c6 c102" style={{ margin: '0', padding: '0' }}>
+              <span
+                  style={{
+                      overflow: "hidden",
+                      display: "inline-block",
+                      margin: "0px",
+                      border: "0px solid #000000",
+                      transform: "rotate(0rad) translateZ(0px)",
+                      WebkitTransform: "rotate(0rad) translateZ(0px)",
+                      width: "47.73px",
+                      height: "45.07px",
+                  }}
+              >
+                  <img
+                      alt=""
+                      src={image4}
+                      style={{
+                          width: "47.73px",
+                          height: "45.07px",
+                          marginLeft: "0px",
+                          marginTop: "0px",
+                          transform: "rotate(0rad) translateZ(0px)",
+                          WebkitTransform: "rotate(0rad) translateZ(0px)",
+                      }}
+                      title=""
+                  />
+              </span>
           </p>
-        </div>
+      </div>
       </body>
       <button onClick={printForm}>Print Form</button>
     </>
