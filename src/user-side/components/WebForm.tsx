@@ -39,17 +39,37 @@ interface RiskFormData {
 
   const printForm = () => {
     // Select the element you want to print
-    const element = document.querySelector('.doc-content') as HTMLElement;
-  
+    const element = document.querySelector('.doc-content');
     if (element) {
       const printWindow = window.open('', '_blank', 'height=600,width=800');
+  
       if (printWindow) {
-        // Properly handle the printing of the document
-        printWindow.document.write('<html><head><title>Print Document</title>');
-        printWindow.document.write('<link rel="stylesheet" href="../../styles/form.css" type="text/css" media="print">');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(element.innerHTML); // Copy the specific content to print
-        printWindow.document.write('</body></html>');
+        // Get CSS from a style element
+        const cssLink = document.querySelector('link[href*="form.css"]');
+        let cssText = "";
+        if (cssLink) {
+          cssText = `<link href="../../styles/form.css" rel="stylesheet" type="text/css" media="print">`;
+        } else {
+          // If no link is found, try to load CSS text from style elements
+          const styles = document.querySelectorAll("style");
+          styles.forEach(style => {
+            cssText += style.outerHTML;
+          });
+        }
+  
+        // Write HTML content
+        printWindow.document.write(`
+          <html>
+          <head>
+            <title>Print Document</title>
+            ${cssText}
+          </head>
+          <body>
+            ${element.innerHTML}
+          </body>
+          </html>
+        `);
+  
         printWindow.document.close();
         printWindow.focus();
   
@@ -62,7 +82,7 @@ interface RiskFormData {
         };
       }
     }
-  };  
+  };    
 
   const fetchRiskForms = async () => {
     try {
@@ -83,7 +103,7 @@ interface RiskFormData {
 
   return (
     <>
-      <body className="c20 doc-content">
+      <body className="c20 hidden doc-content">
         <div>
           <div className="flex justify-between">
             <div style={{ display: "flex", alignItems: "center" }}>
