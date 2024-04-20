@@ -90,7 +90,7 @@ interface RiskFormData {
 
   const fetchRiskForms = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/riskforms/report/109");
+      const response = await fetch("http://localhost:8080/api/riskforms/report/38");
       const data = await response.json();
       console.log("Fetched data:", data);  // Check the fetched data
       if (data && Array.isArray(data.riskFormData)) {
@@ -625,6 +625,13 @@ interface RiskFormData {
         <p className="c21">
           <span className="c14"></span>
         </p>
+        <div className="flex">
+        <div className="app-container">
+        <div className="column">
+        {/* First Column */}
+        <p className="c21">
+          <span className="c14"></span>
+        </p>
         <a id="t.e093c7e7721baa52a33c27063dc75e026cd26f4c"></a>
         <a id="t.2"></a>
         <table className="c37">
@@ -747,9 +754,194 @@ interface RiskFormData {
             </td>
           </tr>
         </table>
+        <a id="t.4d0c7a815873420abb7a9658d64689f7c095540e"></a>
+        <a id="t.4"></a>
+        <table className="c37">
+          <tr className="c34">
+            <td className="c47 c105" colSpan={1} rowSpan={1}>
+              <p className="c6">
+                <span className="c16">Severity (Sev)**</span>
+              </p>
+            </td>
+            <td className="c74 c47" colSpan={1} rowSpan={1}>
+              <p className="c6">
+                <span className="c16">Probability (Prob)**</span>
+              </p>
+              <p className="c1">
+                <span className="c42"></span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c34">
+            <td className="c105" colSpan={1} rowSpan={1}>
+              <p className="c6 c28">
+                <span className="c42">5 &nbsp; Very Severe</span>
+              </p>
+            </td>
+            <td className="c74" colSpan={1} rowSpan={1}>
+              <p className="c6 c114">
+                <span className="c42">5 &nbsp; Very Likely</span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c34">
+            <td className="c105" colSpan={1} rowSpan={1}>
+              <p className="c6 c28">
+                <span className="c42">4 &nbsp; Severe</span>
+              </p>
+            </td>
+            <td className="c74" colSpan={1} rowSpan={1}>
+              <p className="c6 c114">
+                <span className="c42">4 &nbsp; Likely</span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c34">
+            <td className="c105" colSpan={1} rowSpan={1}>
+              <p className="c6 c28">
+                <span className="c42">3 &nbsp; Moderate</span>
+              </p>
+            </td>
+            <td className="c74" colSpan={1} rowSpan={1}>
+              <p className="c6 c114">
+                <span className="c42">3 &nbsp; Unlikely</span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c34">
+            <td className="c105" colSpan={1} rowSpan={1}>
+              <p className="c6 c28">
+                <span className="c42">2 &nbsp; Slight</span>
+              </p>
+            </td>
+            <td className="c74" colSpan={1} rowSpan={1}>
+              <p className="c6 c114">
+                <span className="c42">2 &nbsp; Very Unlikely</span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c34">
+            <td className="c105" colSpan={1} rowSpan={1}>
+              <p className="c6 c28">
+                <span className="c42">1 &nbsp; Insignificant</span>
+              </p>
+            </td>
+            <td className="c74" colSpan={1} rowSpan={1}>
+              <p className="c6 c114">
+                <span className="c42">1 &nbsp; Extreme Unlikely</span>
+              </p>
+            </td>
+          </tr>
+        </table>
+        <p className="c6">
+          <span className="c5">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            __________________________________________________________
+          </span>
+        </p>
+        <p className="c6">
+          <span className="c5">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **Refer to Severity and
+            Probability Scales
+          </span>
+        </p>
+        <a id="t.01a40e0137041aa3600e13a73354ad6e6f848251"></a>
+        <a id="t.5"></a>
+        <table className="c37">
+          <tr className="c34">
+            <td className="c47 c128" colSpan={3} rowSpan={1}>
+              <p className="c6">
+                <span className="c16">
+                  Risk Categorization (Priority Options)-Source: Adapted from
+                  BSI, 2004
+                </span>
+              </p>
+              <p className="c1">
+                <span className="c16"></span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c66">
+            <td className="c12" colSpan={1} rowSpan={1}>
+              <p className="c33 c41">
+                <span className="c42">25-15</span>
+              </p>
+            </td>
+            <td className="c64" colSpan={1} rowSpan={1}>
+              <p className="c3">
+                <span className="c42">High </span>
+              </p>
+              <p className="c1 c18">
+                <span className="c42"></span>
+              </p>
+            </td>
+            <td className="c52" colSpan={1} rowSpan={1}>
+              <p className="c6 c18">
+                <span className="c42">
+                  Unacceptable; risks that should be urgently reduced to become
+                  tolerable or
+                </span>
+              </p>
+              <p className="c6 c18">
+                <span className="c42">acceptable</span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c66">
+            <td className="c12" colSpan={1} rowSpan={1}>
+              <p className="c33 c144">
+                <span className="c42">14-8</span>
+              </p>
+            </td>
+            <td className="c64" colSpan={1} rowSpan={1}>
+              <p className="c3">
+                <span className="c42">Medium </span>
+              </p>
+            </td>
+            <td className="c52" colSpan={1} rowSpan={1}>
+              <p className="c6 c18">
+                <span className="c42">
+                  Risks that should be reduced to become tolerable or acceptable
+                </span>
+              </p>
+            </td>
+          </tr>
+          <tr className="c132">
+            <td className="c12" colSpan={1} rowSpan={1}>
+              <p className="c33 c144">
+                <span className="c42">7-1</span>
+              </p>
+            </td>
+            <td className="c64" colSpan={1} rowSpan={1}>
+              <p className="c3">
+                <span className="c42">Low </span>
+              </p>
+            </td>
+            <td className="c52" colSpan={1} rowSpan={1}>
+              <p className="c6 c18">
+                <span className="c42">
+                  Acceptable; risks that require minimal or no action
+                </span>
+              </p>
+            </td>
+          </tr>
+        </table>
+        <p className="c86">
+          <span className="c5"></span>
+        </p>
+        <p className="c86">
+          <span className="c5"></span>
+        </p>
+        <p className="c86">
+          <span className="c5"></span>
+        </p>
         <p className="c1">
           <span className="c60 c96"></span>
         </p>
+        </div>
+        </div>
+        <div className="column">
+        {/* Second Column */}
         <a id="t.7bece1298abb30b95fd3fdb8197d8426f5217a65"></a>
         <a id="t.3"></a>
         <table className="c37">
@@ -980,190 +1172,11 @@ interface RiskFormData {
         <p className="c1">
           <span className="c60 c96"></span>
         </p>
-        <a id="t.4d0c7a815873420abb7a9658d64689f7c095540e"></a>
-        <a id="t.4"></a>
-        <table className="c37">
-          <tr className="c34">
-            <td className="c47 c105" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c16">Severity (Sev)**</span>
-              </p>
-            </td>
-            <td className="c74 c47" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c16">Probability (Prob)**</span>
-              </p>
-              <p className="c1">
-                <span className="c42"></span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c105" colSpan={1} rowSpan={1}>
-              <p className="c6 c28">
-                <span className="c42">5 &nbsp; Very Severe</span>
-              </p>
-            </td>
-            <td className="c74" colSpan={1} rowSpan={1}>
-              <p className="c6 c114">
-                <span className="c42">5 &nbsp; Very Likely</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c105" colSpan={1} rowSpan={1}>
-              <p className="c6 c28">
-                <span className="c42">4 &nbsp; Severe</span>
-              </p>
-            </td>
-            <td className="c74" colSpan={1} rowSpan={1}>
-              <p className="c6 c114">
-                <span className="c42">4 &nbsp; Likely</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c105" colSpan={1} rowSpan={1}>
-              <p className="c6 c28">
-                <span className="c42">3 &nbsp; Moderate</span>
-              </p>
-            </td>
-            <td className="c74" colSpan={1} rowSpan={1}>
-              <p className="c6 c114">
-                <span className="c42">3 &nbsp; Unlikely</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c105" colSpan={1} rowSpan={1}>
-              <p className="c6 c28">
-                <span className="c42">2 &nbsp; Slight</span>
-              </p>
-            </td>
-            <td className="c74" colSpan={1} rowSpan={1}>
-              <p className="c6 c114">
-                <span className="c42">2 &nbsp; Very Unlikely</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c105" colSpan={1} rowSpan={1}>
-              <p className="c6 c28">
-                <span className="c42">1 &nbsp; Insignificant</span>
-              </p>
-            </td>
-            <td className="c74" colSpan={1} rowSpan={1}>
-              <p className="c6 c114">
-                <span className="c42">1 &nbsp; Extreme Unlikely</span>
-              </p>
-            </td>
-          </tr>
-        </table>
-        <p className="c6">
-          <span className="c5">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            __________________________________________________________
-          </span>
-        </p>
-        <p className="c6">
-          <span className="c5">
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **Refer to Severity and
-            Probability Scales
-          </span>
-        </p>
         <p className="c1">
           <span className="c60 c96"></span>
         </p>
-        <a id="t.01a40e0137041aa3600e13a73354ad6e6f848251"></a>
-        <a id="t.5"></a>
-        <table className="c37">
-          <tr className="c34">
-            <td className="c47 c128" colSpan={3} rowSpan={1}>
-              <p className="c6">
-                <span className="c16">
-                  Risk Categorization (Priority Options)-Source: Adapted from
-                  BSI, 2004
-                </span>
-              </p>
-              <p className="c1">
-                <span className="c16"></span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c66">
-            <td className="c12" colSpan={1} rowSpan={1}>
-              <p className="c33 c41">
-                <span className="c42">25-15</span>
-              </p>
-            </td>
-            <td className="c64" colSpan={1} rowSpan={1}>
-              <p className="c3">
-                <span className="c42">High </span>
-              </p>
-              <p className="c1 c18">
-                <span className="c42"></span>
-              </p>
-            </td>
-            <td className="c52" colSpan={1} rowSpan={1}>
-              <p className="c6 c18">
-                <span className="c42">
-                  Unacceptable; risks that should be urgently reduced to become
-                  tolerable or
-                </span>
-              </p>
-              <p className="c6 c18">
-                <span className="c42">acceptable</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c66">
-            <td className="c12" colSpan={1} rowSpan={1}>
-              <p className="c33 c144">
-                <span className="c42">14-8</span>
-              </p>
-            </td>
-            <td className="c64" colSpan={1} rowSpan={1}>
-              <p className="c3">
-                <span className="c42">Medium </span>
-              </p>
-            </td>
-            <td className="c52" colSpan={1} rowSpan={1}>
-              <p className="c6 c18">
-                <span className="c42">
-                  Risks that should be reduced to become tolerable or acceptable
-                </span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c132">
-            <td className="c12" colSpan={1} rowSpan={1}>
-              <p className="c33 c144">
-                <span className="c42">7-1</span>
-              </p>
-            </td>
-            <td className="c64" colSpan={1} rowSpan={1}>
-              <p className="c3">
-                <span className="c42">Low </span>
-              </p>
-            </td>
-            <td className="c52" colSpan={1} rowSpan={1}>
-              <p className="c6 c18">
-                <span className="c42">
-                  Acceptable; risks that require minimal or no action
-                </span>
-              </p>
-            </td>
-          </tr>
-        </table>
-        <p className="c86">
-          <span className="c5"></span>
-        </p>
-        <p className="c86">
-          <span className="c5"></span>
-        </p>
-        <p className="c86">
-          <span className="c5"></span>
-        </p>
+        </div>
+        </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <p className="c6 c57" style={{ margin: '0', padding: '0' }}>
               <span className="c26 c111">
