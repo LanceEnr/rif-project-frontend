@@ -2302,3 +2302,11 @@ h6 {
   padding: 10px; /* Padding inside each column */
 }
 
+@media print {
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+}

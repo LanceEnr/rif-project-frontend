@@ -32,9 +32,17 @@ interface RiskFormData {
 
   const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
-
+  
   useEffect(() => {
     fetchRiskForms();
+    // Assuming your page numbering functionality should execute on component mount
+    const pages = document.querySelectorAll('.page-break');
+    const total = pages.length + 1;  // Total pages is breaks + 1
+    let pageNumber = 1;
+
+    document.querySelector('.c84')!.textContent = `${pageNumber}`;
+    document.querySelector('.c77')!.textContent = `${total}`;
+
   }, []);
 
   const paragraphStyle: React.CSSProperties = {
@@ -622,6 +630,7 @@ interface RiskFormData {
                 </span>
             </p>
         </div>
+        <tr className="page-break"></tr>
         <p className="c21">
           <span className="c14"></span>
         </p>
@@ -1219,7 +1228,13 @@ interface RiskFormData {
           </p>
       </div>
       </body>
-      <button onClick={printForm}>Print Form</button>
+      <button
+        type="button"
+        onClick={printForm}
+        className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md bg-blue-500 hover:bg-blue-600"
+        >
+        Print Form
+        </button>
     </>
   );
 };
