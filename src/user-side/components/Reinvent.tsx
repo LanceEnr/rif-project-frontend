@@ -22,12 +22,12 @@ const Reinvent: React.FC = () => {
           <div className="grid grid-cols-2 gap-4 mt-8">
             <img
               className="w-full rounded-lg shadow-lg"
-              src="https://scontent.fmnl15-1.fna.fbcdn.net/v/t1.15752-9/431276410_1463064954619635_9031254072205885840_n.png?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHYFGyvkrg4dlc1sbxlHpM7X91pRXvijp1f3WlFe-KOnScyR5l0wX0V6hgtiQy1ahB3P2TFG-ed07SzChQmQPIn&_nc_ohc=diYDsg6qqb4AX9AZPgD&_nc_ht=scontent.fmnl15-1.fna&oh=03_AdQ8DjpcmZiqLd-xOvPR8Bs2tHsaefHWK3iJmW-qblcy8A&oe=6619E923"
+              src="https://media.discordapp.net/attachments/1216948674119205025/1231640389996253195/image.png?ex=6637b17f&is=66253c7f&hm=38d3be0ab894efdc76c6ee235f59f3d0ecdb2c706e44f16e9f74dbc410323836&=&format=webp&quality=lossless&width=523&height=619"
               alt="office content 1"
             />
             <img
               className="mt-4 w-full rounded-lg lg:mt-10 shadow-lg"
-              src="https://scontent.fmnl25-2.fna.fbcdn.net/v/t1.15752-9/430018500_1129575785049244_2963157075008452906_n.png?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeF5FWKdJGrmxRDDAzIiRf2A7z95F3eNUqrvP3kXd41Sqh-0lVP2X27AOLzGObk5MkR-19Bf0n90axSydc0IPLPU&_nc_ohc=bho1oeX9M98AX9nssDQ&_nc_ht=scontent.fmnl25-2.fna&oh=03_AdR118XB3uRG75XbBu1PMAeBoTwJCbHdH07B0-IK95HRlw&oe=6619BA32"
+              src="https://media.discordapp.net/attachments/1216948674119205025/1231640530165829632/image.png?ex=6637b1a1&is=66253ca1&hm=cfd2d4cfdabf8a09d5cb7cf641c236afcff4bcac60b5465a1f776fb1846402ab&=&format=webp&quality=lossless&width=447&height=619"
               alt="office content 2"
             />
           </div>

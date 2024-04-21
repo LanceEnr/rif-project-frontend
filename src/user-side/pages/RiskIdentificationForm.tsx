@@ -1056,7 +1056,7 @@ const RiskIdentificationForm: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleAddRow}
-                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md bg-blue-500 hover:bg-blue-600"
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium   rounded-md text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-600"
                         >
                           Add Another Row
                         </button>
@@ -1072,7 +1072,7 @@ const RiskIdentificationForm: React.FC = () => {
                             rowsData.length === 0 &&
                             !Object.values(formData).some((value) => value)
                               ? "bg-gray-500"
-                              : "bg-green-500 hover:bg-green-600"
+                              : "bg-yellow-500 hover:bg-yellow-600"
                           }`}
                         >
                           Submit

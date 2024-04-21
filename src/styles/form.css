@@ -1,4 +1,4 @@
-@import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLW4KJDKkfsODW2Xa-qzP7ON5E2yjjvZBKj5ny4Zw4TYPg_NW0mmFWnn4zL5LHqGPIw);
+/* @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLW4KJDKkfsODW2Xa-qzP7ON5E2yjjvZBKj5ny4Zw4TYPg_NW0mmFWnn4zL5LHqGPIw);
 .lst-kix_list_4-1 > li {
   counter-increment: lst-ctn-kix_list_4-1;
 }
@@ -2290,16 +2290,16 @@ h6 {
   text-align: left;
 }
 .app-container {
-  display: flex;  /* Using flexbox for horizontal layout */
-  justify-content: space-between; /* This separates the two columns */
-  align-items: flex-start; /* Align items at the flex start of the container */
-  padding: 30px; /* Padding around the container */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 30px;
 }
 
 .column {
-  width: 100%; /* Each column takes nearly half of the container width */
-  margin: 0; /* Adjust margin as necessary */
-  padding: 10px; /* Padding inside each column */
+  width: 100%;
+  margin: 0;
+  padding: 10px;
 }
 
 @media print {
@@ -2309,4 +2309,4 @@ h6 {
     width: 100%;
     text-align: center;
   }
-}
+} */

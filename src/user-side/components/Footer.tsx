@@ -1,24 +1,28 @@
-import React from 'react';
+import React from "react";
 
 const Footer: React.FC = () => {
   return (
     <>
-      <footer style={{ backgroundColor: '#121212' }}>
+      <footer style={{ backgroundColor: "#121212" }}>
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
           <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0">
               <a href="https://flowbite.com/" className="flex items-center">
                 <img
-                  src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t1.15752-9/426963797_1083902849549118_5791859232688171486_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=SLqvOkzzRY4AX-eGOLW&_nc_ht=scontent.fmnl25-1.fna&oh=03_AdQg1yKPWUhRV8ynkQ8WmwT1SIV8OCwl_23mWq9ZTM8E3g&oe=65F263F0"
+                  src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=6637b3db&is=66253edb&hm=6a0b747914a2437581ac82fc3eaf01cebfb4a12c2ff9cdea815262c7d4d9541e&=&format=webp&quality=lossless"
                   className="h-8 me-3"
                   alt="FlowBite Logo"
                 />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap text-yellow-500">YellowAlert</span>
+                <span className="self-center text-2xl font-semibold whitespace-nowrap text-yellow-500">
+                  YellowAlert
+                </span>
               </a>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
-                <h2 className="mb-6 text-sm font-semibold uppercase text-white">Resourcess</h2>
+                <h2 className="mb-6 text-sm font-semibold uppercase text-white">
+                  Resourcess
+                </h2>
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
                     <a href="https://flowbite.com/" className="hover:underline">
@@ -26,29 +30,42 @@ const Footer: React.FC = () => {
                     </a>
                   </li>
                   <li>
-                    <a href="https://tailwindcss.com/" className="hover:underline">
+                    <a
+                      href="https://tailwindcss.com/"
+                      className="hover:underline"
+                    >
                       Tailwind CSS
                     </a>
                   </li>
                 </ul>
               </div>
               <div>
-                <h2 className="mb-6 text-sm font-semibold uppercase text-white">Follow us</h2>
+                <h2 className="mb-6 text-sm font-semibold uppercase text-white">
+                  Follow us
+                </h2>
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
-                    <a href="https://github.com/themesberg/flowbite" className="hover:underline ">
+                    <a
+                      href="https://github.com/themesberg/flowbite"
+                      className="hover:underline "
+                    >
                       Github
                     </a>
                   </li>
                   <li>
-                    <a href="https://discord.gg/4eeurUVvTy" className="hover:underline">
+                    <a
+                      href="https://discord.gg/4eeurUVvTy"
+                      className="hover:underline"
+                    >
                       Discord
                     </a>
                   </li>
                 </ul>
               </div>
               <div>
-                <h2 className="mb-6 text-sm font-semibold uppercase text-white">Legal</h2>
+                <h2 className="mb-6 text-sm font-semibold uppercase text-white">
+                  Legal
+                </h2>
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
                     <a href="#" className="hover:underline">
@@ -67,7 +84,8 @@ const Footer: React.FC = () => {
           <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
           <div className="sm:flex sm:items-center sm:justify-between">
             <span className="text-sm text-gray-500 sm:text-center">
-              © 2024 <a href="https://flowbite.com/" className="hover:underline">
+              © 2024{" "}
+              <a href="https://flowbite.com/" className="hover:underline">
                 UST - Office of Information and Communication Technology™
               </a>
               . All Rights Reserved.
