@@ -527,7 +527,7 @@ const RiskIdentificationForm: React.FC = () => {
 
                       <label
                         htmlFor="message"
-                        className="block mb-2 text-sm font-bold text-gray-900"
+                        className="block mb-2 text-sm font-bold text-yellow-600"
                       >
                         ISSUE(S)
                       </label>
@@ -611,7 +611,7 @@ const RiskIdentificationForm: React.FC = () => {
 
                       <label
                         htmlFor="message"
-                        className="block mb-2 text-sm font-bold text-gray-900"
+                        className="block mb-2 text-sm font-bold text-yellow-600"
                       >
                         RISK(S)
                       </label>
@@ -897,7 +897,7 @@ const RiskIdentificationForm: React.FC = () => {
 
                       <label
                         htmlFor="message"
-                        className="block mb-2 text-sm font-bold text-gray-900"
+                        className="block mb-2 text-sm font-bold text-yellow-600"
                       >
                         ACTION(S) TAKEN
                       </label>

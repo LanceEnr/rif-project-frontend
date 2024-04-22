@@ -1,11 +1,39 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
-import { FaTrashCan } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-const Prerequisites: React.FC = () => {
+const Prerequisites = () => {
+  // State for internal stakeholders
+  const [internalStakeholders, setInternalStakeholders] = useState<string[]>([
+    "",
+  ]);
+  // State for external stakeholders
+  const [externalStakeholders, setExternalStakeholders] = useState<string[]>([
+    "",
+  ]);
+
+  // Handle adding new internal stakeholders
+  const addInternalStakeholder = () => {
+    setInternalStakeholders([...internalStakeholders, ""]);
+  };
+
+  // Handle removing specific internal stakeholder
+  const removeInternalStakeholder = (index: number) => {
+    setInternalStakeholders(internalStakeholders.filter((_, i) => i !== index));
+  };
+
+  // Handle adding new external stakeholders
+  const addExternalStakeholder = () => {
+    setExternalStakeholders([...externalStakeholders, ""]);
+  };
+
+  // Handle removing specific external stakeholder
+  const removeExternalStakeholder = (index: number) => {
+    setExternalStakeholders(externalStakeholders.filter((_, i) => i !== index));
+  };
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
@@ -99,24 +127,32 @@ const Prerequisites: React.FC = () => {
                       </div>
                       <button
                         type="button"
+                        onClick={addInternalStakeholder}
                         className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
                       >
                         <FiPlus className="mr-2" />
                         <span>Add</span>
                       </button>
                     </div>
-                    <div className="relative flex items-center mb-2">
-                      <input
-                        type="text"
-                        name="internal-stakeholder"
-                        id="internal-stakeholder"
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        placeholder="e.g. Academic Staff"
-                      />
-                      <button className="ml-2 py-1 px-3 rounded  text-red-500 hover:text-red-600 ">
-                        <FaTrashCan />
-                      </button>
-                    </div>
+                    {internalStakeholders.map((_, index: number) => (
+                      <div
+                        key={index}
+                        className="relative flex items-center mb-2"
+                      >
+                        <input
+                          type="text"
+                          name={`internal-stakeholder-${index}`}
+                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                          placeholder="e.g. Academic Staff"
+                        />
+                        <button
+                          onClick={() => removeInternalStakeholder(index)}
+                          className="ml-2 py-1 px-3 rounded text-red-500 hover:text-red-600"
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    ))}
                   </div>
 
                   <div className="relative w-full mt-2">
@@ -137,24 +173,32 @@ const Prerequisites: React.FC = () => {
                       </div>
                       <button
                         type="button"
+                        onClick={addExternalStakeholder}
                         className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
                       >
                         <FiPlus className="mr-2" />
                         <span>Add</span>
                       </button>
                     </div>
-                    <div className="relative flex items-center mb-2">
-                      <input
-                        type="text"
-                        name="external-stakeholder"
-                        id="external-stakeholder"
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        placeholder="e.g. Parents & Guardians"
-                      />
-                      <button className="ml-2 py-1 px-3 rounded  text-red-500 hover:text-red-600 ">
-                        <FaTrashCan />
-                      </button>
-                    </div>
+                    {externalStakeholders.map((_, index: number) => (
+                      <div
+                        key={index}
+                        className="relative flex items-center mb-2"
+                      >
+                        <input
+                          type="text"
+                          name={`external-stakeholder-${index}`}
+                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                          placeholder="e.g. Parents & Guardians"
+                        />
+                        <button
+                          onClick={() => removeExternalStakeholder(index)}
+                          className="ml-2 py-1 px-3 rounded text-red-500 hover:text-red-600"
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <button
