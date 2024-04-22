@@ -1,4 +1,4 @@
-/* @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLW4KJDKkfsODW2Xa-qzP7ON5E2yjjvZBKj5ny4Zw4TYPg_NW0mmFWnn4zL5LHqGPIw);
+@import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLW4KJDKkfsODW2Xa-qzP7ON5E2yjjvZBKj5ny4Zw4TYPg_NW0mmFWnn4zL5LHqGPIw);
 .lst-kix_list_4-1 > li {
   counter-increment: lst-ctn-kix_list_4-1;
 }
@@ -2062,7 +2062,7 @@ table th {
 }
 .c20 {
   background-color: #ffffff;
-  max-width: 792pt;
+  max-width: 800pt;
   padding: 72pt 72pt 72pt 72pt;
 }
 .c61 {
@@ -2299,14 +2299,26 @@ h6 {
 .column {
   width: 100%;
   margin: 0;
-  padding: 10px;
+  padding: 5px;
 }
 
 @media print {
-  .page-footer {
+  body, .doc-content {
+    padding-bottom: 20mm; /* Ensure there's a bottom padding for content */
+    position: relative; /* This might be unnecessary unless there's a specific need */
+  }
+
+  .page-footer, .footer {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    text-align: center;
+    left: 0;
+    width: 100%; /* Ensures the footer spans the whole width */
+    text-align: center; /* Centers the footer text */
+    padding: 1mm; /* Positive padding value */
   }
-} */
+
+  @page {
+    margin-bottom: 20mm; /* Increase margin to ensure there's space for the footer */
+  }
+}
+

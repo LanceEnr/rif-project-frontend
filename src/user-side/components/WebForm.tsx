@@ -52,6 +52,7 @@ interface RiskFormData {
   const printForm = () => {
     // Select the element you want to print
     const element = document.querySelector('.doc-content');
+    const footer = document.querySelector('.footer');
     if (element) {
       const printWindow = window.open('', '_blank', 'height=600,width=800');
   
@@ -73,13 +74,14 @@ interface RiskFormData {
         printWindow.document.write(`
           <html>
           <head>
-            <title>Print Document</title>
+            <title>Risk Identification Form</title>
             ${cssText}
           </head>
           <body>
             ${element.innerHTML}
           </body>
           </html>
+          ${footer}
         `);
   
         printWindow.document.close();
@@ -98,7 +100,7 @@ interface RiskFormData {
 
   const fetchRiskForms = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/riskforms/report/38");
+      const response = await fetch("http://localhost:8080/api/riskforms/report/113");
       const data = await response.json();
       console.log("Fetched data:", data);  // Check the fetched data
       if (data && Array.isArray(data.riskFormData)) {
@@ -1186,6 +1188,7 @@ interface RiskFormData {
         </p>
         </div>
         </div>
+        <div className="footer">
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <p className="c6 c57" style={{ margin: '0', padding: '0' }}>
               <span className="c26 c111">
@@ -1226,6 +1229,7 @@ interface RiskFormData {
                   />
               </span>
           </p>
+      </div>
       </div>
       </body>
       <button
