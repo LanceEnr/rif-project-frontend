@@ -547,14 +547,14 @@ interface RiskFormData {
               <td className="c32" colSpan={1} rowSpan={1}>
                 <p className="opportunities">
                   {form.opportunities.map((opportunity, idx) => (
-                    <span key={idx}>{idx + 1}. {opportunity.description}<br /></span>
+                    <span className="c5" key={idx}>{idx + 1}. {opportunity.description}<br /></span>
                   ))}
                 </p>
               </td>
               <td className="c67" colSpan={1} rowSpan={1}>
                 <p className="action_plan">
                   {form.actionPlans.map((action, idx) => (
-                    <span key={idx}>{idx + 1}. {action.description}<br /></span>
+                    <span className="c5" key={idx}>{idx + 1}. {action.description}<br /></span>
                   ))}
                 </p>
               </td>
@@ -573,7 +573,7 @@ interface RiskFormData {
               <td className="c24" colSpan={1} rowSpan={1}>
               <p className="responsible_person">
                 {form.responsiblePersons.map((person, idx) => (
-                  <span key={idx}>
+                  <span className="c5" key={idx}>
                     {person.name}
                     {idx < form.responsiblePersons.length - 1 ? ', ' : ''}<br /></span>    
                 ))}
