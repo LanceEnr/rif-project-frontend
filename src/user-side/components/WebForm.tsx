@@ -570,10 +570,14 @@ interface RiskFormData {
                 </p>
               </td>
               {/* display person*/}
-              <td>
-              {form.responsiblePersons.map((person, idx) => (
-                <span key={idx}>{person.name}{idx < form.responsiblePersons.length - 1 ? ', ' : ''}</span>
-              ))}
+              <td className="c24" colSpan={1} rowSpan={1}>
+              <p className="responsible_person">
+                {form.responsiblePersons.map((person, idx) => (
+                  <span key={idx}>
+                    {person.name}
+                    {idx < form.responsiblePersons.length - 1 ? ', ' : ''}<br /></span>    
+                ))}
+                </p>
               </td>
               <td className="c55" colSpan={1} rowSpan={1}>
                   <p className="status">
