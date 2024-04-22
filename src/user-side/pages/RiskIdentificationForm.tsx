@@ -4,7 +4,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
-import { Checkbox } from "flowbite-react";
 
 interface Opportunity {
   description: string;
@@ -501,7 +500,7 @@ const RiskIdentificationForm: React.FC = () => {
                             : formData.sdaNumber
                         }
                         onChange={handleChange}
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
                       >
                         <option value="">Select an option</option>
                         <option value="1">1 - Leadership and Governance</option>
@@ -548,7 +547,7 @@ const RiskIdentificationForm: React.FC = () => {
                             ? rowsData[activeRowIndex].issueParticulars
                             : formData.issueParticulars
                         }
-                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
@@ -632,7 +631,7 @@ const RiskIdentificationForm: React.FC = () => {
                             ? rowsData[activeRowIndex].riskParticulars
                             : formData.riskParticulars
                         }
-                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
@@ -656,7 +655,7 @@ const RiskIdentificationForm: React.FC = () => {
                             : formData.riskSEV
                         }
                         onChange={handleChange}
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
                       >
                         <option value="">Select an option</option>
                         <option value="1">1 - Insignificant</option>
@@ -685,7 +684,7 @@ const RiskIdentificationForm: React.FC = () => {
                             : formData.riskPROB
                         }
                         onChange={handleChange}
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
                       >
                         <option value="">Select probability</option>
                         <option value="1">1 - Extremely Unlikely</option>
@@ -711,7 +710,7 @@ const RiskIdentificationForm: React.FC = () => {
                         name="riskRating"
                         id="disabled-input-2"
                         aria-label="disabled input 2"
-                        className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed"
+                        className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 cursor-not-allowed"
                         value={riskRating}
                         readOnly
                       />
@@ -873,7 +872,7 @@ const RiskIdentificationForm: React.FC = () => {
                               onChange={(e) =>
                                 handleOpportunityChange(e, index)
                               }
-                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
                             />
                             <button
@@ -940,7 +939,7 @@ const RiskIdentificationForm: React.FC = () => {
                               rows={2}
                               value={action.description}
                               onChange={(e) => handleActionPlanChange(e, index)}
-                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
                             />
                             <button
@@ -977,7 +976,7 @@ const RiskIdentificationForm: React.FC = () => {
                               : date
                           }
                           onChange={handleDateChange}
-                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full ps-10 p-2.5"
                           placeholder="Select date"
                         />
                       </div>
@@ -1021,7 +1020,7 @@ const RiskIdentificationForm: React.FC = () => {
                                   id={`checkbox-item-${index}`}
                                   type="checkbox"
                                   value={person}
-                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded checked:bg-yellow-500 focus:ring-yellow-500"
                                   checked={formData.responsiblePersonNames.includes(
                                     person
                                   )}
@@ -1029,7 +1028,7 @@ const RiskIdentificationForm: React.FC = () => {
                                 />
                                 <label
                                   htmlFor={`checkbox-item-${index}`}
-                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded "
                                 >
                                   {person}
                                 </label>
