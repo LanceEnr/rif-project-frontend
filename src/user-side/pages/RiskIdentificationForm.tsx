@@ -4,6 +4,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
+import { Checkbox } from "flowbite-react";
 
 interface Opportunity {
   description: string;
@@ -27,7 +28,7 @@ interface FormData {
   actionPlans: ActionPlan[];
   date: string; // Existing date field
   submissionDate?: string; // Optional submission date field
-  responsiblePerson: string;
+  responsiblePersonNames: string[]; // Updated to handle multiple responsible persons
   riskRating: number;
   status: string;
 }
@@ -48,7 +49,7 @@ const RiskIdentificationForm: React.FC = () => {
     opportunities: [{ description: "" }],
     actionPlans: [{ description: "" }],
     date: "",
-    responsiblePerson: "",
+    responsiblePersonNames: [], // Initialize as empty array
     riskRating: 0,
     status: "",
   };
@@ -60,6 +61,22 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+
+  const handleResponsiblePersonChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = e.target;
+    setFormData((prevFormData) => {
+      const newResponsiblePersons = checked
+        ? [...prevFormData.responsiblePersonNames, value]
+        : prevFormData.responsiblePersonNames.filter((name) => name !== value);
+
+      return {
+        ...prevFormData,
+        responsiblePersonNames: newResponsiblePersons,
+      };
+    });
+  };
 
   const prepareData = (data: FormData): FormData => ({
     ...data,
@@ -967,38 +984,28 @@ const RiskIdentificationForm: React.FC = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                      <form className="max-w-sm ">
-                        <label
-                          htmlFor="countries"
-                          className="block mb-2 text-sm font-medium text-gray-900"
-                        >
-                          Person/s Responsible
-                        </label>
-                        <select
-                          id="personResponsible"
-                          name="responsiblePerson"
-                          value={
-                            activeRowIndex !== null
-                              ? rowsData[activeRowIndex].responsiblePerson
-                              : formData.responsiblePerson
-                          }
-                          onChange={handleChange}
-                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        >
-                          <option value="">Choose one</option>
-                          <option value="Dean">Dean</option>
-                          <option value="Asst. Dean">Asst. Dean</option>
-                          <option value="Program Chairs">Program Chairs</option>
-                          <option value="Research Directors">
-                            Research Directors
-                          </option>
-                        </select>
-                        {errors.responsiblePerson && (
-                          <p className="text-red-500">
-                            {errors.responsiblePerson}
-                          </p>
-                        )}
-                      </form>
+                      <fieldset>
+                        <legend>Person/s Responsible</legend>
+                        {[
+                          "Dean",
+                          "Asst. Dean",
+                          "Program Chairs",
+                          "Research Directors",
+                        ].map((person) => (
+                          <div key={person}>
+                            <Checkbox
+                              id={person}
+                              name="responsiblePersonNames"
+                              value={person}
+                              checked={formData.responsiblePersonNames.includes(
+                                person
+                              )}
+                              onChange={handleResponsiblePersonChange}
+                            />
+                            <label htmlFor={person}>{person}</label>
+                          </div>
+                        ))}
+                      </fieldset>
                     </div>
 
                     <div className="md:col-span-1">
