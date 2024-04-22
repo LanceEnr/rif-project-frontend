@@ -731,7 +731,7 @@ const RiskIdentificationForm: React.FC = () => {
                             onChange={handleChange}
                           />
 
-                          <Label htmlFor="risk-l">L</Label>
+                          <Label htmlFor="risk-l">Low</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
@@ -747,7 +747,7 @@ const RiskIdentificationForm: React.FC = () => {
                             onChange={handleChange}
                           />
 
-                          <Label htmlFor="risk-m">M</Label>
+                          <Label htmlFor="risk-m">Medium</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
@@ -763,7 +763,7 @@ const RiskIdentificationForm: React.FC = () => {
                             onChange={handleChange}
                           />
 
-                          <Label htmlFor="risk-h">H</Label>
+                          <Label htmlFor="risk-h">High</Label>
                         </div>
                       </fieldset>
                       {errors.riskLevel && (

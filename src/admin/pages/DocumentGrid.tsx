@@ -90,8 +90,31 @@ const DocumentGrid: React.FC = () => {
             <Dropdown.Item>Most Recent</Dropdown.Item>
             <Dropdown.Item>Oldest</Dropdown.Item>
           </Dropdown>
+          <Dropdown
+            label=""
+            inline
+            dismissOnClick={false}
+            renderTrigger={() => (
+              <button
+                id="dropdownActionButton"
+                data-dropdown-toggle="dropdownAction"
+                className="inline-flex ml-2 items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                type="button"
+              >
+                Academic Year
+                <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+              </button>
+            )}
+          >
+            <Dropdown.Item>2024</Dropdown.Item>
+            <Dropdown.Item>2023</Dropdown.Item>
+            <Dropdown.Item>2022</Dropdown.Item>
+            <Dropdown.Item>2021</Dropdown.Item>
+            <Dropdown.Item>2020</Dropdown.Item>
+            <Dropdown.Item>2019</Dropdown.Item>
+          </Dropdown>
         </div>
-        {/* Search input */}
+        \{/* Search input */}
         <label htmlFor="table-search" className="sr-only">
           Search
         </label>

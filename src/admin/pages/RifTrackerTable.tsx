@@ -39,6 +39,8 @@ const RifTrackerTable: React.FC = () => {
             <Dropdown.Item>Completed</Dropdown.Item>
             <Dropdown.Item>Incomplete</Dropdown.Item>
             <Dropdown.Item>Late</Dropdown.Item>
+            <Dropdown.Item>Academic Units only</Dropdown.Item>
+            <Dropdown.Item>Administrative Units only</Dropdown.Item>
           </Dropdown>
 
           {/* Search input */}
