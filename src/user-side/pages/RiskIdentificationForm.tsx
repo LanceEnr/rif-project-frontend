@@ -984,28 +984,60 @@ const RiskIdentificationForm: React.FC = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                      <fieldset>
-                        <legend>Person/s Responsible</legend>
-                        {[
-                          "Dean",
-                          "Asst. Dean",
-                          "Program Chairs",
-                          "Research Directors",
-                        ].map((person) => (
-                          <div key={person}>
-                            <Checkbox
-                              id={person}
-                              name="responsiblePersonNames"
-                              value={person}
-                              checked={formData.responsiblePersonNames.includes(
-                                person
-                              )}
-                              onChange={handleResponsiblePersonChange}
-                            />
-                            <label htmlFor={person}>{person}</label>
-                          </div>
-                        ))}
-                      </fieldset>
+                      <label className="block mb-2 text-sm font-medium text-gray-900">
+                        Person/s Responsible
+                      </label>
+                      <Dropdown
+                        label=""
+                        inline
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                          <button
+                            id="dropdownActionButton"
+                            data-dropdown-toggle="dropdownAction"
+                            className="inline-flex w-full py-2.5 items-center bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-3"
+                            type="button"
+                          >
+                            <div className="flex justify-between w-full">
+                              <span>Choose one</span>
+                              <MdKeyboardArrowDown className="h-5 w-5" />
+                            </div>
+                          </button>
+                        )}
+                      >
+                        <ul
+                          className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                          aria-labelledby="dropdownBgHoverButton"
+                        >
+                          {[
+                            "Dean",
+                            "Asst. Dean",
+                            "Program Chairs",
+                            "Research Directors",
+                          ].map((person, index) => (
+                            <li key={index}>
+                              <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input
+                                  id={`checkbox-item-${index}`}
+                                  type="checkbox"
+                                  value={person}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                  checked={formData.responsiblePersonNames.includes(
+                                    person
+                                  )}
+                                  onChange={handleResponsiblePersonChange}
+                                />
+                                <label
+                                  htmlFor={`checkbox-item-${index}`}
+                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                >
+                                  {person}
+                                </label>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </Dropdown>
                     </div>
 
                     <div className="md:col-span-1">
