@@ -12,6 +12,11 @@ interface ActionPlan {
   description: string;
 }
 
+interface ResponsiblePerson {
+  id: number;
+  name: string;
+}
+
 interface RiskFormData {
   sdaNumber?: number;
   issueParticulars?: string;
@@ -24,8 +29,8 @@ interface RiskFormData {
   opportunities: Opportunity[];
   actionPlans: ActionPlan[];
   date?: string;
-  responsiblePerson?: string;
   riskRating?: number;
+  responsiblePersons: ResponsiblePerson[];
   status?: string;
   submissionDate?: string;
 }
@@ -100,7 +105,7 @@ interface RiskFormData {
 
   const fetchRiskForms = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/riskforms/report/113");
+      const response = await fetch("http://localhost:8080/api/riskforms/report/117");
       const data = await response.json();
       console.log("Fetched data:", data);  // Check the fetched data
       if (data && Array.isArray(data.riskFormData)) {
@@ -564,10 +569,11 @@ interface RiskFormData {
                   </span>
                 </p>
               </td>
-              <td className="c24" colSpan={1} rowSpan={1}>
-                <p className="responsible_person">
-                  <span className="c5">{form.responsiblePerson}</span>
-                </p>
+              {/* display person*/}
+              <td>
+              {form.responsiblePersons.map((person, idx) => (
+                <span key={idx}>{person.name}{idx < form.responsiblePersons.length - 1 ? ', ' : ''}</span>
+              ))}
               </td>
               <td className="c55" colSpan={1} rowSpan={1}>
                   <p className="status">
