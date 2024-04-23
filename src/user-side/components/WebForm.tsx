@@ -17,6 +17,19 @@ interface ResponsiblePerson {
   name: string;
 }
 
+// Define a TypeScript interface for the Prerequisite data
+interface Prerequisite {
+  id: number;
+  unit: string;
+  internalStakeholders: Stakeholder[];
+  externalStakeholders: Stakeholder[];
+}
+
+interface Stakeholder {
+  id: number;
+  name: string;
+}
+
 interface RiskFormData {
   sdaNumber?: number;
   issueParticulars?: string;
@@ -37,6 +50,24 @@ interface RiskFormData {
 
 const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
+  const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
+
+  useEffect(() => {
+    const fetchPrerequisites = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/prerequisites');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data: Prerequisite[] = await response.json();
+        setPrerequisites(data);
+      } catch (error) {
+        console.error('Failed to fetch prerequisites:', error);
+      }
+    };
+
+    fetchPrerequisites();
+  }, []);
 
   useEffect(() => {
     fetchRiskForms();
@@ -105,7 +136,7 @@ const WebForm: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/45"
+        "http://localhost:8080/api/riskforms/report/117"
       );
       const data = await response.json();
       console.log("Fetched data:", data); // Check the fetched data
@@ -183,22 +214,21 @@ const WebForm: React.FC = () => {
           <a id="t.8c3c2da983f659d888d169e3788314b8d34e609f"></a>
           <a id="t.6"></a>
           <table className="c37">
-            <tr className="c110">
+          {prerequisites.map((prerequisite) => (
+            <tr className="c110" key={prerequisite.id}>
               <td className="c80" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c45"></span>
-                </p>
+                <p className="c1"><span className="c45"></span></p>
                 <p className="c6">
                   <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
                     Administrative/Academic Unit:
                   </span>
                 </p>
-              </td>
-              <td className="c135" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c9 c61"></span>
-                </p>
-              </td>
+          </td>
+          <td className="c135" colSpan={1} rowSpan={1}>
+            <p className="c1">
+              <span className="c9 c61">{prerequisite.unit}</span>
+            </p>
+          </td>
               <td className="c2" colSpan={1} rowSpan={1}>
                 <p className="c89 c109">
                   <span className="c9 c61"></span>
@@ -230,6 +260,7 @@ const WebForm: React.FC = () => {
                 </p>
               </td>
             </tr>
+            ))}
           </table>
         </div>
         <p className="c6">
