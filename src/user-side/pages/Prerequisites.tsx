@@ -1,39 +1,77 @@
-import { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashAlt } from "react-icons/fa";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-const Prerequisites = () => {
-  // State for internal stakeholders
+const Prerequisites: React.FC = () => {
   const [internalStakeholders, setInternalStakeholders] = useState<string[]>([
     "",
   ]);
-  // State for external stakeholders
   const [externalStakeholders, setExternalStakeholders] = useState<string[]>([
     "",
   ]);
 
-  // Handle adding new internal stakeholders
   const addInternalStakeholder = () => {
     setInternalStakeholders([...internalStakeholders, ""]);
   };
 
-  // Handle removing specific internal stakeholder
   const removeInternalStakeholder = (index: number) => {
     setInternalStakeholders(internalStakeholders.filter((_, i) => i !== index));
   };
 
-  // Handle adding new external stakeholders
   const addExternalStakeholder = () => {
     setExternalStakeholders([...externalStakeholders, ""]);
   };
 
-  // Handle removing specific external stakeholder
   const removeExternalStakeholder = (index: number) => {
     setExternalStakeholders(externalStakeholders.filter((_, i) => i !== index));
   };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const unitInput = document.getElementById("unit") as HTMLInputElement;
+    const url = "http://localhost:8080/api/prerequisites";
+    const data = {
+      unit: unitInput.value,
+      internalStakeholders: internalStakeholders.map((_, index) => ({
+        name: (
+          document.querySelector(
+            `input[name="internal-stakeholder-${index}"]`
+          ) as HTMLInputElement
+        ).value,
+      })),
+      externalStakeholders: externalStakeholders.map((_, index) => ({
+        name: (
+          document.querySelector(
+            `input[name="external-stakeholder-${index}"]`
+          ) as HTMLInputElement
+        ).value,
+      })),
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log("Prerequisites saved successfully");
+        alert("Data saved successfully!");
+      } else {
+        throw new Error("Failed to save data");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error saving data");
+    }
+  };
+
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
@@ -91,7 +129,7 @@ const Prerequisites = () => {
             <hr className="mt-4 mb-8" />
 
             <div className="mb-10">
-              <form action="#">
+              <form onSubmit={handleSubmit}>
                 <div className="grid gap-4 mb-4 sm:grid-cols-1">
                   <div>
                     <label
