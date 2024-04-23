@@ -853,7 +853,7 @@ const RiskIdentificationForm: React.FC = () => {
                           <button
                             type="button"
                             onClick={handleAddOpportunity}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white  rounded inline-flex items-center"
                           >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
@@ -922,7 +922,7 @@ const RiskIdentificationForm: React.FC = () => {
                           <button
                             type="button"
                             onClick={handleAddActionPlan}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded inline-flex items-center"
+                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white  rounded inline-flex items-center"
                           >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
