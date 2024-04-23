@@ -69,17 +69,6 @@ const WebForm: React.FC = () => {
     fetchPrerequisites();
   }, []);
 
-  useEffect(() => {
-    fetchRiskForms();
-    // Assuming your page numbering functionality should execute on component mount
-    const pages = document.querySelectorAll(".page-break");
-    const total = pages.length + 1; // Total pages is breaks + 1
-    let pageNumber = 1;
-
-    document.querySelector(".c84")!.textContent = `${pageNumber}`;
-    document.querySelector(".c77")!.textContent = `${total}`;
-  }, []);
-
   const paragraphStyle: React.CSSProperties = {
     whiteSpace: "nowrap",
   };
