@@ -86,7 +86,7 @@ interface RiskFormData {
             ${element.innerHTML}
           </body>
           </html>
-          ${footer}
+          ${footer?.outerHTML}
         `);
   
         printWindow.document.close();
