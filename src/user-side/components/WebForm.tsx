@@ -284,107 +284,62 @@ const WebForm: React.FC = () => {
         <a id="t.b77d91ebb78f3c40f45893187130cc43d9e03e8e"></a>
         <a id="t.0"></a>
         <table className="c97">
-          <tr className="c81">
-            <td className="c90" colSpan={2} rowSpan={1}>
-              <p className="c33">
-                <span className="c60 c71">Internal Client/Stakeholder*</span>
-              </p>
-            </td>
-            <td className="c54" colSpan={2} rowSpan={1}>
-              <p className="c33">
-                <span className="c60 c71">External Client/Stakeholder*</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c131" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">1. &nbsp;</span>
-              </p>
-            </td>
-            <td className="c79" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">5.</span>
-              </p>
-            </td>
-            <td className="c72" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">1.</span>
-              </p>
-            </td>
-            <td className="c85" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">5.</span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c88" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">2. </span>
-              </p>
-            </td>
-            <td className="c124" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">6.</span>
-              </p>
-            </td>
-            <td className="c100" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">2. </span>
-              </p>
-            </td>
-            <td className="c126" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">6. </span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c88" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">3. </span>
-              </p>
-            </td>
-            <td className="c124" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">7.</span>
-              </p>
-            </td>
-            <td className="c100" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">3. </span>
-              </p>
-            </td>
-            <td className="c126" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">7. </span>
-              </p>
-            </td>
-          </tr>
-          <tr className="c34">
-            <td className="c142" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">4.</span>
-              </p>
-            </td>
-            <td className="c50" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">8.</span>
-              </p>
-            </td>
-            <td className="c93" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">4.</span>
-              </p>
-            </td>
-            <td className="c123" colSpan={1} rowSpan={1}>
-              <p className="c6">
-                <span className="c5">8.</span>
-              </p>
-            </td>
-          </tr>
-        </table>
+        <tr className="c81">
+          {/* Headers for stakeholders */}
+          <td className="c90" colSpan={2} rowSpan={1}>
+            <p className="c33">
+              <span className="c60 c71">Internal Client/Stakeholder*</span>
+            </p>
+          </td>
+          <td className="c54" colSpan={2} rowSpan={1}>
+            <p className="c33">
+              <span className="c60 c71">External Client/Stakeholder*</span>
+            </p>
+          </td>
+        </tr>
+        {prerequisites.map((prerequisite, idx) => (
+          <React.Fragment key={idx}>
+            <tr className="c34">
+              <td className="c131" colSpan={1} rowSpan={1}>
+                <p className="c6">
+                  {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => 
+                    <React.Fragment key={index}>
+                      <span>{index + 1}. {stakeholder.name}</span><br />
+                    </React.Fragment>
+                  )}
+                </p>
+              </td>
+              <td className="c79" colSpan={1} rowSpan={1}>
+                <p className="c6">
+                  {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => 
+                    <React.Fragment key={index}>
+                      <span>{index + 5}. {stakeholder.name}</span><br />
+                    </React.Fragment>
+                  )}
+                </p>
+              </td>
+              <td className="c72" colSpan={1} rowSpan={1}>
+                <p className="c6">
+                  {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => 
+                    <React.Fragment key={index}>
+                      <span>{index + 1}. {stakeholder.name}</span><br />
+                    </React.Fragment>
+                  )}
+                </p>
+              </td>
+              <td className="c79" colSpan={1} rowSpan={1}>
+                <p className="c6">
+                  {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => 
+                    <React.Fragment key={index}>
+                      <span>{index + 5}. {stakeholder.name}</span><br />
+                    </React.Fragment>
+                  )}
+                </p>
+              </td>
+            </tr>
+          </React.Fragment>
+        ))}
+      </table>
         <p className="c1">
           <span className="c60 c98"></span>
         </p>
@@ -531,7 +486,7 @@ const WebForm: React.FC = () => {
               <tbody></tbody>
             </tr>
             {riskForms.map((form, index) => (
-              <tr className="c137">
+              <tr className="c137" key={form.sdaNumber || index}>
                 <td className="c23" colSpan={1} rowSpan={1}>
                   <p className="item_no">
                     <span className="c5">{index + 1}</span>{" "}
