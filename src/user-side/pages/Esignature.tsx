@@ -61,6 +61,42 @@ const Esignature: React.FC = () => {
               </div>
             </div>
             <hr className="mt-4 mb-8" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="professionalTitle"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Professional Title
+                </label>
+                <input
+                  type="text"
+                  name="professionalTitle"
+                  id="professionalTitle"
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
+                  placeholder="e.g. Assoc. Prof."
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="postNominalTitle"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Post-Nominal Title
+                </label>
+                <input
+                  type="text"
+                  name="postNominalTitle"
+                  id="postNominalTitle"
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
+                  placeholder="e.g. DIT, LPT, PhD"
+                  required
+                />
+              </div>
+            </div>
+            <hr className="mt-4 mb-8" />
             <div className="mb-10">
               <label
                 htmlFor="username"
