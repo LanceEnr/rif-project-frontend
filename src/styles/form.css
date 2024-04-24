@@ -1961,11 +1961,21 @@ table th {
   color: #000000;
   font-weight: 400;
 }
+/* Apply to the table */
 .c97 {
-  margin-left: 0.2pt;
-  border-spacing: 0;
-  border-collapse: collapse;
-  margin-right: auto;
+  width: 100%; /* Ensure the table spans the full width of its container */
+  border-collapse: collapse; /* Collapse borders so that they don't double up */
+  border: 1px solid black; /* Border around the entire table */
+}
+
+/* Apply to each cell */
+.c97 td {
+  border: 1px solid black; /* Border around each cell */
+}
+
+/* Optional: Apply to each row if needed */
+.c97 tr {
+  border: 1px solid black; /* Border around each row */
 }
 .c9 {
   font-size: 10pt;
