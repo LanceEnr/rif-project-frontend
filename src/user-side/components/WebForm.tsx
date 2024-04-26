@@ -148,7 +148,7 @@ const WebForm: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/117"
+        "http://localhost:8080/api/riskforms/report/38"
       );
       const data = await response.json();
       console.log("Fetched data:", data); // Check the fetched data
