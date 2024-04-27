@@ -70,6 +70,16 @@ const RiskIdentificationForm: React.FC = () => {
         ? [...prevFormData.responsiblePersonNames, value]
         : prevFormData.responsiblePersonNames.filter((name) => name !== value);
 
+      // Update responsiblePersonNames in the active row if one is selected
+      if (activeRowIndex !== null) {
+        const updatedRowsData = rowsData.map((data, idx) =>
+          idx === activeRowIndex
+            ? { ...data, responsiblePersonNames: newResponsiblePersons }
+            : data
+        );
+        setRowsData(updatedRowsData);
+      }
+
       return {
         ...prevFormData,
         responsiblePersonNames: newResponsiblePersons,
@@ -160,6 +170,16 @@ const RiskIdentificationForm: React.FC = () => {
       return item;
     });
     setFormData({ ...formData, opportunities: updatedOpportunities });
+
+    // Update rowsData with the changed opportunities
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex
+          ? { ...data, opportunities: updatedOpportunities }
+          : data
+      );
+      setRowsData(updatedRowsData);
+    }
   };
 
   const handleActionPlanChange = (
@@ -173,6 +193,16 @@ const RiskIdentificationForm: React.FC = () => {
       return item;
     });
     setFormData({ ...formData, actionPlans: updatedActionPlans });
+
+    // Update rowsData with the changed action plans
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex
+          ? { ...data, actionPlans: updatedActionPlans }
+          : data
+      );
+      setRowsData(updatedRowsData);
+    }
   };
 
   const rowsDropdownItems =
@@ -309,23 +339,32 @@ const RiskIdentificationForm: React.FC = () => {
     // Check for any required fields that are empty or have the default value
     const requiredFieldsFilled = Object.entries(formData).every(
       ([key, value]) => {
-        if (key === "opportunities" || key === "actionPlans") {
-          // Skip here, check separately below
-          return true;
+        if (
+          key === "opportunities" ||
+          key === "actionPlans" ||
+          key === "responsiblePersonNames"
+        ) {
+          return true; // Skip here, check separately below
         }
         return value !== "" && value !== 0;
       }
     );
 
-    // Ensure there's at least one non-empty opportunity and action plan
+    // Ensure there's at least one non-empty opportunity, action plan, and responsible person
     const hasValidOpportunities = formData.opportunities.some(
       (opportunity) => opportunity.description.trim() !== ""
     );
     const hasValidActionPlans = formData.actionPlans.some(
       (actionPlan) => actionPlan.description.trim() !== ""
     );
+    const hasResponsiblePersons = formData.responsiblePersonNames.length > 0;
 
-    return requiredFieldsFilled && hasValidOpportunities && hasValidActionPlans;
+    return (
+      requiredFieldsFilled &&
+      hasValidOpportunities &&
+      hasValidActionPlans &&
+      hasResponsiblePersons
+    );
   };
 
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
