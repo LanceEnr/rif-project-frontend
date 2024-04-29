@@ -26,7 +26,6 @@ interface Prerequisite {
 }
 
 interface Stakeholder {
-  id: number;
   name: string;
 }
 
@@ -51,6 +50,7 @@ interface RiskFormData {
 const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
+  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(4);  //input the id here for academic unit
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -68,6 +68,8 @@ const WebForm: React.FC = () => {
 
     fetchPrerequisites();
   }, []);
+
+  const specificPrerequisite = prerequisites.filter(p => p.id === specificPrerequisiteId);
 
   useEffect(() => {
     fetchRiskForms();
@@ -226,9 +228,9 @@ const WebForm: React.FC = () => {
           <a id="t.8c3c2da983f659d888d169e3788314b8d34e609f"></a>
           <a id="t.6"></a>
           <table className="c37">
-          {prerequisites.map((prerequisite) => (
-            <tr className="c110" key={prerequisite.id}>
-              <td className="c80" colSpan={1} rowSpan={1}>
+          {specificPrerequisite.map((prerequisite) => (
+          <tr className="c110" key={prerequisite.id}>
+            <td className="c80" colSpan={1} rowSpan={1}>
                 <p className="c1"><span className="c45"></span></p>
                 <p className="c6">
                   <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
@@ -285,55 +287,50 @@ const WebForm: React.FC = () => {
         <a id="t.0"></a>
         <table className="c97">
         <tr className="c81">
-          {/* Headers for stakeholders */}
-          <td className="c90" colSpan={2} rowSpan={1}>
-            <p className="c33">
-              <span className="c60 c71">Internal Client/Stakeholder*</span>
-            </p>
+          <td className="c90" colSpan={2}>
+            <p className="c33">Internal Client/Stakeholder*</p>
           </td>
-          <td className="c54" colSpan={2} rowSpan={1}>
-            <p className="c33">
-              <span className="c60 c71">External Client/Stakeholder*</span>
-            </p>
+          <td className="c54" colSpan={2}>
+            <p className="c33">External Client/Stakeholder*</p>
           </td>
         </tr>
-        {prerequisites.map((prerequisite, idx) => (
-          <React.Fragment key={idx}>
+        {specificPrerequisite.map((prerequisite) => (
+          <React.Fragment key={prerequisite.id}>
             <tr className="c34">
-              <td className="c131" colSpan={1} rowSpan={1}>
+              <td className="c131" colSpan={1}>
                 <p className="c6">
-                  {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => 
+                  {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => (
                     <React.Fragment key={index}>
                       <span>{index + 1}. {stakeholder.name}</span><br />
                     </React.Fragment>
-                  )}
+                  ))}
                 </p>
               </td>
-              <td className="c79" colSpan={1} rowSpan={1}>
+              <td className="c79" colSpan={1}>
                 <p className="c6">
-                  {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => 
+                  {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => (
                     <React.Fragment key={index}>
                       <span>{index + 5}. {stakeholder.name}</span><br />
                     </React.Fragment>
-                  )}
+                  ))}
                 </p>
               </td>
-              <td className="c72" colSpan={1} rowSpan={1}>
+              <td className="c72" colSpan={1}>
                 <p className="c6">
-                  {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => 
+                  {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => (
                     <React.Fragment key={index}>
                       <span>{index + 1}. {stakeholder.name}</span><br />
                     </React.Fragment>
-                  )}
+                  ))}
                 </p>
               </td>
-              <td className="c79" colSpan={1} rowSpan={1}>
+              <td className="c79" colSpan={1}>
                 <p className="c6">
-                  {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => 
+                  {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => (
                     <React.Fragment key={index}>
                       <span>{index + 5}. {stakeholder.name}</span><br />
                     </React.Fragment>
-                  )}
+                  ))}
                 </p>
               </td>
             </tr>
