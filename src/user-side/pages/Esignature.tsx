@@ -70,14 +70,19 @@ const Esignature: React.FC = () => {
                 >
                   Professional Title
                 </label>
-                <input
-                  type="text"
-                  name="professionalTitle"
+                <select
                   id="professionalTitle"
+                  name="professionalTitle"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
-                  placeholder="e.g. Assoc. Prof."
-                  required
-                />
+                >
+                  <option value="">Select a title</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Asst. Prof.">Assistant Professor</option>
+                  <option value="Assoc. Prof.">Associate Professor</option>
+                  <option value="Prof.">Professor</option>
+                </select>
               </div>
               <div>
                 <label

@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import { Label, Radio, Dropdown } from "flowbite-react";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdClose } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
@@ -66,15 +66,14 @@ const RiskIdentificationForm: React.FC = () => {
   ) => {
     const { value, checked } = e.target;
     setFormData((prevFormData) => {
-      const newResponsiblePersons = checked
+      const updatedResponsiblePersons = checked
         ? [...prevFormData.responsiblePersonNames, value]
         : prevFormData.responsiblePersonNames.filter((name) => name !== value);
 
-      // Update responsiblePersonNames in the active row if one is selected
       if (activeRowIndex !== null) {
         const updatedRowsData = rowsData.map((data, idx) =>
           idx === activeRowIndex
-            ? { ...data, responsiblePersonNames: newResponsiblePersons }
+            ? { ...data, responsiblePersonNames: updatedResponsiblePersons }
             : data
         );
         setRowsData(updatedRowsData);
@@ -82,7 +81,7 @@ const RiskIdentificationForm: React.FC = () => {
 
       return {
         ...prevFormData,
-        responsiblePersonNames: newResponsiblePersons,
+        responsiblePersonNames: updatedResponsiblePersons,
       };
     });
   };
@@ -462,6 +461,46 @@ const RiskIdentificationForm: React.FC = () => {
     // Additional UI state updates, if necessary
     setError(null); // Resetting the error state when a row is selected
   };
+
+  const removeResponsiblePerson = (
+    personToRemove: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation(); // Prevent dropdown from closing when a tag is removed
+
+    if (activeRowIndex !== null) {
+      // Update responsiblePersonNames in the active row
+      const updatedRowsData = rowsData.map((data, idx) => {
+        if (idx === activeRowIndex) {
+          return {
+            ...data,
+            responsiblePersonNames: data.responsiblePersonNames.filter(
+              (person) => person !== personToRemove
+            ),
+          };
+        }
+        return data;
+      });
+      setRowsData(updatedRowsData);
+
+      // If you're currently editing a row, update formData to reflect the change immediately
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        responsiblePersonNames: prevFormData.responsiblePersonNames.filter(
+          (person) => person !== personToRemove
+        ),
+      }));
+    } else {
+      // If not currently editing a row, just update formData
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        responsiblePersonNames: prevFormData.responsiblePersonNames.filter(
+          (person) => person !== personToRemove
+        ),
+      }));
+    }
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-4   min-h-screen my-24">
       <div className="flex flex-col items-right">
@@ -1037,7 +1076,29 @@ const RiskIdentificationForm: React.FC = () => {
                             type="button"
                           >
                             <div className="flex justify-between w-full">
-                              <span>Choose one</span>
+                              <div className="flex flex-wrap gap-2">
+                                {formData.responsiblePersonNames.map(
+                                  (person, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-1 bg-yellow-100 border border-yellow-500 rounded px-2 py-1 text-sm"
+                                    >
+                                      {person}
+                                      <button
+                                        type="button"
+                                        onClick={(e) =>
+                                          removeResponsiblePerson(person, e)
+                                        }
+                                        className="text-yellow-500 hover:text-yellow-700"
+                                      >
+                                        <MdClose />
+                                      </button>
+                                    </div>
+                                  )
+                                )}
+                                {formData.responsiblePersonNames.length ===
+                                  0 && <span>Select an option</span>}
+                              </div>
                               <MdKeyboardArrowDown className="h-5 w-5" />
                             </div>
                           </button>
@@ -1067,7 +1128,7 @@ const RiskIdentificationForm: React.FC = () => {
                                 />
                                 <label
                                   htmlFor={`checkbox-item-${index}`}
-                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded "
+                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded"
                                 >
                                   {person}
                                 </label>
