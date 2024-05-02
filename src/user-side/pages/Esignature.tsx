@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Esignature: React.FC = () => {
+  const [tags, setTags] = useState<string[]>([]); // State to hold the tags
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && event.currentTarget.value) {
+      event.preventDefault();
+      if (!tags.includes(event.currentTarget.value)) {
+        setTags([...tags, event.currentTarget.value]);
+        event.currentTarget.value = "";
+      }
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    setTags(tags.filter((_, index) => index !== indexToRemove));
+  };
+
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
@@ -96,9 +112,26 @@ const Esignature: React.FC = () => {
                   name="postNominalTitle"
                   id="postNominalTitle"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
-                  placeholder="e.g. DIT, LPT, PhD"
-                  required
+                  placeholder="e.g. PhD, MSc"
+                  onKeyDown={handleKeyDown}
                 />
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {tags.map((tag, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 bg-yellow-200 px-2 py-1 rounded"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(index)}
+                        className="text-sm text-gray-700"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <hr className="mt-4 mb-8" />
