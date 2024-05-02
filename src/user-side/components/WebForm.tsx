@@ -50,7 +50,7 @@ interface RiskFormData {
 const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
-  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(1);  //input the id here for academic unit
+  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(2);  //input the id here for academic unit
 
   useEffect(() => {
     const fetchPrerequisites = async () => {

@@ -1941,6 +1941,13 @@ table th {
   orphans: 2;
   widows: 2;
   text-align: center;
+  color: #000000;
+  font-weight: 700;
+  text-decoration: none;
+  vertical-align: baseline;
+  font-size: 11pt;
+  font-family: "Arial";
+  font-style: normal;
 }
 .c89 {
   padding-top: 0pt;
