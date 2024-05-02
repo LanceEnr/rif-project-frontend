@@ -50,7 +50,7 @@ interface RiskFormData {
 const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
-  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(4);  //input the id here for academic unit
+  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(1);  //input the id here for academic unit
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -150,7 +150,7 @@ const WebForm: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/38"
+        "http://localhost:8080/api/riskforms/report/117"
       );
       const data = await response.json();
       console.log("Fetched data:", data); // Check the fetched data
@@ -1163,13 +1163,13 @@ const WebForm: React.FC = () => {
                     </span>
                   </p>
                   <ul className="c75 lst-kix_list_5-0 start">
-                    <li className="c65 c76 li-bullet-0">
+                    <li className="c65 c76 .doc-list-bullet-0">
                       <span className="c14">
                         Sub-clause 4.1 Understanding the Organization and its
                         context
                       </span>
                     </li>
-                    <li className="c95 c65 li-bullet-0">
+                    <li className="c95 c65 .doc-list-bullet-0">
                       <span className="c14">
                         Sub-clause 4.4 Quality Management system and its
                         processes
@@ -1180,7 +1180,7 @@ const WebForm: React.FC = () => {
                     <span className="c14">Clause 6: Planning</span>
                   </p>
                   <ul className="c75 lst-kix_list_6-0 start">
-                    <li className="c95 c65 li-bullet-0">
+                    <li className="c95 c65 .doc-list-bullet-0">
                       <span className="c14">
                         Sub-clause 6.1 Actions to address risks and
                         opportunities
@@ -1193,7 +1193,7 @@ const WebForm: React.FC = () => {
                     </span>
                   </p>
                   <ul className="c75 lst-kix_list_6-0">
-                    <li className="c65 c95 li-bullet-0">
+                    <li className="c65 c95 .doc-list-bullet-0">
                       <span className="c14">
                         Sub-clause 9.3 Management review
                       </span>
@@ -1203,7 +1203,7 @@ const WebForm: React.FC = () => {
                     <span className="c14">Clause 10: Improvement</span>
                   </p>
                   <ul className="c75 lst-kix_list_6-0">
-                    <li className="c95 c65 li-bullet-0">
+                    <li className="c95 c65 .doc-list-bullet-0">
                       <span className="c14">
                         Sub-clause 10.2 Nonconformity and corrective action
                       </span>

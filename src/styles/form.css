@@ -2209,18 +2209,18 @@ table th {
   widows: 2;
   text-align: left;
 }
-li {
+.doc-list {
   color: #000000;
   font-size: 11pt;
   font-family: "Calibri";
 }
-p {
+.p-docs {
   margin: 0;
   color: #000000;
   font-size: 11pt;
   font-family: "Calibri";
 }
-h1 {
+header1 {
   padding-top: 24pt;
   color: #000000;
   font-weight: 700;
@@ -2233,7 +2233,7 @@ h1 {
   widows: 2;
   text-align: left;
 }
-h2 {
+header2 {
   padding-top: 18pt;
   color: #000000;
   font-weight: 700;
@@ -2246,7 +2246,7 @@ h2 {
   widows: 2;
   text-align: left;
 }
-h3 {
+header3 {
   padding-top: 14pt;
   color: #000000;
   font-weight: 700;
@@ -2259,7 +2259,7 @@ h3 {
   widows: 2;
   text-align: left;
 }
-h4 {
+header4 {
   padding-top: 12pt;
   color: #000000;
   font-weight: 700;
@@ -2272,7 +2272,7 @@ h4 {
   widows: 2;
   text-align: left;
 }
-h5 {
+header5 {
   padding-top: 11pt;
   color: #000000;
   font-weight: 700;
@@ -2313,21 +2313,21 @@ h6 {
 
 @media print {
   body, .doc-content {
-    padding-bottom: 20mm; /* Ensure there's a bottom padding for content */
-    position: relative; /* This might be unnecessary unless there's a specific need */
+    padding-bottom: 20mm; 
+    position: relative;
   }
 
   .page-footer, .footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%; /* Ensures the footer spans the whole width */
-    text-align: center; /* Centers the footer text */
-    padding: 1mm; /* Positive padding value */
+    width: 100%; 
+    text-align: center; 
+    padding: 1mm; 
   }
 
   @page {
-    margin-bottom: 20mm; /* Increase margin to ensure there's space for the footer */
+    margin-bottom: 20mm; 
   }
 }
 
