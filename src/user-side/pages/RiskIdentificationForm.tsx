@@ -64,30 +64,43 @@ const RiskIdentificationForm: React.FC = () => {
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const [tags, setTags] = useState<string[]>([]); // State to hold the tags
 
-  const handleResponsiblePersonChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value, checked } = e.target;
-    setFormData((prevFormData) => {
-      const updatedResponsiblePersons = checked
-        ? [...prevFormData.responsiblePersonNames, value]
-        : prevFormData.responsiblePersonNames.filter((name) => name !== value);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && event.currentTarget.value.trim() !== "") {
+      event.preventDefault();
+      const newTag = event.currentTarget.value.trim();
+      if (!tags.includes(newTag)) {
+        const updatedTags = [...tags, newTag];
+        setTags(updatedTags);
 
-      if (activeRowIndex !== null) {
-        const updatedRowsData = rowsData.map((data, idx) =>
-          idx === activeRowIndex
-            ? { ...data, responsiblePersonNames: updatedResponsiblePersons }
-            : data
-        );
-        setRowsData(updatedRowsData);
+        if (activeRowIndex !== null) {
+          const updatedRowsData = rowsData.map((row, idx) => {
+            if (idx === activeRowIndex) {
+              return { ...row, responsiblePersonNames: updatedTags };
+            }
+            return row;
+          });
+          setRowsData(updatedRowsData);
+        }
       }
+      event.currentTarget.value = ""; // Clear input after adding tag
+    }
+  };
 
-      return {
-        ...prevFormData,
-        responsiblePersonNames: updatedResponsiblePersons,
-      };
-    });
+  const removeTag = (indexToRemove: number) => {
+    const updatedTags = tags.filter((_, index) => index !== indexToRemove);
+    setTags(updatedTags);
+
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((row, idx) => {
+        if (idx === activeRowIndex) {
+          return { ...row, responsiblePersonNames: updatedTags };
+        }
+        return row;
+      });
+      setRowsData(updatedRowsData);
+    }
   };
 
   const prepareData = (data: FormData): FormData => ({
@@ -102,6 +115,8 @@ const RiskIdentificationForm: React.FC = () => {
       (riskParticular: RiskParticular) =>
         riskParticular.description.trim() !== ""
     ),
+    responsiblePersonNames: data.responsiblePersonNames, // This is now directly passed
+
     submissionDate: new Date().toISOString().split("T")[0], // Add the current date as submissionDate
   });
 
@@ -405,7 +420,7 @@ const RiskIdentificationForm: React.FC = () => {
           key === "opportunities" ||
           key === "actionPlans" ||
           key === "riskParticulars" ||
-          key === "responsiblePersonNames"
+          key === "responsiblePersonNames" // This will skip the old field
         ) {
           return true; // Skip here, check separately below
         }
@@ -413,7 +428,7 @@ const RiskIdentificationForm: React.FC = () => {
       }
     );
 
-    // Ensure there's at least one non-empty opportunity, action plan, and responsible person
+    // Ensure there's at least one non-empty opportunity, action plan, and risk particular
     const hasValidOpportunities = formData.opportunities.some(
       (opportunity) => opportunity.description.trim() !== ""
     );
@@ -423,7 +438,9 @@ const RiskIdentificationForm: React.FC = () => {
     const hasValidRiskParticulars = formData.riskParticulars.some(
       (riskParticular) => riskParticular.description.trim() !== ""
     );
-    const hasResponsiblePersons = formData.responsiblePersonNames.length > 0;
+
+    // Validate the presence of at least one responsible person via tags
+    const hasResponsiblePersons = tags.length > 0;
 
     return (
       requiredFieldsFilled &&
@@ -437,16 +454,25 @@ const RiskIdentificationForm: React.FC = () => {
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (validateForm()) {
+      // Ensure tags are saved into the row data
+      const newFormData = {
+        ...formData,
+        date: date,
+        responsiblePersonNames: [...tags], // Ensure tags are included
+      };
+
       const newData =
         activeRowIndex !== null
-          ? [...rowsData]
-          : [...rowsData, { ...formData, date: date }];
-      if (activeRowIndex !== null) {
-        newData[activeRowIndex] = { ...formData, date: date };
-      }
+          ? [
+              ...rowsData.slice(0, activeRowIndex),
+              newFormData,
+              ...rowsData.slice(activeRowIndex + 1),
+            ]
+          : [...rowsData, newFormData];
+
       setRowsData(newData);
-      resetForm(); // Reset form to initial state after adding/updating a row
-      setDate(""); // Reset the date state
+      resetForm();
+      setDate("");
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -454,22 +480,28 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!validateForm()) {
       setError("Please fill out the form correctly before submitting.");
       return;
     }
 
-    const preparedFormData = prepareData(formData);
-    const preparedRowsData = rowsData.map(prepareData);
-
-    let dataToSubmit = [...preparedRowsData];
-    if (activeRowIndex === null) {
-      dataToSubmit = [...dataToSubmit, preparedFormData];
+    // Ensure the latest tags are included in the active row before submission
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((row, idx) => {
+        if (idx === activeRowIndex) {
+          return { ...row, responsiblePersonNames: [...tags] }; // Update the active row with the latest tags
+        }
+        return row;
+      });
+      setRowsData(updatedRowsData); // Update the rowsData state
     }
 
-    await submitData(dataToSubmit);
-    resetFormState();
+    // Prepare the data for each row including the currently active row with the updated tags
+    const preparedRowsData = rowsData.map((row) => prepareData({ ...row }));
+
+    // No need to add the current formData separately since it's already included in rowsData when a row is active or added
+    await submitData(preparedRowsData);
+    resetFormState(); // Reset form state after submission
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -497,6 +529,8 @@ const RiskIdentificationForm: React.FC = () => {
   const resetForm = () => {
     setFormData(initialState);
     setActiveRowIndex(null);
+    setTags([]); // Reset tags
+
     setError(null);
   };
 
@@ -509,13 +543,14 @@ const RiskIdentificationForm: React.FC = () => {
     setRiskRating(0);
     setError(null);
     setErrors({});
+    setTags([]);
   };
 
   const selectRow = (index: number) => {
     const selectedRow = rowsData[index];
     setActiveRowIndex(index);
+    setTags(selectedRow.responsiblePersonNames || []);
 
-    // Update formData with the data from the selected row, ensuring opportunities and actionPlans are also updated
     setFormData({
       ...selectedRow,
       opportunities: selectedRow.opportunities.map((opportunity) => ({
@@ -529,47 +564,7 @@ const RiskIdentificationForm: React.FC = () => {
       })),
     });
 
-    // Additional UI state updates, if necessary
     setError(null); // Resetting the error state when a row is selected
-  };
-
-  const removeResponsiblePerson = (
-    personToRemove: string,
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation(); // Prevent dropdown from closing when a tag is removed
-
-    if (activeRowIndex !== null) {
-      // Update responsiblePersonNames in the active row
-      const updatedRowsData = rowsData.map((data, idx) => {
-        if (idx === activeRowIndex) {
-          return {
-            ...data,
-            responsiblePersonNames: data.responsiblePersonNames.filter(
-              (person) => person !== personToRemove
-            ),
-          };
-        }
-        return data;
-      });
-      setRowsData(updatedRowsData);
-
-      // If you're currently editing a row, update formData to reflect the change immediately
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        responsiblePersonNames: prevFormData.responsiblePersonNames.filter(
-          (person) => person !== personToRemove
-        ),
-      }));
-    } else {
-      // If not currently editing a row, just update formData
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        responsiblePersonNames: prevFormData.responsiblePersonNames.filter(
-          (person) => person !== personToRemove
-        ),
-      }));
-    }
   };
 
   return (
@@ -1161,82 +1156,37 @@ const RiskIdentificationForm: React.FC = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block mb-2 text-sm font-medium text-gray-900">
-                        Person/s Responsible
-                      </label>
-                      <Dropdown
-                        label=""
-                        inline
-                        dismissOnClick={false}
-                        renderTrigger={() => (
-                          <button
-                            id="dropdownActionButton"
-                            data-dropdown-toggle="dropdownAction"
-                            className="inline-flex w-full py-2.5 items-center bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-3"
-                            type="button"
-                          >
-                            <div className="flex justify-between w-full">
-                              <div className="flex flex-wrap gap-2">
-                                {formData.responsiblePersonNames.map(
-                                  (person, index) => (
-                                    <div
-                                      key={index}
-                                      className="flex items-center gap-1 bg-yellow-100 border border-yellow-500 rounded px-2 py-1 text-sm"
-                                    >
-                                      {person}
-                                      <button
-                                        type="button"
-                                        onClick={(e) =>
-                                          removeResponsiblePerson(person, e)
-                                        }
-                                        className="text-yellow-500 hover:text-yellow-700"
-                                      >
-                                        <MdClose />
-                                      </button>
-                                    </div>
-                                  )
-                                )}
-                                {formData.responsiblePersonNames.length ===
-                                  0 && <span>Select an option</span>}
-                              </div>
-                              <MdKeyboardArrowDown className="h-5 w-5" />
-                            </div>
-                          </button>
-                        )}
+                      <label
+                        htmlFor="responsiblePersonNames"
+                        className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        <ul
-                          className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby="dropdownBgHoverButton"
-                        >
-                          {[
-                            "Dean",
-                            "Asst. Dean",
-                            "Program Chairs",
-                            "Research Directors",
-                          ].map((person, index) => (
-                            <li key={index}>
-                              <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                <input
-                                  id={`checkbox-item-${index}`}
-                                  type="checkbox"
-                                  value={person}
-                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded checked:bg-yellow-500 focus:ring-yellow-500"
-                                  checked={formData.responsiblePersonNames.includes(
-                                    person
-                                  )}
-                                  onChange={handleResponsiblePersonChange}
-                                />
-                                <label
-                                  htmlFor={`checkbox-item-${index}`}
-                                  className="w-full ml-2 text-sm font-medium text-gray-900 rounded"
-                                >
-                                  {person}
-                                </label>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </Dropdown>
+                        Person(s) Responsible
+                      </label>
+                      <input
+                        type="text"
+                        name="responsiblePersonNames"
+                        id="responsiblePersonNames"
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
+                        placeholder="Type here and press enter..."
+                        onKeyDown={handleKeyDown}
+                      />
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {tags.map((tag, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 bg-yellow-200 px-2 py-1 rounded"
+                          >
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() => removeTag(index)}
+                              className="text-sm text-gray-700 hover:text-gray-900 focus:outline-none"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="md:col-span-1">
