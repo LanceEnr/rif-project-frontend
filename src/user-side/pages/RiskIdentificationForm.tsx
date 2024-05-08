@@ -13,12 +13,16 @@ interface ActionPlan {
   description: string;
 }
 
+interface RiskParticular {
+  description: string;
+}
+
 interface FormData {
   sdaNumber: number;
   uploadRIF: File | null;
   issueParticulars: string;
   issueType: string;
-  riskParticulars: string;
+  riskParticulars: RiskParticular[];
   riskSEV: number;
   riskPROB: number;
   riskLevel: string;
@@ -40,7 +44,7 @@ const RiskIdentificationForm: React.FC = () => {
     uploadRIF: null,
     issueParticulars: "",
     issueType: "",
-    riskParticulars: "",
+    riskParticulars: [{ description: "" }],
     riskSEV: 0,
     riskPROB: 0,
     riskLevel: "",
@@ -94,8 +98,67 @@ const RiskIdentificationForm: React.FC = () => {
     actionPlans: data.actionPlans.filter(
       (actionPlan: ActionPlan) => actionPlan.description.trim() !== ""
     ),
+    riskParticulars: data.riskParticulars.filter(
+      (riskParticular: RiskParticular) =>
+        riskParticular.description.trim() !== ""
+    ),
     submissionDate: new Date().toISOString().split("T")[0], // Add the current date as submissionDate
   });
+
+  const handleAddRiskParticular = () => {
+    // Prevent adding a new opportunity if the last one is empty
+    if (
+      formData.riskParticulars[
+        formData.riskParticulars.length - 1
+      ]?.description.trim() !== ""
+    ) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        riskParticulars: [...prevFormData.riskParticulars, { description: "" }],
+      }));
+    }
+  };
+
+  const handleRemoveRiskParticular = (index: number) => {
+    const updatedRiskParticulars = formData.riskParticulars.filter(
+      (_, i) => i !== index
+    );
+    const updatedFormData = {
+      ...formData,
+      riskParticulars: updatedRiskParticulars,
+    };
+
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex ? updatedFormData : data
+      );
+      setRowsData(updatedRowsData);
+    }
+    setFormData(updatedFormData);
+  };
+
+  const handleRiskParticularChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const updatedRiskParticulars = formData.riskParticulars.map((item, i) => {
+      if (i === index) {
+        return { ...item, description: e.target.value };
+      }
+      return item;
+    });
+    setFormData({ ...formData, riskParticulars: updatedRiskParticulars });
+
+    // Update rowsData with the changed riskParticulars
+    if (activeRowIndex !== null) {
+      const updatedRowsData = rowsData.map((data, idx) =>
+        idx === activeRowIndex
+          ? { ...data, riskParticulars: updatedRiskParticulars }
+          : data
+      );
+      setRowsData(updatedRowsData);
+    }
+  };
 
   const handleAddOpportunity = () => {
     // Prevent adding a new opportunity if the last one is empty
@@ -341,6 +404,7 @@ const RiskIdentificationForm: React.FC = () => {
         if (
           key === "opportunities" ||
           key === "actionPlans" ||
+          key === "riskParticulars" ||
           key === "responsiblePersonNames"
         ) {
           return true; // Skip here, check separately below
@@ -356,12 +420,16 @@ const RiskIdentificationForm: React.FC = () => {
     const hasValidActionPlans = formData.actionPlans.some(
       (actionPlan) => actionPlan.description.trim() !== ""
     );
+    const hasValidRiskParticulars = formData.riskParticulars.some(
+      (riskParticular) => riskParticular.description.trim() !== ""
+    );
     const hasResponsiblePersons = formData.responsiblePersonNames.length > 0;
 
     return (
       requiredFieldsFilled &&
       hasValidOpportunities &&
       hasValidActionPlans &&
+      hasValidRiskParticulars &&
       hasResponsiblePersons
     );
   };
@@ -455,6 +523,9 @@ const RiskIdentificationForm: React.FC = () => {
       })),
       actionPlans: selectedRow.actionPlans.map((actionPlan) => ({
         ...actionPlan,
+      })),
+      riskParticulars: selectedRow.riskParticulars.map((riskParticular) => ({
+        ...riskParticular,
       })),
     });
 
@@ -694,29 +765,58 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                     </div>
 
-                    <div className="md:col-span-5 mb-2">
-                      <label
-                        htmlFor="message"
-                        className="block mb-2 text-sm font-medium text-gray-900"
-                      >
-                        Particulars
-                      </label>
-                      <textarea
-                        name="riskParticulars"
-                        rows={4}
-                        value={
-                          activeRowIndex !== null
-                            ? rowsData[activeRowIndex].riskParticulars
-                            : formData.riskParticulars
-                        }
-                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
-                        placeholder="Description"
-                        onChange={handleChange}
-                      ></textarea>
-                      {errors.riskParticulars && (
-                        <p className="text-red-500">{errors.riskParticulars}</p>
-                      )}
+                    <div className="md:col-span-5">
+                      <div className="relative w-full">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <label className="block text-sm font-medium mb-2 text-gray-900">
+                              Risk Particulars
+                            </label>
+                            <p className="my-2 text-xs text-gray-500">
+                              Use the "Add" button to include more entries.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleAddRiskParticular}
+                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white rounded inline-flex items-center"
+                          >
+                            <FiPlus className="mr-2" />
+                            <span>Add</span>
+                          </button>
+                        </div>
+                        {formData.riskParticulars.map((particular, index) => (
+                          <div
+                            key={index}
+                            className="relative flex items-center mb-2"
+                          >
+                            <div className="mr-3">{index + 1}.</div>
+                            <textarea
+                              name="riskParticulars"
+                              rows={2}
+                              value={particular.description}
+                              onChange={(e) =>
+                                handleRiskParticularChange(e, index)
+                              }
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                              placeholder="Write here..."
+                            />
+                            <button
+                              onClick={() => handleRemoveRiskParticular(index)}
+                              className={`ml-2 py-1 px-3 rounded ${
+                                index === 0
+                                  ? "text-gray-500 cursor-not-allowed"
+                                  : "text-red-500 hover:text-red-600"
+                              }`}
+                              disabled={index === 0}
+                            >
+                              <FaTrashCan />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+
                     <div className="md:col-span-2">
                       <label
                         htmlFor="riskSEV"
