@@ -480,12 +480,14 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Validate the form before proceeding with submission
     if (!validateForm()) {
       setError("Please fill out the form correctly before submitting.");
       return;
     }
 
-    // Ensure the latest tags are included in the active row before submission
+    // Update the rowsData with the latest tags for the active row before preparing data for submission
     if (activeRowIndex !== null) {
       const updatedRowsData = rowsData.map((row, idx) => {
         if (idx === activeRowIndex) {
@@ -496,12 +498,12 @@ const RiskIdentificationForm: React.FC = () => {
       setRowsData(updatedRowsData); // Update the rowsData state
     }
 
-    // Prepare the data for each row including the currently active row with the updated tags
+    // Prepare the data for each row for submission
     const preparedRowsData = rowsData.map((row) => prepareData({ ...row }));
 
-    // No need to add the current formData separately since it's already included in rowsData when a row is active or added
+    // Proceed with submitting the prepared rows data
     await submitData(preparedRowsData);
-    resetFormState(); // Reset form state after submission
+    resetFormState(); // Reset form state after successful submission
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -516,7 +518,9 @@ const RiskIdentificationForm: React.FC = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Failed to submit report");
+      if (!response.ok) {
+        throw new Error("Failed to submit report");
+      }
 
       alert("Form submitted successfully!");
       resetFormState(); // Resetting form state after successful submission
