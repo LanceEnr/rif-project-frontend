@@ -1159,7 +1159,7 @@ const RiskIdentificationForm: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-3">
                       <label
                         htmlFor="responsiblePersonNames"
                         className="block mb-2 text-sm font-medium text-gray-900"
@@ -1193,51 +1193,26 @@ const RiskIdentificationForm: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="md:col-span-1">
+                    <div className="md:col-span-5">
                       <label
-                        htmlFor="message"
+                        htmlFor="status"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
                         Status
                       </label>
-                      <fieldset className="flex max-w-md flex-col gap-4">
-                        <div className="flex items-center gap-2">
-                          <Radio
-                            id="action-ongoing"
-                            name="status"
-                            value="Ongoing"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].status === "Ongoing"
-                                : formData.status === "Ongoing"
-                            }
-                            className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
-                          />
-
-                          <Label htmlFor="action-internal">Ongoing</Label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Radio
-                            id="action-completed"
-                            name="status"
-                            value="Completed"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].status ===
-                                  "Completed"
-                                : formData.status === "Completed"
-                            }
-                            className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
-                          />
-
-                          <Label htmlFor="action-external">Completed</Label>
-                        </div>
-                      </fieldset>
-                      {errors.status && (
-                        <p className="text-red-500">{errors.status}</p>
-                      )}
+                      <textarea
+                        id="status"
+                        name="status"
+                        rows={3}
+                        className="block w-full p-2.5 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                        value={
+                          activeRowIndex !== null
+                            ? rowsData[activeRowIndex].status
+                            : formData.status
+                        }
+                        onChange={handleChange}
+                        placeholder="Enter status description here..."
+                      ></textarea>
                     </div>
 
                     <div className="md:col-span-5">
