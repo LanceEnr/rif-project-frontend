@@ -12,6 +12,10 @@ interface ActionPlan {
   description: string;
 }
 
+interface RiskParticular {
+  description: string;
+}
+
 interface ResponsiblePerson {
   id: number;
   name: string;
@@ -33,7 +37,7 @@ interface RiskFormData {
   sdaNumber?: number;
   issueParticulars?: string;
   issueType?: string;
-  riskParticulars?: string;
+  riskParticulars?: RiskParticular[];
   riskSEV?: number;
   riskPROB?: number;
   riskLevel?: string;
@@ -50,7 +54,7 @@ interface RiskFormData {
 const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
-  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(2);  //input the id here for academic unit
+  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(11);  //input the id here for academic unit
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -150,10 +154,10 @@ const WebForm: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/117"
+        "http://localhost:8080/api/riskforms/report/74"
       );
       const data = await response.json();
-      console.log("Fetched data:", data); // Check the fetched data
+      console.log("Fetched data:", data); // Check the fetched data 
       if (data && Array.isArray(data.riskFormData)) {
         setRiskForms(data.riskFormData);
       } else {
@@ -503,20 +507,25 @@ const WebForm: React.FC = () => {
                 <td className="c13" colSpan={1} rowSpan={1}>
                   <p className="issue_typeInternal">
                     <span className="c5">
-                      {form.issueType === "Internal" ? "✓" : ""}
+                      {form.issueType?.includes("Internal") ? "✓" : ""}
                     </span>
                   </p>
                 </td>
                 <td className="c53" colSpan={1} rowSpan={1}>
                   <p className="issue_typeExternal">
                     <span className="c5">
-                      {form.issueType === "External" ? "✓" : ""}
+                      {form.issueType?.includes("External") ? "✓" : ""}
                     </span>
                   </p>
                 </td>
                 <td className="c35" colSpan={1} rowSpan={1}>
                   <p className="risk_particulars">
-                    <span className="c5">{form.riskParticulars}</span>
+                    {form.riskParticulars?.map((particular, index) => (
+                      <span className="c5" key={index}>
+                        {index + 1}. {particular.description}
+                        <br />
+                      </span>
+                    ))}
                   </p>
                 </td>
                 <td className="c13" colSpan={1} rowSpan={1}>
