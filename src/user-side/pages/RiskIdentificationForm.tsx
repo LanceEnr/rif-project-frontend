@@ -485,20 +485,32 @@ const RiskIdentificationForm: React.FC = () => {
       return;
     }
 
-    const preparedFormData = prepareData({
-      ...formData,
-      responsiblePersonNames: tags, // Ensure tags are used as responsiblePersonNames
-    });
-    const preparedRowsData = rowsData.map((data) =>
+    // Prepare data for submission
+    let dataToSubmit = rowsData.map((data) =>
       prepareData({
         ...data,
         responsiblePersonNames: data.responsiblePersonNames,
       })
     );
 
-    let dataToSubmit = [...preparedRowsData, preparedFormData];
+    // Check if the formData should be added as a new row
+    if (
+      activeRowIndex === null &&
+      Object.keys(formData).some(
+        (key) =>
+          formData[key as keyof FormData] !==
+          initialState[key as keyof FormData]
+      )
+    ) {
+      const preparedFormData = prepareData({
+        ...formData,
+        date: date,
+        responsiblePersonNames: tags,
+      });
+      dataToSubmit = [...dataToSubmit, preparedFormData];
+    }
+
     await submitData(dataToSubmit);
-    resetFormState();
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
