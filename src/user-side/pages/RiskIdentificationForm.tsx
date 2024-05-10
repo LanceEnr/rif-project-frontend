@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
-import { Label, Radio, Dropdown } from "flowbite-react";
+import { Label, Radio, Dropdown, Checkbox } from "flowbite-react";
 import { MdKeyboardArrowDown, MdClose } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
@@ -65,6 +65,32 @@ const RiskIdentificationForm: React.FC = () => {
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
   const [tags, setTags] = useState<string[]>([]); // State to hold the tags
+
+  const handleChangeCheckbox = (value: string) => {
+    const currentIssueTypes = formData.issueType.split(",").filter((v) => v); // Split and filter out empty strings
+    const newIssueTypes = currentIssueTypes.includes(value)
+      ? currentIssueTypes.filter((type) => type !== value)
+      : [...currentIssueTypes, value];
+
+    const newIssueTypeString = newIssueTypes.join(",");
+
+    if (activeRowIndex !== null) {
+      // Update the row data if editing an existing row
+      const updatedRowsData = rowsData.map((data, idx) => {
+        if (idx === activeRowIndex) {
+          return { ...data, issueType: newIssueTypeString };
+        }
+        return data;
+      });
+      setRowsData(updatedRowsData);
+    }
+
+    // Update form data for new entries or if not currently editing a specific row
+    setFormData({
+      ...formData,
+      issueType: newIssueTypeString,
+    });
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && event.currentTarget.value.trim() !== "") {
@@ -562,6 +588,7 @@ const RiskIdentificationForm: React.FC = () => {
 
     setFormData({
       ...selectedRow,
+      issueType: selectedRow.issueType,
       opportunities: selectedRow.opportunities.map((opportunity) => ({
         ...opportunity,
       })),
@@ -720,39 +747,25 @@ const RiskIdentificationForm: React.FC = () => {
                           Choose atleast one.
                         </p>
                       </div>
-                      <fieldset className="flex max-w-md flex-row gap-4">
+                      <fieldset className="flex flex-row gap-4">
                         <div className="flex items-center gap-2">
-                          <Radio
+                          <Checkbox
                             id="issue-internal"
                             name="issueType"
-                            value="Internal"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].issueType ===
-                                  "Internal"
-                                : formData.issueType === "Internal"
-                            }
+                            checked={formData.issueType.includes("Internal")}
+                            onChange={() => handleChangeCheckbox("Internal")}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
                           />
-
                           <Label htmlFor="issue-internal">Internal</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Radio
+                          <Checkbox
                             id="issue-external"
                             name="issueType"
-                            value="External"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].issueType ===
-                                  "External"
-                                : formData.issueType === "External"
-                            }
+                            checked={formData.issueType.includes("External")}
+                            onChange={() => handleChangeCheckbox("External")}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
                           />
-
                           <Label htmlFor="issue-external">External</Label>
                         </div>
                       </fieldset>
