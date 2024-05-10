@@ -712,12 +712,14 @@ const RiskIdentificationForm: React.FC = () => {
                       )}
                     </div>
                     <div className="md:col-span-5 mt-4">
-                      <label
-                        htmlFor="message"
-                        className="block mb-2 text-sm font-medium text-gray-900"
-                      >
-                        Issue Type
-                      </label>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-900">
+                          Issue Type
+                        </label>
+                        <p className="my-2 text-xs text-gray-500">
+                          Choose atleast one.
+                        </p>
+                      </div>
                       <fieldset className="flex max-w-md flex-row gap-4">
                         <div className="flex items-center gap-2">
                           <Radio
@@ -769,12 +771,12 @@ const RiskIdentificationForm: React.FC = () => {
                       </label>
                     </div>
 
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-5 mb-2">
                       <div className="relative w-full">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <label className="block text-sm font-medium mb-2 text-gray-900">
-                              Risk Particulars
+                              Particulars
                             </label>
                             <p className="my-2 text-xs text-gray-500">
                               Use the "Add" button to include more entries.
@@ -797,7 +799,7 @@ const RiskIdentificationForm: React.FC = () => {
                             <div className="mr-3">{index + 1}.</div>
                             <textarea
                               name="riskParticulars"
-                              rows={2}
+                              rows={4}
                               value={particular.description}
                               onChange={(e) =>
                                 handleRiskParticularChange(e, index)
@@ -973,7 +975,7 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="message"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Issue Type
+                        Risk Type
                       </label>
                       <fieldset className="flex max-w-md flex-row gap-4">
                         <div className="flex items-center gap-2">
@@ -1049,7 +1051,7 @@ const RiskIdentificationForm: React.FC = () => {
                             <div className="mr-3">{index + 1}.</div>
                             <textarea
                               name="opportunities"
-                              rows={2}
+                              rows={4}
                               value={opportunity.description}
                               onChange={(e) =>
                                 handleOpportunityChange(e, index)
@@ -1118,7 +1120,7 @@ const RiskIdentificationForm: React.FC = () => {
                             <div className="mr-3">{index + 1}.</div>
                             <textarea
                               name="actionPlan"
-                              rows={2}
+                              rows={4}
                               value={action.description}
                               onChange={(e) => handleActionPlanChange(e, index)}
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
@@ -1164,7 +1166,7 @@ const RiskIdentificationForm: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-3">
                       <label
                         htmlFor="responsiblePersonNames"
                         className="block mb-2 text-sm font-medium text-gray-900"
