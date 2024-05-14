@@ -743,9 +743,6 @@ const RiskIdentificationForm: React.FC = () => {
                         <label className="block text-sm font-medium mb-2 text-gray-900">
                           Issue Type
                         </label>
-                        <p className="my-2 text-xs text-gray-500">
-                          Choose atleast one.
-                        </p>
                       </div>
                       <fieldset className="flex flex-row gap-4">
                         <div className="flex items-center gap-2">

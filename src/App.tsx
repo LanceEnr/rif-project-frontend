@@ -14,7 +14,6 @@ import SideNavbar from "./admin/components/SideNavbar";
 import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
-import PrerequisitesList from "./user-side/pages/PrerequisitesList";{/*to be deleted*/}
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
 import RifTrackerTable from "./admin/pages/RifTrackerTable";
 import MicroAnalytics from "./admin/pages/MicroAnalytics";
@@ -70,7 +69,6 @@ const UserLayout: FC = () => (
       <Route path="/submissions" element={<SubmissionHistory />} />
       <Route path="/displayform" element={<DisplayForm />} />
       <Route path="*" element={<NotFoundPage />} />
-      <Route path="/prereq" element={<PrerequisitesList />} /> {/*to be deleted*/}
     </Routes>
     <Footer />
   </>
