@@ -55,6 +55,7 @@ const WebForm: React.FC = () => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
   const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(11);  //input the id here for academic unit
+  const [signatureImage, setSignatureImage] = useState("");
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -70,7 +71,23 @@ const WebForm: React.FC = () => {
       }
     };
 
-    fetchPrerequisites();
+  // Fetch electronic signature from the backend
+  const fetchSignature = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/esignatures/1');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      setSignatureImage(imageObjectURL);
+    } catch (error) {
+      console.error('Error fetching signature:', error);
+    }
+  };
+
+  fetchPrerequisites();
+  fetchSignature();
   }, []);
 
   const specificPrerequisite = prerequisites.filter(p => p.id === specificPrerequisiteId);
@@ -640,17 +657,13 @@ const WebForm: React.FC = () => {
         </p>
         <div style={{ whiteSpace: "nowrap" }}>
           <p className="c6 c121" style={paragraphStyle}>
-            <span className="c92">Prepared by</span>
-            <span className="c56">: </span>
-            <span className="c56 c129">________________________</span>
-            <span className="c56">
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{" "}
-            </span>
-            <span className="c92">Reviewed/Approved by:</span>
-            <span className="c129 c56">______________________</span>
+          <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span className="c92">Prepared by:</span>
+              <img src={signatureImage} alt="Signature" style={{ height: '50px', border: '1px solid black', marginLeft: '10px' }} />
+            </div>
+            <span className="c92">Reviewed/Approved by: ______________________</span>
+          </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
