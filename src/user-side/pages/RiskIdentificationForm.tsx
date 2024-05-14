@@ -67,29 +67,26 @@ const RiskIdentificationForm: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]); // State to hold the tags
 
   const handleChangeCheckbox = (value: string) => {
-    const currentIssueTypes = formData.issueType.split(",").filter((v) => v); // Split and filter out empty strings
-    const newIssueTypes = currentIssueTypes.includes(value)
-      ? currentIssueTypes.filter((type) => type !== value)
-      : [...currentIssueTypes, value];
+    const newIssueTypes = formData.issueType.includes(value)
+      ? formData.issueType.split(",").filter((type) => type !== value)
+      : [...formData.issueType.split(",").filter((type) => type), value];
 
-    const newIssueTypeString = newIssueTypes.join(",");
+    // Update the form state with either the new issue types array joined into a string or empty if no checkboxes are checked
+    setFormData({
+      ...formData,
+      issueType: newIssueTypes.length > 0 ? newIssueTypes.join(",") : "",
+    });
 
     if (activeRowIndex !== null) {
       // Update the row data if editing an existing row
       const updatedRowsData = rowsData.map((data, idx) => {
         if (idx === activeRowIndex) {
-          return { ...data, issueType: newIssueTypeString };
+          return { ...data, issueType: newIssueTypes.join(",") };
         }
         return data;
       });
       setRowsData(updatedRowsData);
     }
-
-    // Update form data for new entries or if not currently editing a specific row
-    setFormData({
-      ...formData,
-      issueType: newIssueTypeString,
-    });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -439,22 +436,22 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const validateForm = () => {
-    // Check for any required fields that are empty or have the default value
+    // Check that other required fields are filled, excluding 'issueType'
     const requiredFieldsFilled = Object.entries(formData).every(
       ([key, value]) => {
         if (
+          key === "issueType" || // Exclude 'issueType' from required checks
           key === "opportunities" ||
           key === "actionPlans" ||
           key === "riskParticulars" ||
-          key === "responsiblePersonNames" // This will skip the old field
+          key === "responsiblePersonNames"
         ) {
-          return true; // Skip here, check separately below
+          return true;
         }
         return value !== "" && value !== 0;
       }
     );
 
-    // Ensure there's at least one non-empty opportunity, action plan, and risk particular
     const hasValidOpportunities = formData.opportunities.some(
       (opportunity) => opportunity.description.trim() !== ""
     );
@@ -464,8 +461,6 @@ const RiskIdentificationForm: React.FC = () => {
     const hasValidRiskParticulars = formData.riskParticulars.some(
       (riskParticular) => riskParticular.description.trim() !== ""
     );
-
-    // Validate the presence of at least one responsible person via tags
     const hasResponsiblePersons = tags.length > 0;
 
     return (
@@ -480,7 +475,6 @@ const RiskIdentificationForm: React.FC = () => {
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      // Ensure tags are saved into the row data
       const newFormData = {
         ...formData,
         date: date,
@@ -499,6 +493,7 @@ const RiskIdentificationForm: React.FC = () => {
       setRowsData(newData);
       resetForm();
       setDate("");
+      setError(null);
     } else {
       setError("Please fill out all fields before adding another row.");
     }
@@ -506,37 +501,38 @@ const RiskIdentificationForm: React.FC = () => {
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm()) {
+    if (validateForm()) {
+      // Ensure other validations pass
+      // Prepare data for submission
+      let dataToSubmit = rowsData.map((data) =>
+        prepareData({
+          ...data,
+          responsiblePersonNames: data.responsiblePersonNames,
+        })
+      );
+
+      // Check if the formData should be added as a new row
+      if (
+        activeRowIndex === null &&
+        Object.keys(formData).some(
+          (key) =>
+            formData[key as keyof FormData] !==
+            initialState[key as keyof FormData]
+        )
+      ) {
+        const preparedFormData = prepareData({
+          ...formData,
+          date: date,
+          responsiblePersonNames: tags,
+        });
+        dataToSubmit = [...dataToSubmit, preparedFormData];
+      }
+
+      await submitData(dataToSubmit);
+      resetFormState(); // Resetting form state after successful submission
+    } else {
       setError("Please fill out the form correctly before submitting.");
-      return;
     }
-
-    // Prepare data for submission
-    let dataToSubmit = rowsData.map((data) =>
-      prepareData({
-        ...data,
-        responsiblePersonNames: data.responsiblePersonNames,
-      })
-    );
-
-    // Check if the formData should be added as a new row
-    if (
-      activeRowIndex === null &&
-      Object.keys(formData).some(
-        (key) =>
-          formData[key as keyof FormData] !==
-          initialState[key as keyof FormData]
-      )
-    ) {
-      const preparedFormData = prepareData({
-        ...formData,
-        date: date,
-        responsiblePersonNames: tags,
-      });
-      dataToSubmit = [...dataToSubmit, preparedFormData];
-    }
-
-    await submitData(dataToSubmit);
   };
 
   // Abstracted function for data submission to keep handleSubmitFinal clean
@@ -565,7 +561,6 @@ const RiskIdentificationForm: React.FC = () => {
     setFormData(initialState);
     setActiveRowIndex(null);
     setTags([]); // Reset tags
-
     setError(null);
   };
 
