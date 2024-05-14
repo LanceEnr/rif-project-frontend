@@ -149,9 +149,9 @@ const WebForm: React.FC = () => {
           </head>
           <body>
             ${element.innerHTML}
+            ${footer?.outerHTML}
           </body>
           </html>
-          ${footer?.outerHTML}
         `);
 
         printWindow.document.close();
