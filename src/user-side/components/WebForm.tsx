@@ -171,7 +171,7 @@ const WebForm: React.FC = () => {
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/74"
+        "http://localhost:8080/api/riskforms/report/94"
       );
       const data = await response.json();
       console.log("Fetched data:", data); // Check the fetched data 
@@ -536,14 +536,14 @@ const WebForm: React.FC = () => {
                   </p>
                 </td>
                 <td className="c35" colSpan={1} rowSpan={1}>
-                  <p className="risk_particulars">
-                    {form.riskParticulars?.map((particular, index) => (
-                      <span className="c5" key={index}>
-                        {index + 1}. {particular.description}
-                        <br />
-                      </span>
-                    ))}
-                  </p>
+                <p className="risk_particulars">
+                  {form.riskParticulars?.map((particular, index) => (
+                    <span className="c5" key={index}>
+                      {particular.description}
+                      <br />
+                    </span>
+                  ))}
+                </p>
                 </td>
                 <td className="c13" colSpan={1} rowSpan={1}>
                   <p className="risksev">
@@ -571,24 +571,24 @@ const WebForm: React.FC = () => {
                   </p>
                 </td>
                 <td className="c32" colSpan={1} rowSpan={1}>
-                  <p className="opportunities">
-                    {form.opportunities.map((opportunity, idx) => (
-                      <span className="c5" key={idx}>
-                        {idx + 1}. {opportunity.description}
-                        <br />
-                      </span>
-                    ))}
-                  </p>
+                <p className="opportunities">
+                  {form.opportunities.map((opportunity, idx) => (
+                    <span className="c5" key={idx}>
+                      {opportunity.description}
+                      <br />
+                    </span>
+                  ))}
+                </p>
                 </td>
                 <td className="c67" colSpan={1} rowSpan={1}>
-                  <p className="action_plan">
-                    {form.actionPlans.map((action, idx) => (
-                      <span className="c5" key={idx}>
-                        {idx + 1}. {action.description}
-                        <br />
-                      </span>
-                    ))}
-                  </p>
+                <p className="action_plan">
+                  {form.actionPlans.map((action, idx) => (
+                    <span className="c5" key={idx}>
+                      {action.description}
+                      <br />
+                    </span>
+                  ))}
+                </p>
                 </td>
                 <td className="c24" colSpan={1} rowSpan={1}>
                   <p className="date">
