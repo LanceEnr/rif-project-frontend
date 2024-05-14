@@ -660,20 +660,17 @@ const WebForm: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span className="c92">Prepared by:</span>
-              <img src={signatureImage} alt="Signature" style={{ height: '50px', border: '1px solid black', marginLeft: '10px' }} />
+              <img src={signatureImage} alt="Signature" style={{ height: '50px', marginLeft: '10px' }} />
             </div>
             <span className="c92">Reviewed/Approved by: ______________________</span>
           </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
