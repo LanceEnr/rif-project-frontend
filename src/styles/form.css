@@ -2329,8 +2329,8 @@ h6 {
   }
 
   .doc-content {
-    margin-bottom: 60px; /* Adjust this value based on the footer height */
-    padding-bottom: 20mm; /* Ensures enough space for the footer */
+    margin-bottom: 60px;
+    padding-bottom: 20mm;
     position: relative;
   }
 
@@ -2339,9 +2339,9 @@ h6 {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: white; /* Ensures the footer has a background color */
+    background: white;
     text-align: center;
-    padding: 1mm; /* Space around footer content */
+    padding: 1mm;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -2353,8 +2353,8 @@ h6 {
   }
 
   @page {
-    size: auto; /* auto is the initial value */
-    margin: 20mm 0; /* Ensures enough space at the bottom of each page */
+    size: auto;
+    margin: 20mm 0;
   }
 
   .page-break {
