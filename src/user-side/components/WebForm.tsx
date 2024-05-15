@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/form.css";
 import image1 from "../../assets/image1.png";
-
 import image4 from "../../assets/image4.png";
 
 interface Opportunity {
@@ -71,23 +70,23 @@ const WebForm: React.FC = () => {
       }
     };
 
-  // Fetch electronic signature from the backend
-  const fetchSignature = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/esignatures/1');
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+    // Fetch electronic signature from the backend
+    const fetchSignature = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/esignatures/1');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const imageBlob = await response.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        setSignatureImage(imageObjectURL);
+      } catch (error) {
+        console.error('Error fetching signature:', error);
       }
-      const imageBlob = await response.blob();
-      const imageObjectURL = URL.createObjectURL(imageBlob);
-      setSignatureImage(imageObjectURL);
-    } catch (error) {
-      console.error('Error fetching signature:', error);
-    }
-  };
+    };
 
-  fetchPrerequisites();
-  fetchSignature();
+    fetchPrerequisites();
+    fetchSignature();
   }, []);
 
   const specificPrerequisite = prerequisites.filter(p => p.id === specificPrerequisiteId);
@@ -98,49 +97,44 @@ const WebForm: React.FC = () => {
     const pages = document.querySelectorAll(".page-break");
     const total = pages.length + 1; // Total pages is breaks + 1
     let pageNumber = 1;
-  
+
     const pageElement = document.querySelector(".c84");
     const totalElement = document.querySelector(".c77");
-  
+
     if (pageElement) {
       pageElement.textContent = `${pageNumber}`;
     } else {
       console.error('Page element not found');
     }
-  
+
     if (totalElement) {
       totalElement.textContent = `${total}`;
     } else {
       console.error('Total element not found');
     }
-  }, []);  
+  }, []);
 
   const paragraphStyle: React.CSSProperties = {
     whiteSpace: "nowrap",
   };
 
   const printForm = () => {
-    // Select the element you want to print
     const element = document.querySelector(".doc-content");
-    const footer = document.querySelector(".footer");
     if (element) {
       const printWindow = window.open("", "_blank", "height=600,width=800");
 
       if (printWindow) {
-        // Get CSS from a style element
         const cssLink = document.querySelector('link[href*="form.css"]');
         let cssText = "";
         if (cssLink) {
           cssText = `<link href="../../styles/form.css" rel="stylesheet" type="text/css" media="print">`;
         } else {
-          // If no link is found, try to load CSS text from style elements
           const styles = document.querySelectorAll("style");
           styles.forEach((style) => {
             cssText += style.outerHTML;
           });
         }
 
-        // Write HTML content
         printWindow.document.write(`
           <html>
           <head>
@@ -148,8 +142,24 @@ const WebForm: React.FC = () => {
             ${cssText}
           </head>
           <body>
-            ${element.innerHTML}
-            ${footer?.outerHTML}
+            <div class="doc-content">${element.innerHTML}</div>
+            <div class="footer">
+              <p class="c6 c57" style="margin: 0; padding: 0;">
+                <span class="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
+              </p>
+              <p class="c6 c102" style="margin: 0; padding: 0;">
+                <span
+                  style="overflow: hidden; display: inline-block; margin: 0px; border: 0px solid #000000; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px); width: 47.73px; height: 45.07px;"
+                >
+                  <img
+                    alt=""
+                    src="${image4}"
+                    style="width: 47.73px; height: 45.07px; margin-left: 5px; margin-top: 0px; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px);"
+                    title=""
+                  />
+                </span>
+              </p>
+            </div>
           </body>
           </html>
         `);
@@ -157,7 +167,6 @@ const WebForm: React.FC = () => {
         printWindow.document.close();
         printWindow.focus();
 
-        // Ensure the window loads the content before printing
         printWindow.onload = function () {
           setTimeout(() => {
             printWindow.print();
@@ -167,7 +176,7 @@ const WebForm: React.FC = () => {
       }
     }
   };
-
+  
   const fetchRiskForms = async () => {
     try {
       const response = await fetch(
@@ -249,52 +258,52 @@ const WebForm: React.FC = () => {
           <a id="t.8c3c2da983f659d888d169e3788314b8d34e609f"></a>
           <a id="t.6"></a>
           <table className="c37">
-          {specificPrerequisite.map((prerequisite) => (
-          <tr className="c110" key={prerequisite.id}>
-            <td className="c80" colSpan={1} rowSpan={1}>
-                <p className="c1"><span className="c45"></span></p>
-                <p className="c6">
-                  <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
-                    Administrative/Academic Unit:
-                  </span>
-                </p>
-          </td>
-          <td className="c135" colSpan={1} rowSpan={1}>
-            <p className="c1">
-              <span className="c9 c61">{prerequisite.unit}</span>
-            </p>
-          </td>
-              <td className="c2" colSpan={1} rowSpan={1}>
-                <p className="c89 c109">
-                  <span className="c9 c61"></span>
-                </p>
-              </td>
-              <td className="c78" colSpan={1} rowSpan={1}>
-                <p className="c1 c87">
-                  <span className="c9 c61"></span>
-                </p>
-              </td>
-              <td className="c140" colSpan={1} rowSpan={1}>
-                <p className="c6 c87">
-                  <span className="c9 c61">Page</span>
-                </p>
-              </td>
-              <td className="c84" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c9 c61"></span>
-                </p>
-              </td>
-              <td className="c119" colSpan={1} rowSpan={1}>
-                <p className="c6 c136">
-                  <span className="c9 c61">of</span>
-                </p>
-              </td>
-              <td className="c77" colSpan={1} rowSpan={1}>
-                <p className="c1">
-                  <span className="c9 c61"></span>
-                </p>
-              </td>
-            </tr>
+            {specificPrerequisite.map((prerequisite) => (
+              <tr className="c110" key={prerequisite.id}>
+                <td className="c80" colSpan={1} rowSpan={1}>
+                  <p className="c1"><span className="c45"></span></p>
+                  <p className="c6">
+                    <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
+                      Administrative/Academic Unit:
+                    </span>
+                  </p>
+                </td>
+                <td className="c135" colSpan={1} rowSpan={1}>
+                  <p className="c1">
+                    <span className="c9 c61">{prerequisite.unit}</span>
+                  </p>
+                </td>
+                <td className="c2" colSpan={1} rowSpan={1}>
+                  <p className="c89 c109">
+                    <span className="c9 c61"></span>
+                  </p>
+                </td>
+                <td className="c78" colSpan={1} rowSpan={1}>
+                  <p className="c1 c87">
+                    <span className="c9 c61"></span>
+                  </p>
+                </td>
+                <td className="c140" colSpan={1} rowSpan={1}>
+                  <p className="c6 c87">
+                    <span className="c9 c61">Page</span>
+                  </p>
+                </td>
+                <td className="c84" colSpan={1} rowSpan={1}>
+                  <p className="c1">
+                    <span className="c9 c61"></span>
+                  </p>
+                </td>
+                <td className="c119" colSpan={1} rowSpan={1}>
+                  <p className="c6 c136">
+                    <span className="c9 c61">of</span>
+                  </p>
+                </td>
+                <td className="c77" colSpan={1} rowSpan={1}>
+                  <p className="c1">
+                    <span className="c9 c61"></span>
+                  </p>
+                </td>
+              </tr>
             ))}
           </table>
         </div>
@@ -307,57 +316,57 @@ const WebForm: React.FC = () => {
         <a id="t.b77d91ebb78f3c40f45893187130cc43d9e03e8e"></a>
         <a id="t.0"></a>
         <table className="c97">
-        <tr className="c81">
-          <td className="c90" colSpan={2}>
-            <p className="c33">Internal Client/Stakeholder*</p>
-          </td>
-          <td className="c54" colSpan={2}>
-            <p className="c33">External Client/Stakeholder*</p>
-          </td>
-        </tr>
-        {specificPrerequisite.map((prerequisite) => (
-          <React.Fragment key={prerequisite.id}>
-            <tr className="c34">
-              <td className="c131" colSpan={1}>
-                <p className="c6">
-                  {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => (
-                    <React.Fragment key={index}>
-                      <span>{index + 1}. {stakeholder.name}</span><br />
-                    </React.Fragment>
-                  ))}
-                </p>
-              </td>
-              <td className="c79" colSpan={1}>
-                <p className="c6">
-                  {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => (
-                    <React.Fragment key={index}>
-                      <span>{index + 5}. {stakeholder.name}</span><br />
-                    </React.Fragment>
-                  ))}
-                </p>
-              </td>
-              <td className="c72" colSpan={1}>
-                <p className="c6">
-                  {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => (
-                    <React.Fragment key={index}>
-                      <span>{index + 1}. {stakeholder.name}</span><br />
-                    </React.Fragment>
-                  ))}
-                </p>
-              </td>
-              <td className="c79" colSpan={1}>
-                <p className="c6">
-                  {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => (
-                    <React.Fragment key={index}>
-                      <span>{index + 5}. {stakeholder.name}</span><br />
-                    </React.Fragment>
-                  ))}
-                </p>
-              </td>
-            </tr>
-          </React.Fragment>
-        ))}
-      </table>
+          <tr className="c81">
+            <td className="c90" colSpan={2}>
+              <p className="c33">Internal Client/Stakeholder*</p>
+            </td>
+            <td className="c54" colSpan={2}>
+              <p className="c33">External Client/Stakeholder*</p>
+            </td>
+          </tr>
+          {specificPrerequisite.map((prerequisite) => (
+            <React.Fragment key={prerequisite.id}>
+              <tr className="c34">
+                <td className="c131" colSpan={1}>
+                  <p className="c6">
+                    {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => (
+                      <React.Fragment key={index}>
+                        <span>{index + 1}. {stakeholder.name}</span><br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+                </td>
+                <td className="c79" colSpan={1}>
+                  <p className="c6">
+                    {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => (
+                      <React.Fragment key={index}>
+                        <span>{index + 5}. {stakeholder.name}</span><br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+                </td>
+                <td className="c72" colSpan={1}>
+                  <p className="c6">
+                    {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => (
+                      <React.Fragment key={index}>
+                        <span>{index + 1}. {stakeholder.name}</span><br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+                </td>
+                <td className="c79" colSpan={1}>
+                  <p className="c6">
+                    {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => (
+                      <React.Fragment key={index}>
+                        <span>{index + 5}. {stakeholder.name}</span><br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+                </td>
+              </tr>
+            </React.Fragment>
+          ))}
+        </table>
         <p className="c1">
           <span className="c60 c98"></span>
         </p>
@@ -536,14 +545,14 @@ const WebForm: React.FC = () => {
                   </p>
                 </td>
                 <td className="c35" colSpan={1} rowSpan={1}>
-                <p className="risk_particulars">
-                  {form.riskParticulars?.map((particular, index) => (
-                    <span className="c5" key={index}>
-                      {particular.description}
-                      <br />
-                    </span>
-                  ))}
-                </p>
+                  <p className="risk_particulars">
+                    {form.riskParticulars?.map((particular, index) => (
+                      <span className="c5" key={index}>
+                        {particular.description}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
                 </td>
                 <td className="c13" colSpan={1} rowSpan={1}>
                   <p className="risksev">
@@ -571,24 +580,24 @@ const WebForm: React.FC = () => {
                   </p>
                 </td>
                 <td className="c32" colSpan={1} rowSpan={1}>
-                <p className="opportunities">
-                  {form.opportunities.map((opportunity, idx) => (
-                    <span className="c5" key={idx}>
-                      {opportunity.description}
-                      <br />
-                    </span>
-                  ))}
-                </p>
+                  <p className="opportunities">
+                    {form.opportunities.map((opportunity, idx) => (
+                      <span className="c5" key={idx}>
+                        {opportunity.description}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
                 </td>
                 <td className="c67" colSpan={1} rowSpan={1}>
-                <p className="action_plan">
-                  {form.actionPlans.map((action, idx) => (
-                    <span className="c5" key={idx}>
-                      {action.description}
-                      <br />
-                    </span>
-                  ))}
-                </p>
+                  <p className="action_plan">
+                    {form.actionPlans.map((action, idx) => (
+                      <span className="c5" key={idx}>
+                        {action.description}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
                 </td>
                 <td className="c24" colSpan={1} rowSpan={1}>
                   <p className="date">
@@ -657,13 +666,13 @@ const WebForm: React.FC = () => {
         </p>
         <div style={{ whiteSpace: "nowrap" }}>
           <p className="c6 c121" style={paragraphStyle}>
-          <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span className="c92">Prepared by:</span>
-              <img src={signatureImage} alt="Signature" style={{ height: '50px', marginLeft: '10px' }} />
+            <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span className="c92">Prepared by:</span>
+                <img src={signatureImage} alt="Signature" style={{ height: '50px', marginLeft: '10px' }} />
+              </div>
+              <span className="c92">Reviewed/Approved by: ______________________</span>
             </div>
-            <span className="c92">Reviewed/Approved by: ______________________</span>
-          </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
@@ -1249,59 +1258,37 @@ const WebForm: React.FC = () => {
           </div>
         </div>
         <div className="footer">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <p className="c6 c57" style={{ margin: "0", padding: "0" }}>
-              <span className="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
-            </p>
-            <p
-              className="c1"
+          <p className="c6 c57" style={{ margin: "0", padding: "0" }}>
+            <span className="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
+          </p>
+          <p className="c6 c102" style={{ margin: "0", padding: "0" }}>
+            <span
               style={{
-                margin: "0",
-                padding: "0",
-                marginLeft: "5px",
-                marginRight: "5px",
+                overflow: "hidden",
+                display: "inline-block",
+                margin: "0px",
+                border: "0px solid #000000",
+                transform: "rotate(0rad) translateZ(0px)",
+                WebkitTransform: "rotate(0rad) translateZ(0px)",
+                width: "47.73px",
+                height: "45.07px",
               }}
             >
-              <span className="c5"></span>
-            </p>
-            <p className="c6 c57" style={{ margin: "0", padding: "0" }}>
-              <span className="c26 c111">&nbsp;</span>
-            </p>
-            <p className="c6 c102" style={{ margin: "0", padding: "0" }}>
-              <span
+              <img
+                alt=""
+                src={image4}
                 style={{
-                  overflow: "hidden",
-                  display: "inline-block",
-                  margin: "0px",
-                  border: "0px solid #000000",
-                  transform: "rotate(0rad) translateZ(0px)",
-                  WebkitTransform: "rotate(0rad) translateZ(0px)",
                   width: "47.73px",
                   height: "45.07px",
+                  marginLeft: "5px",
+                  marginTop: "0px",
+                  transform: "rotate(0rad) translateZ(0px)",
+                  WebkitTransform: "rotate(0rad) translateZ(0px)",
                 }}
-              >
-                <img
-                  alt=""
-                  src={image4}
-                  style={{
-                    width: "47.73px",
-                    height: "45.07px",
-                    marginLeft: "0px",
-                    marginTop: "0px",
-                    transform: "rotate(0rad) translateZ(0px)",
-                    WebkitTransform: "rotate(0rad) translateZ(0px)",
-                  }}
-                  title=""
-                />
-              </span>
-            </p>
-          </div>
+                title=""
+              />
+            </span>
+          </p>
         </div>
       </body>
       <button

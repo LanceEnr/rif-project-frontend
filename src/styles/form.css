@@ -2324,21 +2324,41 @@ h6 {
 
 @media print {
   body, .doc-content {
-    padding-bottom: 20mm; 
+    margin: 0;
+    padding: 0;
+  }
+
+  .doc-content {
+    margin-bottom: 60px; /* Adjust this value based on the footer height */
+    padding-bottom: 20mm; /* Ensures enough space for the footer */
     position: relative;
   }
 
-  .page-footer, .footer {
+  .footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%; 
-    text-align: center; 
-    padding: 1mm; 
+    width: 100%;
+    background: white; /* Ensures the footer has a background color */
+    text-align: center;
+    padding: 1mm; /* Space around footer content */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .footer p {
+    margin: 0;
+    padding: 0;
   }
 
   @page {
-    margin-bottom: 20mm; 
+    size: auto; /* auto is the initial value */
+    margin: 20mm 0; /* Ensures enough space at the bottom of each page */
+  }
+
+  .page-break {
+    display: block;
+    page-break-before: always;
   }
 }
-
