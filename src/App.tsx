@@ -1,5 +1,6 @@
-import { FC } from "react";
-import "./App.css";
+import { FC, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AuthContext, { AuthProvider } from "./auth/AuthContext";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
 import Contact from "./user-side/pages/Contact";
@@ -21,57 +22,67 @@ import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
 import DisplayForm from "./user-side/pages/DisplayForm";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./auth/Register";
+import Login from "./auth/Login";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 const App: FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/*" element={<UserLayout />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/*" element={<UserLayout />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 
-const AdminLayout: FC = () => (
-  <>
-    <SideNavbar />
-    <div className="p-4 sm:ml-64">
-      <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="grid" element={<DocumentGrid />} />
-          <Route path="tracker" element={<RifTracker />} />
-          <Route path="trackertable" element={<RifTrackerTable />} />
-          <Route path="users" element={<Users />} />
-          <Route path="editUser" element={<EditUser />} />
-          <Route path="microanalytics" element={<MicroAnalytics />} />
-          <Route path="macroanalytics" element={<MacroAnalytics />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+const AdminLayout: FC = () => {
+  return (
+    <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+      <SideNavbar />
+      <div className="p-4 sm:ml-64">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="grid" element={<DocumentGrid />} />
+            <Route path="tracker" element={<RifTracker />} />
+            <Route path="trackertable" element={<RifTrackerTable />} />
+            <Route path="users" element={<Users />} />
+            <Route path="editUser" element={<EditUser />} />
+            <Route path="microanalytics" element={<MicroAnalytics />} />
+            <Route path="macroanalytics" element={<MacroAnalytics />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
       </div>
-    </div>
-  </>
-);
+    </ProtectedRoute>
+  );
+};
 
-const UserLayout: FC = () => (
-  <>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/FAQS" element={<Faqs />} />
-      <Route path="/Contact" element={<Contact />} />
-      <Route path="/addstakeholders" element={<AddStakeholders />} />
-      <Route path="/prerequisites" element={<Prerequisites />} />
-      <Route path="/esignature" element={<Esignature />} />
-      <Route path="/form" element={<RiskIdentificationForm />} />
-      <Route path="/submissions" element={<SubmissionHistory />} />
-      <Route path="/displayform" element={<DisplayForm />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-    <Footer />
-  </>
-);
+const UserLayout: FC = () => {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/FAQS" element={<Faqs />} />
+        <Route path="/Contact" element={<Contact />} />
+        <Route path="/addstakeholders" element={<AddStakeholders />} />
+        <Route path="/prerequisites" element={<Prerequisites />} />
+        <Route path="/esignature" element={<Esignature />} />
+        <Route path="/form" element={<RiskIdentificationForm />} />
+        <Route path="/submissions" element={<SubmissionHistory />} />
+        <Route path="/displayform" element={<DisplayForm />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      <Footer />
+    </>
+  );
+};
 
 export default App;
