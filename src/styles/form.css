@@ -2317,24 +2317,48 @@ h6 {
   margin: 0;
   padding: 5px;
 }
+.risk_particulars .c5::before, .opportunities .c5::before, .action_plan .c5::before {
+  content: '• ';
+  padding-right: 5px;
+}
 
 @media print {
   body, .doc-content {
-    padding-bottom: 20mm; 
+    margin: 0;
+    padding: 0;
+  }
+
+  .doc-content {
+    margin-bottom: 60px;
+    padding-bottom: 20mm;
     position: relative;
   }
 
-  .page-footer, .footer {
+  .footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%; 
-    text-align: center; 
-    padding: 1mm; 
+    width: 100%;
+    background: white;
+    text-align: center;
+    padding: 1mm;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .footer p {
+    margin: 0;
+    padding: 0;
   }
 
   @page {
-    margin-bottom: 20mm; 
+    size: auto;
+    margin: 20mm 0;
+  }
+
+  .page-break {
+    display: block;
+    page-break-before: always;
   }
 }
-
