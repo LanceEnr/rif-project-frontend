@@ -48,9 +48,9 @@ const Login = () => {
         backgroundImage: "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')"
       }}
     >
-    <div className="container mx-auto px-4 flex items-center justify-center min-h-screen">
-        <section className="rounded-xl bg-gray-600 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
-          <div className="flex flex-col items-center justify-center mx-auto sm:max-w-md">
+      <div className="container mx-auto px-4 flex items-center justify-center min-h-screen">
+        <section className="rounded-xl bg-gray-600 bg-opacity-50 px-10 py-12 shadow-lg backdrop-blur-md max-w-xl w-full">
+          <div className="flex flex-col items-center justify-center mx-auto">
             <a
               href="#"
               className="flex items-center mb-6 text-3xl font-bold"
@@ -63,11 +63,11 @@ const Login = () => {
               Risk Forms Login
             </a>
             <div className="w-full bg-white rounded-lg shadow">
-              <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-l font-bold leading-tight tracking-tight0 md:text-2xl">
+              <div className="p-6 space-y-4 sm:p-8">
+                <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Sign in to your account
                 </h1>
-                <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label
                       htmlFor="email"
@@ -153,6 +153,7 @@ const Login = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Login;

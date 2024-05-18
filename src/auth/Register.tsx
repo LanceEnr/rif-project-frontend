@@ -56,7 +56,7 @@ const Register = () => {
       }}
     >
       <div className="container mx-auto px-4 flex items-center justify-center min-h-screen">
-        <section className="rounded-xl bg-gray-600 bg-opacity-50 px-8 py-6 shadow-lg backdrop-blur-md max-w-lg w-full">
+        <section className="rounded-xl bg-gray-600 bg-opacity-50 px-8 py-6 shadow-lg backdrop-blur-md max-w-xl w-full">
           <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto lg:py-0">
             <a
               href="#"
