@@ -1,9 +1,10 @@
-import React, { useState, ChangeEvent } from "react";
+import { useContext, useState, ChangeEvent, useEffect } from "react";
 import { Label, Radio, Dropdown, Checkbox } from "flowbite-react";
-import { MdKeyboardArrowDown, MdClose } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
+import { MdKeyboardArrowDown, MdClose, MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
+import AuthContext from "../../auth/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 interface Opportunity {
   description: string;
@@ -29,15 +30,18 @@ interface FormData {
   riskType: string;
   opportunities: Opportunity[];
   actionPlans: ActionPlan[];
-  date: string; // Existing date field
-  submissionDate?: string; // Optional submission date field
-  responsiblePersonNames: string[]; // Updated to handle multiple responsible persons
+  date: string;
+  submissionDate?: string;
+  responsiblePersonNames: string[];
   riskRating: number;
   status: string;
+  userEmail?: string; // New field for user email
 }
 
 // Component
 const RiskIdentificationForm: React.FC = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
   // Initial form state
   const initialState: FormData = {
     sdaNumber: 0,
@@ -52,9 +56,10 @@ const RiskIdentificationForm: React.FC = () => {
     opportunities: [{ description: "" }],
     actionPlans: [{ description: "" }],
     date: "",
-    responsiblePersonNames: [], // Initialize as empty array
+    responsiblePersonNames: [],
     riskRating: 0,
     status: "",
+    userEmail: "", // Initialize with empty string
   };
 
   const [formData, setFormData] = useState<FormData>(initialState);
@@ -65,6 +70,78 @@ const RiskIdentificationForm: React.FC = () => {
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
   const [tags, setTags] = useState<string[]>([]); // State to hold the tags
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        userEmail: decodedToken.email,
+      }));
+    }
+  }, []);
+
+  const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (validateForm()) {
+      let dataToSubmit = rowsData.map((data) =>
+        prepareData({
+          ...data,
+          responsiblePersonNames: data.responsiblePersonNames,
+          userEmail: formData.userEmail, // Include userEmail in each row's data
+        })
+      );
+
+      if (
+        activeRowIndex === null &&
+        Object.keys(formData).some(
+          (key) =>
+            formData[key as keyof FormData] !==
+            initialState[key as keyof FormData]
+        )
+      ) {
+        const preparedFormData = prepareData({
+          ...formData,
+          date: date,
+          responsiblePersonNames: tags,
+          userEmail: formData.userEmail, // Include userEmail
+        });
+        dataToSubmit = [...dataToSubmit, preparedFormData];
+      }
+
+      await submitData(dataToSubmit);
+      resetFormState();
+    } else {
+      setError("Please fill out the form correctly before submitting.");
+    }
+  };
+
+  const submitData = async (data: FormData[]) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/riskforms/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include token in the headers
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to submit report");
+
+      alert("Form submitted successfully!");
+      resetFormState();
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      setError("Failed to submit report. Please try again later.");
+    }
+  };
 
   const handleChangeCheckbox = (value: string) => {
     const newIssueTypes = formData.issueType.includes(value)
@@ -496,64 +573,6 @@ const RiskIdentificationForm: React.FC = () => {
       setError(null);
     } else {
       setError("Please fill out all fields before adding another row.");
-    }
-  };
-
-  const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (validateForm()) {
-      // Ensure other validations pass
-      // Prepare data for submission
-      let dataToSubmit = rowsData.map((data) =>
-        prepareData({
-          ...data,
-          responsiblePersonNames: data.responsiblePersonNames,
-        })
-      );
-
-      // Check if the formData should be added as a new row
-      if (
-        activeRowIndex === null &&
-        Object.keys(formData).some(
-          (key) =>
-            formData[key as keyof FormData] !==
-            initialState[key as keyof FormData]
-        )
-      ) {
-        const preparedFormData = prepareData({
-          ...formData,
-          date: date,
-          responsiblePersonNames: tags,
-        });
-        dataToSubmit = [...dataToSubmit, preparedFormData];
-      }
-
-      await submitData(dataToSubmit);
-      resetFormState(); // Resetting form state after successful submission
-    } else {
-      setError("Please fill out the form correctly before submitting.");
-    }
-  };
-
-  // Abstracted function for data submission to keep handleSubmitFinal clean
-  const submitData = async (data: FormData[]) => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/riskforms/submit",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to submit report");
-
-      alert("Form submitted successfully!");
-      resetFormState(); // Resetting form state after successful submission
-    } catch (error) {
-      console.error("Error submitting report:", error);
-      setError("Failed to submit report. Please try again later.");
     }
   };
 
