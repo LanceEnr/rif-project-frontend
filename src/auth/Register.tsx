@@ -68,7 +68,7 @@ const Register = () => {
             >
               <img
                 className="w-8 h-8 mr-2"
-                src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=6637b3db&is=66253edb&hm=6a0b747914a2437581ac82fc3eaf01cebfb4a12c2ff9cdea815262c7d4d9541e&=&format=webp&quality=lossless"
+                src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=664ad19b&is=6649801b&hm=0810b0a962e79b72006f3c266dac9b82309ccff3d65f2c88d6eb1bda280dd10a&=&format=webp&quality=lossless"
                 alt="logo"
               />
               Risk Forms Register
