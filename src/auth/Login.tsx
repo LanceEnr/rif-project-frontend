@@ -2,10 +2,13 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import { jwtDecode } from "jwt-decode";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -45,16 +48,14 @@ const Login = () => {
     <div
       className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
       style={{
-        backgroundImage: "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')"
+        backgroundImage:
+          "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
       }}
     >
       <div className="container mx-auto px-4 flex items-center justify-center min-h-screen">
         <section className="rounded-xl bg-gray-600 bg-opacity-50 px-10 py-12 shadow-lg backdrop-blur-md max-w-xl w-full">
           <div className="flex flex-col items-center justify-center mx-auto">
-            <a
-              href="#"
-              className="flex items-center mb-6 text-3xl font-bold"
-            >
+            <a href="#" className="flex items-center mb-6 text-3xl font-bold">
               <img
                 className="w-8 h-8 mr-2"
                 src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=6637b3db&is=66253edb&hm=6a0b747914a2437581ac82fc3eaf01cebfb4a12c2ff9cdea815262c7d4d9541e&=&format=webp&quality=lossless"
@@ -93,16 +94,27 @@ const Login = () => {
                     >
                       Password
                     </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        required
+                      />
+                      <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={showPassword ? faEye : faEyeSlash}
+                          style={{ color: "black" }}
+                        />
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-start">
@@ -115,18 +127,12 @@ const Login = () => {
                         />
                       </div>
                       <div className="ml-3 text-sm">
-                        <label
-                          htmlFor="remember"
-                          className="text-gray-500"
-                        >
+                        <label htmlFor="remember" className="text-gray-500">
                           Remember me
                         </label>
                       </div>
                     </div>
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-primary-600 hover:underline"
-                    >
+                    <a href="#" className="text-sm font-medium text-primary-600 hover:underline">
                       Forgot password?
                     </a>
                   </div>
@@ -138,10 +144,7 @@ const Login = () => {
                   </button>
                   <p className="text-sm font-light text-gray-500">
                     Don’t have an account yet?{" "}
-                    <a
-                      href="/register"
-                      className="font-medium text-primary-600 hover:underline"
-                    >
+                    <a href="/register" className="font-medium text-primary-600 hover:underline">
                       Sign up
                     </a>
                   </p>
@@ -153,7 +156,6 @@ const Login = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Login;
