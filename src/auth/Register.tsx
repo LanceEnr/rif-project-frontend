@@ -14,7 +14,6 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,9 +39,8 @@ const Register = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        login(data.token, data.role);
-        navigate("/");
+        // Registration successful, redirect to login page
+        navigate("/login");
       } else {
         // Handle registration error
         console.error("Registration failed");
