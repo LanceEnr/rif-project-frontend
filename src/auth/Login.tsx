@@ -46,13 +46,13 @@ const Login = () => {
 
   return (
     <div
-      className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
+      className="flex h-full w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
       style={{
         backgroundImage:
           "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
       }}
     >
-      <div className="container mx-auto px-4 flex items-center justify-center min-h-screen">
+      <div className="container mx-auto py-4 px-4 flex items-center justify-center min-h-screen">
         <section className="rounded-xl bg-gray-600 bg-opacity-50 px-10 py-12 shadow-lg backdrop-blur-md max-w-xl w-full">
           <div className="flex flex-col items-center justify-center mx-auto">
             <a href="#" className="flex items-center mb-6 text-3xl font-bold">
