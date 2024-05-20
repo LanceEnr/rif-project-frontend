@@ -1,10 +1,11 @@
-import { createContext, useState, FC, ReactNode, useEffect } from "react";
+import React, { createContext, useState, FC, ReactNode, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   role: string;
   loading: boolean;
+  user: { firstname: string; lastname: string; email: string } | null;
   login: (token: string, role: string) => void;
   logout: () => void;
 }
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   role: "",
   loading: true,
+  user: null,
   login: () => {},
   logout: () => {},
 });
@@ -21,23 +23,23 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    console.log("useEffect - token:", token);
-    console.log("useEffect - storedRole:", storedRole);
     if (token) {
       try {
         const decodedToken = jwtDecode(token) as any;
         const userRole = decodedToken?.roles?.[0]; // Assuming roles is an array
-        console.log("useEffect - decodedToken:", decodedToken);
         if (userRole && new Date(decodedToken.exp * 1000) > new Date()) {
-          console.log("useEffect - setting authenticated");
           setIsAuthenticated(true);
           setRole(userRole);
+          setUser({
+            firstname: decodedToken.firstname,
+            lastname: decodedToken.lastname,
+            email: decodedToken.email,
+          });
         } else {
-          console.log("useEffect - token expired or role missing");
           localStorage.removeItem("token");
           localStorage.removeItem("role");
         }
@@ -51,12 +53,16 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const login = (token: string, userRole: string) => {
-    console.log("login - token:", token);
-    console.log("login - userRole:", userRole);
     localStorage.setItem("token", token);
     localStorage.setItem("role", userRole);
     setIsAuthenticated(true);
     setRole(userRole);
+    const decodedToken = jwtDecode(token) as any;
+    setUser({
+      firstname: decodedToken.firstname,
+      lastname: decodedToken.lastname,
+      email: decodedToken.email,
+    });
   };
 
   const logout = () => {
@@ -64,12 +70,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.removeItem("role");
     setIsAuthenticated(false);
     setRole("");
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, role, loading, login, logout }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, role, loading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -29,7 +29,6 @@ const Login = () => {
       try {
         const decodedToken = jwtDecode(token) as any;
         const userRole = decodedToken?.roles?.[0]; // Assuming roles is an array
-        console.log("handleSubmit - decodedToken:", decodedToken);
         if (userRole) {
           login(token, userRole);
           navigate("/");
