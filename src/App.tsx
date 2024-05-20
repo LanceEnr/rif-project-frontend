@@ -25,6 +25,7 @@ import DisplayForm from "./user-side/pages/DisplayForm";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import WebForm from "./user-side/components/WebForm"; // Import WebForm
 
 const App: FC = () => {
   return (
@@ -35,6 +36,7 @@ const App: FC = () => {
           <Route path="/*" element={<UserLayout />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/report/:id" element={<WebForm />} /> {/* Add route */}
         </Routes>
       </Router>
     </AuthProvider>

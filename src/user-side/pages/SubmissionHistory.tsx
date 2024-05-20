@@ -1,28 +1,61 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { IoMdDownload } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import AuthContext from "../../auth/AuthContext";
 
-interface Post {
-  title: string;
-  img: string;
-  content: string;
-  date: string;
+interface RiskFormData {
+  id: number;
+  submissionDate: string;
+}
+
+interface Report {
+  id: number;
+  riskFormData: RiskFormData[];
 }
 
 const SubmissionHistory: React.FC = () => {
-  const posts: Post[] = [
-    {
-      title: "Document Sample 1",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 1",
-      date: "2024-02-26",
-    },
-  ];
+  const [reports, setReports] = useState<Report[]>([]);
+  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
+
+        try {
+          const response = await fetch(
+            "http://localhost:8080/api/riskforms/reports",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setReports(data);
+        } catch (error) {
+          console.error("Error fetching reports:", error);
+        }
+      }
+    };
+
+    fetchReports();
+  }, [isAuthenticated]);
+
+  const handleCardClick = (reportId: number) => {
+    navigate(`/report/${reportId}`);
+  };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Submission History
@@ -34,7 +67,7 @@ const SubmissionHistory: React.FC = () => {
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
         {/* Dropdown */}
         <div>
           <Dropdown
@@ -94,10 +127,10 @@ const SubmissionHistory: React.FC = () => {
             cursor: "pointer",
             transition: "all 1s ease",
           }}
-          className=" rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
+          className="rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
           onMouseOver={(event) =>
             (event.currentTarget.style.boxShadow =
-              "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) ")
+              "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)")
           }
           onMouseOut={(event) => (event.currentTarget.style.boxShadow = "none")}
         >
@@ -106,79 +139,87 @@ const SubmissionHistory: React.FC = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
         </Link>
-        {posts.map((item, index) => (
-          <div
-            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
-            key={index}
-            style={{ cursor: "pointer" }}
-          >
-            <img
-              className="object-cover w-full h-64 rounded-t-lg"
-              src={item.img}
-              alt="image"
-              style={{ transition: "transform 1s" }}
-              onMouseOver={(e) => {
-                (e.target as HTMLImageElement).style.transform = "scale(1.03)";
-              }}
-              onMouseOut={(e) => {
-                (e.target as HTMLImageElement).style.transform = "scale(1)";
-              }}
-            />
-            <div className="p-4 rounded-b-lg">
-              <h4 className="text-l font-semibold">{item.title}</h4>
-              <p className="mb-2 leading-normal text-xs">{item.content}</p>
-              <div className="flex justify-between">
-                <div className="flex">
-                  <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
+        {reports.map((report, reportIndex) =>
+          report.riskFormData.map((formData, formIndex) => (
+            <div
+              className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
+              key={formData.id}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleCardClick(report.id)}
+            >
+              <img
+                className="object-cover w-full h-64 rounded-t-lg"
+                src="https://www.pdffiller.com/preview/332/872/332872673.png"
+                alt="image"
+                style={{ transition: "transform 1s" }}
+                onMouseOver={(e) => {
+                  (e.target as HTMLImageElement).style.transform =
+                    "scale(1.03)";
+                }}
+                onMouseOut={(e) => {
+                  (e.target as HTMLImageElement).style.transform = "scale(1)";
+                }}
+              />
+              <div className="p-4 rounded-b-lg">
+                <h4 className="text-l font-semibold">
+                  {`Risk Identification Form ${reportIndex + formIndex + 1}`}
+                </h4>
+                <p className="mb-2 leading-normal text-xs">
+                  Report ID: {report.id}
+                </p>
+                <div className="flex justify-between">
+                  <div className="flex">
+                    <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
 
-                  <p
-                    className="mb-2 leading-normal text-xs font-normal"
-                    style={{ color: "#2d3748" }}
-                  >
-                    {item.date}
-                  </p>
-                </div>
-                <Dropdown
-                  label=""
-                  dismissOnClick={false}
-                  renderTrigger={() => (
-                    <button
-                      id="apple-imac-27-dropdown-button"
-                      data-dropdown-toggle="apple-imac-27-dropdown"
-                      className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
-                      type="button"
+                    <p
+                      className="mb-2 leading-normal text-xs font-normal"
+                      style={{ color: "#2d3748" }}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        aria-hidden="true"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
+                      {formData.submissionDate}
+                    </p>
+                  </div>
+                  <Dropdown
+                    label=""
+                    dismissOnClick={false}
+                    renderTrigger={() => (
+                      <button
+                        id="dropdown-button"
+                        data-dropdown-toggle="dropdown"
+                        className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
+                        type="button"
                       >
-                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                      </svg>
-                    </button>
-                  )}
-                >
-                  <Dropdown.Item as={Link} to="/form">
-                    Duplicate and Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="#">
-                    Edit Logs
-                  </Dropdown.Item>
-                </Dropdown>
+                        <svg
+                          className="w-5 h-5"
+                          aria-hidden="true"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                        </svg>
+                      </button>
+                    )}
+                  >
+                    <Dropdown.Item as={Link} to="/form">
+                      Duplicate and Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item as={Link} to="#">
+                      Edit Logs
+                    </Dropdown.Item>
+                  </Dropdown>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

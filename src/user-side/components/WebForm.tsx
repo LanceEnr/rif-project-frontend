@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import "../../styles/form.css";
 import image1 from "../../assets/image1.png";
 import image4 from "../../assets/image4.png";
+import AuthContext from "../../auth/AuthContext";
 
 interface Opportunity {
   description: string;
@@ -17,18 +19,6 @@ interface RiskParticular {
 
 interface ResponsiblePerson {
   id: number;
-  name: string;
-}
-
-// Define a TypeScript interface for the Prerequisite data
-interface Prerequisite {
-  id: number;
-  unit: string;
-  internalStakeholders: Stakeholder[];
-  externalStakeholders: Stakeholder[];
-}
-
-interface Stakeholder {
   name: string;
 }
 
@@ -50,30 +40,64 @@ interface RiskFormData {
   submissionDate?: string;
 }
 
+interface Prerequisite {
+  id: number;
+  unit: string;
+  internalStakeholders: Stakeholder[];
+  externalStakeholders: Stakeholder[];
+}
+
+interface Stakeholder {
+  name: string;
+}
+
 const WebForm: React.FC = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
-  const [specificPrerequisiteId, setSpecificPrerequisiteId] = useState<number>(11);  //input the id here for academic unit
+  const [specificPrerequisiteId, setSpecificPrerequisiteId] =
+    useState<number>(11); // input the id here for academic unit
   const [signatureImage, setSignatureImage] = useState("");
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      console.error("User is not authenticated");
+      return;
+    }
+
     const fetchPrerequisites = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/prerequisites');
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          "http://localhost:8080/api/prerequisites",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data: Prerequisite[] = await response.json();
         setPrerequisites(data);
       } catch (error) {
-        console.error('Failed to fetch prerequisites:', error);
+        console.error("Failed to fetch prerequisites:", error);
       }
     };
 
-    // Fetch electronic signature from the backend
     const fetchSignature = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/esignatures/1');
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          "http://localhost:8080/api/esignatures/1",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -81,38 +105,51 @@ const WebForm: React.FC = () => {
         const imageObjectURL = URL.createObjectURL(imageBlob);
         setSignatureImage(imageObjectURL);
       } catch (error) {
-        console.error('Error fetching signature:', error);
+        console.error("Error fetching signature:", error);
       }
     };
 
     fetchPrerequisites();
     fetchSignature();
-  }, []);
+  }, [isAuthenticated]);
 
-  const specificPrerequisite = prerequisites.filter(p => p.id === specificPrerequisiteId);
+  const specificPrerequisite = prerequisites.filter(
+    (p) => p.id === specificPrerequisiteId
+  );
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      console.error("User is not authenticated");
+      return;
+    }
+
+    const fetchRiskForms = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:8080/api/riskforms/report/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        console.log("Fetched data:", data);
+        if (data && Array.isArray(data.riskFormData)) {
+          setRiskForms(data.riskFormData);
+        } else {
+          console.error("Data is not in expected format:", data);
+          setRiskForms([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setRiskForms([]);
+      }
+    };
+
     fetchRiskForms();
-    // Assuming your page numbering functionality should execute on component mount
-    const pages = document.querySelectorAll(".page-break");
-    const total = pages.length + 1; // Total pages is breaks + 1
-    let pageNumber = 1;
-
-    const pageElement = document.querySelector(".c84");
-    const totalElement = document.querySelector(".c77");
-
-    if (pageElement) {
-      pageElement.textContent = `${pageNumber}`;
-    } else {
-      console.error('Page element not found');
-    }
-
-    if (totalElement) {
-      totalElement.textContent = `${total}`;
-    } else {
-      console.error('Total element not found');
-    }
-  }, []);
+  }, [id, isAuthenticated]);
 
   const paragraphStyle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -171,28 +208,9 @@ const WebForm: React.FC = () => {
           setTimeout(() => {
             printWindow.print();
             printWindow.close();
-          }, 1000); // Adjust timeout as needed
+          }, 1000);
         };
       }
-    }
-  };
-  
-  const fetchRiskForms = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/riskforms/report/94"
-      );
-      const data = await response.json();
-      console.log("Fetched data:", data); // Check the fetched data 
-      if (data && Array.isArray(data.riskFormData)) {
-        setRiskForms(data.riskFormData);
-      } else {
-        console.error("Data is not in expected format:", data);
-        setRiskForms([]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-      setRiskForms([]);
     }
   };
 
@@ -261,7 +279,9 @@ const WebForm: React.FC = () => {
             {specificPrerequisite.map((prerequisite) => (
               <tr className="c110" key={prerequisite.id}>
                 <td className="c80" colSpan={1} rowSpan={1}>
-                  <p className="c1"><span className="c45"></span></p>
+                  <p className="c1">
+                    <span className="c45"></span>
+                  </p>
                   <p className="c6">
                     <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
                       Administrative/Academic Unit:
@@ -329,38 +349,58 @@ const WebForm: React.FC = () => {
               <tr className="c34">
                 <td className="c131" colSpan={1}>
                   <p className="c6">
-                    {prerequisite.internalStakeholders.slice(0, 4).map((stakeholder, index) => (
-                      <React.Fragment key={index}>
-                        <span>{index + 1}. {stakeholder.name}</span><br />
-                      </React.Fragment>
-                    ))}
+                    {prerequisite.internalStakeholders
+                      .slice(0, 4)
+                      .map((stakeholder, index) => (
+                        <React.Fragment key={index}>
+                          <span>
+                            {index + 1}. {stakeholder.name}
+                          </span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </p>
                 </td>
                 <td className="c79" colSpan={1}>
                   <p className="c6">
-                    {prerequisite.internalStakeholders.slice(4, 8).map((stakeholder, index) => (
-                      <React.Fragment key={index}>
-                        <span>{index + 5}. {stakeholder.name}</span><br />
-                      </React.Fragment>
-                    ))}
+                    {prerequisite.internalStakeholders
+                      .slice(4, 8)
+                      .map((stakeholder, index) => (
+                        <React.Fragment key={index}>
+                          <span>
+                            {index + 5}. {stakeholder.name}
+                          </span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </p>
                 </td>
                 <td className="c72" colSpan={1}>
                   <p className="c6">
-                    {prerequisite.externalStakeholders.slice(0, 4).map((stakeholder, index) => (
-                      <React.Fragment key={index}>
-                        <span>{index + 1}. {stakeholder.name}</span><br />
-                      </React.Fragment>
-                    ))}
+                    {prerequisite.externalStakeholders
+                      .slice(0, 4)
+                      .map((stakeholder, index) => (
+                        <React.Fragment key={index}>
+                          <span>
+                            {index + 1}. {stakeholder.name}
+                          </span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </p>
                 </td>
                 <td className="c79" colSpan={1}>
                   <p className="c6">
-                    {prerequisite.externalStakeholders.slice(4, 8).map((stakeholder, index) => (
-                      <React.Fragment key={index}>
-                        <span>{index + 5}. {stakeholder.name}</span><br />
-                      </React.Fragment>
-                    ))}
+                    {prerequisite.externalStakeholders
+                      .slice(4, 8)
+                      .map((stakeholder, index) => (
+                        <React.Fragment key={index}>
+                          <span>
+                            {index + 5}. {stakeholder.name}
+                          </span>
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </p>
                 </td>
               </tr>
@@ -666,12 +706,25 @@ const WebForm: React.FC = () => {
         </p>
         <div style={{ whiteSpace: "nowrap" }}>
           <p className="c6 c121" style={paragraphStyle}>
-            <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span className="c92">Prepared by:</span>
-                <img src={signatureImage} alt="Signature" style={{ height: '50px', marginLeft: '10px' }} />
+                <img
+                  src={signatureImage}
+                  alt="Signature"
+                  style={{ height: "50px", marginLeft: "10px" }}
+                />
               </div>
-              <span className="c92">Reviewed/Approved by: ______________________</span>
+              <span className="c92">
+                Reviewed/Approved by: ______________________
+              </span>
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
