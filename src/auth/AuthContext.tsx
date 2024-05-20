@@ -29,8 +29,8 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decodedToken = jwtDecode(token) as any;
-        const userRole = decodedToken?.roles?.[0]; // Assuming roles is an array
+        const decodedToken = jwtDecode<{ exp: number; firstname: string; lastname: string; email: string; roles: string[] }>(token);
+        const userRole = decodedToken.roles[0];
         if (userRole && new Date(decodedToken.exp * 1000) > new Date()) {
           setIsAuthenticated(true);
           setRole(userRole);
@@ -57,7 +57,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.setItem("role", userRole);
     setIsAuthenticated(true);
     setRole(userRole);
-    const decodedToken = jwtDecode(token) as any;
+    const decodedToken = jwtDecode<{ firstname: string; lastname: string; email: string }>(token);
     setUser({
       firstname: decodedToken.firstname,
       lastname: decodedToken.lastname,

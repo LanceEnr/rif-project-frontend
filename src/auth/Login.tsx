@@ -28,10 +28,14 @@ const Login = () => {
       const token = data.token;
       try {
         const decodedToken = jwtDecode(token) as any;
-        const userRole = decodedToken?.roles?.[0]; // Assuming roles is an array
+        const userRole = decodedToken?.roles?.[0];
         if (userRole) {
           login(token, userRole);
-          navigate("/");
+          if (userRole === "ROLE_ADMIN") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
         } else {
           console.error("Roles not found in token");
         }
@@ -47,8 +51,7 @@ const Login = () => {
     <div
       className="flex h-full w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
       style={{
-        backgroundImage:
-          "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
+        backgroundImage: "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
       }}
     >
       <div className="container mx-auto py-4 px-4 flex items-center justify-center min-h-screen">

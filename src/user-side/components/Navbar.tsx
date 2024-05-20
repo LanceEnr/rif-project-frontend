@@ -12,6 +12,11 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
+  // If the role is "ROLE_ADMIN", do not render this navbar
+  if (role === "ROLE_ADMIN") {
+    return null;
+  }
+
   return (
     <nav style={{ backgroundColor: "#121212" }} className="fixed w-full z-20 top-0 start-0">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
