@@ -4,17 +4,34 @@ import AuthContext from "./AuthContext";
 import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import ReCAPTCHA from "react-google-recaptcha";
+
+// Define an interface for the JWT payload
+interface JwtPayload {
+  roles: string[];
+  [key: string]: any; // Allow other properties
+}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!captchaValue) {
+      setError("Please complete the CAPTCHA");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8080/api/auth/signin", {
@@ -22,15 +39,15 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, captchaValue }),
       });
 
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
-        const decodedToken = jwtDecode(token) as any;
+        const decodedToken = jwtDecode<JwtPayload>(token);
         login(token); // Call login function from context
-        const userRole = decodedToken?.roles?.[0];
+        const userRole = decodedToken.roles?.[0];
         if (userRole === "ROLE_ADMIN") {
           navigate("/admin");
         } else if (userRole === "ROLE_USER") {
@@ -82,7 +99,7 @@ const Login = () => {
                       name="email"
                       id="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       placeholder="user@gmail.com"
                       required
@@ -102,7 +119,7 @@ const Login = () => {
                         id="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         required
                       />
@@ -137,6 +154,10 @@ const Login = () => {
                       Forgot password?
                     </a>
                   </div>
+                  <ReCAPTCHA
+                    sitekey="6LdqSOIpAAAAABh9QlokKcKE3OdJLFslH9M5alo2"
+                    onChange={handleCaptchaChange}
+                  />
                   <button
                     type="submit"
                     className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
