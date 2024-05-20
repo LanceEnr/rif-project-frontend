@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,41 +9,39 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8080/api/auth/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      const token = data.token;
-      try {
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
         const decodedToken = jwtDecode(token) as any;
+        login(token); // Call login function from context
         const userRole = decodedToken?.roles?.[0];
-        if (userRole) {
-          login(token, userRole);
-          if (userRole === "ROLE_ADMIN") {
-            navigate("/admin");
-          } else {
-            navigate("/");
-          }
-        } else {
-          console.error("Roles not found in token");
+        if (userRole === "ROLE_ADMIN") {
+          navigate("/admin");
+        } else if (userRole === "ROLE_USER") {
+          navigate("/");
         }
-      } catch (error) {
-        console.error("Invalid token format", error);
+      } else {
+        setError("Login failed. Please check your credentials.");
       }
-    } else {
-      console.error("Login failed");
+    } catch (error) {
+      setError("An error occurred during login.");
+      console.error("Login error:", error);
     }
   };
 
@@ -70,6 +68,7 @@ const Login = () => {
                 <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Sign in to your account
                 </h1>
+                {error && <p className="text-red-500">{error}</p>}
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label

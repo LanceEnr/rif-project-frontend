@@ -39,14 +39,13 @@ const Register = () => {
       });
 
       if (response.ok) {
-        // Registration successful, redirect to login page
         navigate("/login");
       } else {
-        // Handle registration error
-        console.error("Registration failed");
+        setError("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("An error occurred during registration:", error);
+      setError("An error occurred during registration.");
+      console.error("Registration error:", error);
     }
   };
 
@@ -74,6 +73,7 @@ const Register = () => {
                 <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Create an account
                 </h1>
+                {error && <p className="text-red-500">{error}</p>}
                 <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                   <div>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

@@ -13,22 +13,16 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
 }) => {
   const { isAuthenticated, role, loading } = useContext(AuthContext);
 
-  console.log("ProtectedRoute - isAuthenticated:", isAuthenticated);
-  console.log("ProtectedRoute - role:", role);
-  console.log("ProtectedRoute - allowedRoles:", allowedRoles);
-
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner/loader component
+    return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    console.log("ProtectedRoute - Not authenticated, redirecting to login.");
     return <Navigate to="/login" />;
   }
 
   if (!allowedRoles.includes(role)) {
-    console.log("ProtectedRoute - Role not allowed, redirecting to home.");
-    return <Navigate to="/" />;
+    return <Navigate to="/404" />;
   }
 
   return <>{children}</>;

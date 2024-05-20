@@ -1,12 +1,12 @@
 import React, { createContext, useState, FC, ReactNode, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   role: string;
   loading: boolean;
   user: { firstname: string; lastname: string; email: string } | null;
-  login: (token: string, role: string) => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -41,23 +41,21 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           });
         } else {
           localStorage.removeItem("token");
-          localStorage.removeItem("role");
         }
       } catch (error) {
         console.error("Invalid token format", error);
         localStorage.removeItem("token");
-        localStorage.removeItem("role");
       }
     }
     setLoading(false);
   }, []);
 
-  const login = (token: string, userRole: string) => {
+  const login = (token: string) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("role", userRole);
+    const decodedToken = jwtDecode(token) as any;
+    const userRole = decodedToken?.roles?.[0];
     setIsAuthenticated(true);
     setRole(userRole);
-    const decodedToken = jwtDecode(token) as any;
     setUser({
       firstname: decodedToken.firstname,
       lastname: decodedToken.lastname,
@@ -67,7 +65,6 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
     setIsAuthenticated(false);
     setRole("");
     setUser(null);

@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AuthContext, { AuthProvider } from "./auth/AuthContext";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
@@ -67,13 +67,19 @@ const AdminLayout: FC = () => {
 };
 
 const UserLayout: FC = () => {
+  const { role } = useContext(AuthContext);
+
+  if (role === "ROLE_ADMIN") {
+    return <Navigate to="/admin" />;
+  }
+
   return (
-    <>
+    <ProtectedRoute allowedRoles={["ROLE_USER"]}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/FAQS" element={<Faqs />} />
-        <Route path="/Contact" element={<Contact />} />
+        <Route path="/faqs" element={<Faqs />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/addstakeholders" element={<AddStakeholders />} />
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
@@ -83,7 +89,7 @@ const UserLayout: FC = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
-    </>
+    </ProtectedRoute>
   );
 };
 
