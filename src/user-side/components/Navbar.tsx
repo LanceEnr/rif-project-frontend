@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, user, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, role, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/login";
+    navigate("/");
   };
 
   return (
@@ -111,21 +112,25 @@ const Navbar: React.FC = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/form" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
-                Form
-              </Link>
-            </li>
-            <li>
-              <Link to="/submissions" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
-                History
-              </Link>
-            </li>
-            <li>
-              <Link to="/prerequisites" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
-                Prerequisites
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <>
+                <li>
+                  <Link to="/form" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                    Form
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/submissions" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                    History
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/prerequisites" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                    Prerequisites
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <Link to="/FAQS" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
                 FAQs
