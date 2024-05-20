@@ -71,9 +71,18 @@ const Navbar: React.FC = () => {
               <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
             </Dropdown>
           ) : (
-            <Link to="/login" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
-              Login
-            </Link>
+            <Dropdown
+              label={<button className="py-2 px-4 text-white rounded bg-yellow-500">Menu</button>}
+              arrowIcon={false}
+              inline
+            >
+              <Dropdown.Item>
+                <Link to="/login" className="block w-full text-left">Login</Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to="/register" className="block w-full text-left">Register</Link>
+              </Dropdown.Item>
+            </Dropdown>
           )}
 
           <button
