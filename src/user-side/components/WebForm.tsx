@@ -158,73 +158,80 @@ const WebForm: React.FC = () => {
   const printForm = () => {
     const element = document.querySelector(".doc-content");
     if (element) {
-      const printWindow = window.open("", "_blank", "fullscreen=yes");
+      // Create an iframe
+      const iframe = document.createElement("iframe");
+      iframe.style.position = "fixed";
+      iframe.style.width = "0";
+      iframe.style.height = "0";
+      iframe.style.border = "none";
 
-      if (printWindow) {
-        const cssLink = document.querySelector('link[href*="form.css"]');
-        let cssText = "";
-        if (cssLink) {
-          cssText = `<link href="../../styles/form.css" rel="stylesheet" type="text/css" media="print">`;
-        } else {
-          const styles = document.querySelectorAll("style");
-          styles.forEach((style) => {
-            cssText += style.outerHTML;
-          });
-        }
+      document.body.appendChild(iframe);
 
-        printWindow.document.write(`
-          <html>
-          <head>
-            <title>Risk Identification Form</title>
-            ${cssText}
-                <style>
-            @page {
-              size: A4 landscape;
-              margin: 0.25in;
-            }
-            @media print {
-              body {
-                -webkit-print-color-adjust: exact;
-                margin: 0.25in;
-              }
-              .doc-content {
-                margin: 0.25in;
-              }
-           
-            }
-          </style>
-          </head>
-          <body>
-            <div class="doc-content">${element.innerHTML}</div>
-            <div class="footer"  style="margin: -3;">
-              <p class="c6 c57" style="margin: 0; padding: 0;">
-                <span class="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
-              </p>
-              <p class="c6 c102" style="margin: 0; padding: 0;">
-                <span
-                  style="overflow: hidden; display: inline-block; margin: 0px; border: 0px solid #000000; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px); width: 47.73px; height: 45.07px;"
-                >
-                  <img
-                    alt=""
-                    src="${image4}"
-                    style="width: 47.73px; height: 45.07px; margin-left: 5px; margin-top: 0px; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px);"
-                    title=""
-                  />
-                </span>
-              </p>
-            </div>
-          </body>
-          </html>
-        `);
+      const cssLink = document.querySelector('link[href*="form.css"]');
+      let cssText = "";
+      if (cssLink) {
+        cssText = `<link href="../../styles/form.css" rel="stylesheet" type="text/css" media="print">`;
+      } else {
+        const styles = document.querySelectorAll("style");
+        styles.forEach((style) => {
+          cssText += style.outerHTML;
+        });
+      }
 
-        printWindow.document.close();
-        printWindow.focus();
+      const doc = iframe.contentWindow?.document;
+      if (doc) {
+        doc.open();
+        doc.write(`
+                <html>
+                <head>
+                    <title>Risk Identification Form</title>
+                    ${cssText}
+                    <style>
+                        @page {
+                            size: A4 landscape;
+                            margin: 0.25in;
+                        }
+                        @media print {
+                            body {
+                                -webkit-print-color-adjust: exact;
+                                margin: 0.25in;
+                            }
+                            .doc-content {
+                                margin: 0.25in;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="doc-content">${element.innerHTML}</div>
+                    <div class="footer" style="margin: -3;">
+                        <p class="c6 c57" style="margin: 0; padding: 0;">
+                            <span class="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
+                        </p>
+                        <p class="c6 c102" style="margin: 0; padding: 0;">
+                            <span
+                                style="overflow: hidden; display: inline-block; margin: 0px; border: 0px solid #000000; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px); width: 47.73px; height: 45.07px;"
+                            >
+                                <img
+                                    alt=""
+                                    src="${image4}"
+                                    style="width: 47.73px; height: 45.07px; margin-left: 5px; margin-top: 0px; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px);"
+                                    title=""
+                                />
+                            </span>
+                        </p>
+                    </div>
+                </body>
+                </html>
+            `);
+        doc.close();
 
-        printWindow.onload = function () {
-          setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-          }, 1000);
+        iframe.onload = function () {
+          if (iframe.contentWindow) {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+            document.body.removeChild(iframe);
+          }
         };
       }
     }

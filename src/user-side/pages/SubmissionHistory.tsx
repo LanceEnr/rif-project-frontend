@@ -176,7 +176,6 @@ const SubmissionHistory: React.FC = () => {
               </p>
               <div className="flex justify-between">
                 <div className="flex">
-                  <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
