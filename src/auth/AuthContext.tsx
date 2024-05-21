@@ -37,7 +37,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           setUser({
             firstname: decodedToken.firstname,
             lastname: decodedToken.lastname,
-            email: decodedToken.email,
+            email: decodedToken.sub,
           });
         } else {
           localStorage.removeItem("token");
@@ -59,7 +59,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setUser({
       firstname: decodedToken.firstname,
       lastname: decodedToken.lastname,
-      email: decodedToken.email,
+      email: decodedToken.sub,
     });
   };
 
