@@ -158,7 +158,7 @@ const WebForm: React.FC = () => {
   const printForm = () => {
     const element = document.querySelector(".doc-content");
     if (element) {
-      const printWindow = window.open("", "_blank", "height=600,width=800");
+      const printWindow = window.open("", "_blank", "fullscreen=yes");
 
       if (printWindow) {
         const cssLink = document.querySelector('link[href*="form.css"]');
@@ -177,10 +177,26 @@ const WebForm: React.FC = () => {
           <head>
             <title>Risk Identification Form</title>
             ${cssText}
+                <style>
+            @page {
+              size: A4 landscape;
+              margin: 0.25in;
+            }
+            @media print {
+              body {
+                -webkit-print-color-adjust: exact;
+                margin: 0.25in;
+              }
+              .doc-content {
+                margin: 0.25in;
+              }
+           
+            }
+          </style>
           </head>
           <body>
             <div class="doc-content">${element.innerHTML}</div>
-            <div class="footer">
+            <div class="footer"  style="margin: -3;">
               <p class="c6 c57" style="margin: 0; padding: 0;">
                 <span class="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
               </p>
