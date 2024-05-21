@@ -5,7 +5,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   role: string;
   loading: boolean;
-  user: { firstname: string; lastname: string; email: string } | null;
+  user: { firstname: string; lastname: string; email: string; role: string } | null;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -23,7 +23,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ firstname: string; lastname: string; email: string; role: string } | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,6 +38,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
             firstname: decodedToken.firstname,
             lastname: decodedToken.lastname,
             email: decodedToken.sub,
+            role: userRole,
           });
         } else {
           localStorage.removeItem("token");
@@ -60,6 +61,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       firstname: decodedToken.firstname,
       lastname: decodedToken.lastname,
       email: decodedToken.sub,
+      role: userRole,
     });
   };
 

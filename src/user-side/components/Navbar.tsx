@@ -3,6 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 
+const roleMap: { [key: string]: string } = {
+  ROLE_USER: "User",
+  ROLE_APPROVER: "Approver",
+  ROLE_AUDITOR: "Auditor",
+  ROLE_ADMIN: "Administrator",
+};
+
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, role, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -70,6 +77,7 @@ const Navbar: React.FC = () => {
               <Dropdown.Header>
                 <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
                 <span className="block truncate text-sm font-medium">{user.email}</span>
+                <span className="block text-sm font-medium">{roleMap[user.role]}</span>
               </Dropdown.Header>
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>
