@@ -19,6 +19,11 @@ const SideNavbar: React.FC = () => {
     navigate("/");
   };
 
+  // Extract initials from the user's name
+  const getInitials = (firstname: string, lastname: string) => {
+    return `${firstname.charAt(0)}${lastname.charAt(0)}`.toUpperCase();
+  };
+
   return (
     <>
       <nav
@@ -116,14 +121,18 @@ const SideNavbar: React.FC = () => {
 
                 {isAuthenticated && user ? (
                   <Dropdown
-                    label={<Avatar alt="User settings" img="https://static.generated.photos/vue-static/face-generator/landing/wall/14.jpg" rounded />}
+                    label={
+                      <div className="flex items-center justify-center w-10 h-10 bg-yellow-500 text-white rounded-full">
+                        {getInitials(user.firstname, user.lastname)}
+                      </div>
+                    }
                     arrowIcon={false}
                     inline
                   >
                     <Dropdown.Header>
+                      <span className="block text-lg font-medium text-yellow-500">{roleMap[role]}</span>
                       <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-                      <span className="block truncate text-sm font-medium">{user.email}</span>
-                      <span className="block text-sm font-medium">{roleMap[role]}</span>
+                      <span className="block truncate text-sm font-medium">{user.email}</span>      
                     </Dropdown.Header>
                     <Dropdown.Item>Dashboard</Dropdown.Item>
                     <Dropdown.Item>Settings</Dropdown.Item>
@@ -132,7 +141,7 @@ const SideNavbar: React.FC = () => {
                   </Dropdown>
                 ) : (
                   <Dropdown
-                    label={<button className="py-2 px-4 text-white rounded bg-yellow-500"></button>}
+                    label={<button className="py-2 px-4 text-white rounded bg-yellow-500">Login</button>}
                     arrowIcon={false}
                     inline
                   >
