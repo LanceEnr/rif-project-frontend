@@ -513,11 +513,12 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const validateForm = () => {
-    // Check that other required fields are filled, excluding 'issueType'
+    // Check that other required fields are filled, excluding 'issueType' and 'userEmail'
     const requiredFieldsFilled = Object.entries(formData).every(
       ([key, value]) => {
         if (
           key === "issueType" || // Exclude 'issueType' from required checks
+          key === "userEmail" || // Exclude 'userEmail' from required checks
           key === "opportunities" ||
           key === "actionPlans" ||
           key === "riskParticulars" ||

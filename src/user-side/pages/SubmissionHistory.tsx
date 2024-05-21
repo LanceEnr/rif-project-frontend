@@ -148,78 +148,73 @@ const SubmissionHistory: React.FC = () => {
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
         </Link>
-        {reports.map((report, reportIndex) =>
-          report.riskFormData.map((formData, formIndex) => (
-            <div
-              className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
-              key={formData.id}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleCardClick(report.id)}
-            >
-              <img
-                className="object-cover w-full h-64 rounded-t-lg"
-                src="https://www.pdffiller.com/preview/332/872/332872673.png"
-                alt="image"
-                style={{ transition: "transform 1s" }}
-                onMouseOver={(e) => {
-                  (e.target as HTMLImageElement).style.transform =
-                    "scale(1.03)";
-                }}
-                onMouseOut={(e) => {
-                  (e.target as HTMLImageElement).style.transform = "scale(1)";
-                }}
-              />
-              <div className="p-4 rounded-b-lg">
-                <h4 className="text-l font-semibold">
-                  {`Risk Identification Form ${reportIndex + formIndex + 1}`}
-                </h4>
-                <p className="mb-2 leading-normal text-xs">
-                  Report ID: {report.id}
-                </p>
-                <div className="flex justify-between">
-                  <div className="flex">
-                    <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
-
-                    <p
-                      className="mb-2 leading-normal text-xs font-normal"
-                      style={{ color: "#2d3748" }}
-                    >
-                      {formData.submissionDate}
-                    </p>
-                  </div>
-                  <Dropdown
-                    label=""
-                    dismissOnClick={false}
-                    renderTrigger={() => (
-                      <button
-                        id="dropdown-button"
-                        data-dropdown-toggle="dropdown"
-                        className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
-                        type="button"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                        </svg>
-                      </button>
-                    )}
+        {reports.map((report, index) => (
+          <div
+            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
+            key={report.id}
+            style={{ cursor: "pointer" }}
+            onClick={() => handleCardClick(report.id)}
+          >
+            <img
+              className="object-cover w-full h-64 rounded-t-lg"
+              src="https://www.pdffiller.com/preview/332/872/332872673.png"
+              alt="image"
+              style={{ transition: "transform 1s" }}
+              onMouseOver={(e) => {
+                (e.target as HTMLImageElement).style.transform = "scale(1.03)";
+              }}
+              onMouseOut={(e) => {
+                (e.target as HTMLImageElement).style.transform = "scale(1)";
+              }}
+            />
+            <div className="p-4 rounded-b-lg">
+              <h4 className="text-l font-semibold">
+                {`Risk Identification Form ${index + 1}`}
+              </h4>
+              <p className="mb-2 leading-normal text-xs">
+                Report ID: {report.id}
+              </p>
+              <div className="flex justify-between">
+                <div className="flex">
+                  <p
+                    className="mb-2 leading-normal text-xs font-normal"
+                    style={{ color: "#2d3748" }}
                   >
-                    <Dropdown.Item as={Link} to="/form">
-                      Duplicate and Edit
-                    </Dropdown.Item>
-                    <Dropdown.Item as={Link} to="#">
-                      Edit Logs
-                    </Dropdown.Item>
-                  </Dropdown>
+                    {report.riskFormData[0]?.submissionDate || "No Date"}
+                  </p>
                 </div>
+                <Dropdown
+                  label=""
+                  dismissOnClick={false}
+                  renderTrigger={() => (
+                    <button
+                      id="dropdown-button"
+                      data-dropdown-toggle="dropdown"
+                      className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none "
+                      type="button"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </svg>
+                    </button>
+                  )}
+                >
+                  <Dropdown.Item as={Link} to="/form">
+                    Duplicate and Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="#">
+                    Edit Logs
+                  </Dropdown.Item>
+                </Dropdown>
               </div>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
