@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Avatar, Dropdown } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 
 const SideNavbar: React.FC = () => {
@@ -10,6 +10,13 @@ const SideNavbar: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const getUserInitials = () => {
+    if (user && user.firstname && user.lastname) {
+      return `${user.firstname[0]}${user.lastname[0]}`.toUpperCase();
+    }
+    return "";
   };
 
   return (
@@ -109,7 +116,11 @@ const SideNavbar: React.FC = () => {
 
                 {isAuthenticated && user ? (
                   <Dropdown
-                    label={<Avatar alt="User settings" img="https://static.generated.photos/vue-static/face-generator/landing/wall/14.jpg" rounded />}
+                    label={
+                      <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
+                        {getUserInitials()}
+                      </div>
+                    }
                     arrowIcon={false}
                     inline
                   >

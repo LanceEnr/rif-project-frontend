@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Avatar, Dropdown } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 
 const Navbar: React.FC = () => {
@@ -25,6 +25,13 @@ const Navbar: React.FC = () => {
   if (role === "ROLE_ADMIN") {
     return null;
   }
+
+  const getUserInitials = () => {
+    if (user && user.firstname && user.lastname) {
+      return `${user.firstname[0]}${user.lastname[0]}`.toUpperCase();
+    }
+    return "";
+  };
 
   return (
     <nav style={{ backgroundColor: "#121212" }} className="fixed w-full z-20 top-0 start-0">
@@ -72,7 +79,11 @@ const Navbar: React.FC = () => {
 
           {isAuthenticated && user && (
             <Dropdown
-              label={<Avatar alt="User settings" img="https://static.generated.photos/vue-static/face-generator/landing/wall/14.jpg" rounded />}
+              label={
+                <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
+                  {getUserInitials()}
+                </div>
+              }
               arrowIcon={false}
               inline
             >
