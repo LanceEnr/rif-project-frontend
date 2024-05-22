@@ -1,8 +1,8 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "./AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Modal from "./Modal"; // Assume you have a Modal component
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +13,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [showTerms, setShowTerms] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -172,9 +173,9 @@ const Register = () => {
                     <div className="ml-3 text-sm">
                       <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">
                         I accept the{" "}
-                        <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">
+                        <button type="button" className="font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={() => setShowTerms(true)}>
                           Terms and Conditions
-                        </a>
+                        </button>
                       </label>
                     </div>
                   </div>
@@ -193,6 +194,45 @@ const Register = () => {
           </div>
         </section>
       </div>
+      {showTerms && (
+        <Modal onClose={() => setShowTerms(false)}>
+          <div className="p-4">
+            <h2 className="text-2xl font-bold mb-4">Terms and Conditions</h2>
+            <p className="mb-4">
+              Welcome to our application. By using our services, you agree to the following terms and conditions:
+            </p>
+            <h3 className="text-xl font-semibold mb-2">1. User Account</h3>
+            <p className="mb-4">
+              You are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer.
+              You agree to accept responsibility for all activities that occur under your account or password.
+            </p>
+            <h3 className="text-xl font-semibold mb-2">2. Privacy</h3>
+            <p className="mb-4">
+              Your privacy is important to us. We will not share or sell your personal information to third parties without your consent.
+              Our privacy policy outlines how your information is collected and used.
+            </p>
+            <h3 className="text-xl font-semibold mb-2">3. Use of Service</h3>
+            <p className="mb-4">
+              You agree not to use the service for any unlawful purpose or in any way that might harm, damage, or disparage any other party.
+              You must not use the service to transmit any harmful or illegal content.
+            </p>
+            <h3 className="text-xl font-semibold mb-2">4. Termination</h3>
+            <p className="mb-4">
+              We reserve the right to terminate or suspend your account and access to the service at our sole discretion, without prior notice or liability, for any reason whatsoever, including but not limited to a breach of the terms.
+            </p>
+            <h3 className="text-xl font-semibold mb-2">5. Changes to Terms</h3>
+            <p className="mb-4">
+              We reserve the right to modify these terms at any time. Any changes will be posted on this page, and your continued use of the service after such changes have been made constitutes your acceptance of the new terms.
+            </p>
+            <button
+              onClick={() => setShowTerms(false)}
+              className="mt-4 w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

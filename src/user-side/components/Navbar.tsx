@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
               inline
             >
               <Dropdown.Header>
-                <span className="block text-lg" style={{ color: "#FFEA00" }}>{displayRole}</span>
+                <span className="block text-lg text-yellow-400">{displayRole}</span>
                 <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
                 <span className="block truncate text-sm font-medium">{user.email}</span>
               </Dropdown.Header>
