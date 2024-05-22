@@ -78,7 +78,7 @@ const Prerequisites: React.FC = () => {
     <>
       <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
         <div className="flex flex-col items-right">
-          <h2 className="font-bold text-5xl mt-5 tracking-tight">Settings</h2>
+          <h2 className="font-bold text-5xl mt-5 tracking-tight">Users</h2>
           <hr className="h-px my-8 border-yellow-500 border-2" />
         </div>
         <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">
