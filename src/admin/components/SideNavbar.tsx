@@ -4,7 +4,7 @@ import { Avatar, Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 
 const SideNavbar: React.FC = () => {
-  const { isAuthenticated, user, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, displayRole, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -116,6 +116,7 @@ const SideNavbar: React.FC = () => {
                     <Dropdown.Header>
                       <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
                       <span className="block truncate text-sm font-medium">{user.email}</span>
+                      <span className="block text-sm">{displayRole}</span>
                     </Dropdown.Header>
                     <Dropdown.Item>Dashboard</Dropdown.Item>
                     <Dropdown.Item>Settings</Dropdown.Item>
@@ -124,7 +125,7 @@ const SideNavbar: React.FC = () => {
                   </Dropdown>
                 ) : (
                   <Dropdown
-                    label={<button className="py-2 px-4 text-white rounded bg-yellow-500"></button>}
+                    label={<button className="py-2 px-4 text-white rounded bg-yellow-500">Login</button>}
                     arrowIcon={false}
                     inline
                   >

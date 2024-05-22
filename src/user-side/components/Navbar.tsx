@@ -12,6 +12,15 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
+  const roleMapping: { [key: string]: string } = {
+    "ROLE_USER": "User",
+    "ROLE_APPROVER": "Approver",
+    "ROLE_AUDITOR": "Auditor",
+    "ROLE_ADMIN": "Administrator"
+  };
+
+  const displayRole = roleMapping[role] || "Unknown Role";
+
   // If the role is "ROLE_ADMIN", do not render this navbar
   if (role === "ROLE_ADMIN") {
     return null;
@@ -70,6 +79,7 @@ const Navbar: React.FC = () => {
               <Dropdown.Header>
                 <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
                 <span className="block truncate text-sm font-medium">{user.email}</span>
+                <span className="block text-sm">{displayRole}</span>
               </Dropdown.Header>
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>

@@ -4,6 +4,7 @@ import {jwtDecode} from "jwt-decode";
 interface AuthContextProps {
   isAuthenticated: boolean;
   role: string;
+  displayRole: string;
   loading: boolean;
   user: { firstname: string; lastname: string; email: string } | null;
   login: (token: string) => void;
@@ -13,6 +14,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   role: "",
+  displayRole: "",
   loading: true,
   user: null,
   login: () => {},
@@ -22,8 +24,16 @@ const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
+  const [displayRole, setDisplayRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
+
+  const roleMapping: { [key: string]: string } = {
+    ROLE_USER: "User",
+    ROLE_APPROVER: "Approver",
+    ROLE_AUDITOR: "Auditor",
+    ROLE_ADMIN: "Administrator",
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,10 +44,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         if (userRole && new Date(decodedToken.exp * 1000) > new Date()) {
           setIsAuthenticated(true);
           setRole(userRole);
+          setDisplayRole(roleMapping[userRole] || userRole);
           setUser({
             firstname: decodedToken.firstname,
             lastname: decodedToken.lastname,
-            email: decodedToken.email,
+            email: decodedToken.sub,
           });
         } else {
           localStorage.removeItem("token");
@@ -56,10 +67,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const userRole = decodedToken?.roles?.[0];
     setIsAuthenticated(true);
     setRole(userRole);
+    setDisplayRole(roleMapping[userRole] || userRole);
     setUser({
       firstname: decodedToken.firstname,
       lastname: decodedToken.lastname,
-      email: decodedToken.email,
+      email: decodedToken.sub,
     });
   };
 
@@ -67,11 +79,12 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setRole("");
+    setDisplayRole("");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, loading, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, role, displayRole, loading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
