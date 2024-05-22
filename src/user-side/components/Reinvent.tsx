@@ -1,4 +1,6 @@
 import React from "react";
+import history from "../../assets/history.png";
+import form from "../../assets/form.png";
 
 const Reinvent: React.FC = () => {
   return (
@@ -22,12 +24,12 @@ const Reinvent: React.FC = () => {
           <div className="grid grid-cols-2 gap-4 mt-8">
             <img
               className="w-full rounded-lg shadow-lg"
-              src="https://media.discordapp.net/attachments/1216948674119205025/1231640389996253195/image.png?ex=6637b17f&is=66253c7f&hm=38d3be0ab894efdc76c6ee235f59f3d0ecdb2c706e44f16e9f74dbc410323836&=&format=webp&quality=lossless&width=523&height=619"
+              src={form}
               alt="office content 1"
             />
             <img
               className="mt-4 w-full rounded-lg lg:mt-10 shadow-lg"
-              src="https://media.discordapp.net/attachments/1216948674119205025/1231640530165829632/image.png?ex=6637b1a1&is=66253ca1&hm=cfd2d4cfdabf8a09d5cb7cf641c236afcff4bcac60b5465a1f776fb1846402ab&=&format=webp&quality=lossless&width=447&height=619"
+              src={history}
               alt="office content 2"
             />
           </div>

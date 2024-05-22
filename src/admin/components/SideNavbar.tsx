@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
+import yellowalert from "../../assets/yellowalert.png";
 
 const SideNavbar: React.FC = () => {
-  const { isAuthenticated, user, displayRole, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, displayRole, logout } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -52,7 +54,7 @@ const SideNavbar: React.FC = () => {
               </button>
               <Link to="/admin" className="flex ms-2 md:me-24">
                 <img
-                  src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=6637b3db&is=66253edb&hm=6a0b747914a2437581ac82fc3eaf01cebfb4a12c2ff9cdea815262c7d4d9541e&=&format=webp&quality=lossless"
+                  src={yellowalert}
                   className="h-8 me-3"
                   alt="FlowBite Logo"
                 />
@@ -125,26 +127,40 @@ const SideNavbar: React.FC = () => {
                     inline
                   >
                     <Dropdown.Header>
-                      <span className="block text-lg text-yellow-400">{displayRole}</span>
+                      <span className="block text-sm text-yellow-500 uppercase">
+                        {displayRole}
+                      </span>
                       <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-                      <span className="block truncate text-sm font-medium">{user.email}</span>
+                      <span className="block truncate text-sm font-medium">
+                        {user.email}
+                      </span>
                     </Dropdown.Header>
                     <Dropdown.Item>Dashboard</Dropdown.Item>
                     <Dropdown.Item>Settings</Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}>
+                      Sign out
+                    </Dropdown.Item>
                   </Dropdown>
                 ) : (
                   <Dropdown
-                    label={<button className="py-2 px-4 text-white rounded bg-yellow-500">Login</button>}
+                    label={
+                      <button className="py-2 px-4 text-white rounded bg-yellow-500">
+                        Login
+                      </button>
+                    }
                     arrowIcon={false}
                     inline
                   >
                     <Dropdown.Item>
-                      <Link to="/login" className="block w-full text-left">Login</Link>
+                      <Link to="/login" className="block w-full text-left">
+                        Login
+                      </Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link to="/register" className="block w-full text-left">Register</Link>
+                      <Link to="/register" className="block w-full text-left">
+                        Register
+                      </Link>
                     </Dropdown.Item>
                   </Dropdown>
                 )}

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
+import yellowalert from "../../assets/yellowalert.png";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, role, logout } = useContext(AuthContext);
@@ -13,10 +14,10 @@ const Navbar: React.FC = () => {
   };
 
   const roleMapping: { [key: string]: string } = {
-    "ROLE_USER": "User",
-    "ROLE_APPROVER": "Approver",
-    "ROLE_AUDITOR": "Auditor",
-    "ROLE_ADMIN": "Administrator"
+    ROLE_USER: "User",
+    ROLE_APPROVER: "Approver",
+    ROLE_AUDITOR: "Auditor",
+    ROLE_ADMIN: "Administrator",
   };
 
   const displayRole = roleMapping[role] || "Unknown Role";
@@ -34,14 +35,13 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav style={{ backgroundColor: "#121212" }} className="fixed w-full z-20 top-0 start-0">
+    <nav
+      style={{ backgroundColor: "#121212" }}
+      className="fixed w-full z-20 top-0 start-0"
+    >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img
-            src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=6637b3db&is=66253edb&hm=6a0b747914a2437581ac82fc3eaf01cebfb4a12c2ff9cdea815262c7d4d9541e&=&format=webp&quality=lossless"
-            className="h-8 me-1"
-            alt="FlowBite Logo"
-          />
+          <img src={yellowalert} className="h-8 me-1" alt="FlowBite Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-yellow-500">
             YellowAlert
           </span>
@@ -72,7 +72,9 @@ const Navbar: React.FC = () => {
             inline
           >
             <Dropdown.Header>
-              <span className="text-center block truncate text-sm font-medium">Notifications</span>
+              <span className="text-center block truncate text-sm font-medium">
+                Notifications
+              </span>
             </Dropdown.Header>
             {/* Notification items here */}
           </Dropdown>
@@ -88,9 +90,14 @@ const Navbar: React.FC = () => {
               inline
             >
               <Dropdown.Header>
-                <span className="block text-lg text-yellow-400">{displayRole}</span>
+                <span className="block text-sm text-yellow-500 uppercase">
+                  {displayRole}
+                </span>
+
                 <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-                <span className="block truncate text-sm font-medium">{user.email}</span>
+                <span className="block truncate text-sm font-medium">
+                  {user.email}
+                </span>
               </Dropdown.Header>
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>
@@ -107,7 +114,13 @@ const Navbar: React.FC = () => {
             aria-expanded="false"
           >
             <span className="sr-only">Open main menu</span>
-            <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
               <path
                 stroke="currentColor"
                 strokeLinecap="round"
@@ -118,39 +131,63 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
         </div>
-        <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-          <ul style={{ backgroundColor: "#121212" }} className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+        <div
+          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
+          <ul
+            style={{ backgroundColor: "#121212" }}
+            className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
+          >
             <li>
-              <Link to="/" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+              <Link
+                to="/"
+                className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+              >
                 Home
               </Link>
             </li>
             {isAuthenticated && (
               <>
                 <li>
-                  <Link to="/form" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                  <Link
+                    to="/form"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
                     Form
                   </Link>
                 </li>
                 <li>
-                  <Link to="/submissions" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                  <Link
+                    to="/submissions"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
                     History
                   </Link>
                 </li>
                 <li>
-                  <Link to="/prerequisites" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+                  <Link
+                    to="/prerequisites"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
                     Prerequisites
                   </Link>
                 </li>
               </>
             )}
             <li>
-              <Link to="/FAQS" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+              <Link
+                to="/FAQS"
+                className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+              >
                 FAQs
               </Link>
             </li>
             <li>
-              <Link to="/Contact" className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0">
+              <Link
+                to="/Contact"
+                className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+              >
                 Contact
               </Link>
             </li>

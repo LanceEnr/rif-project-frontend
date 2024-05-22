@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Modal from "./Modal"; // Assume you have a Modal component
+import yellowalert from "../assets/yellowalert.png";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -52,32 +53,37 @@ const Register = () => {
 
   return (
     <div
-      className="flex h-full w-full items-center justify-center bg-gray-900 bg-cover bg-center"
+      className="flex h-full w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
       style={{
-        backgroundImage: "url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
-        backgroundSize: "cover",
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://ustalumniassociation.files.wordpress.com/2020/10/ust-2.jpg?w=1200')",
       }}
     >
       <div className="container mx-auto py-4 px-4 flex items-center justify-center min-h-screen">
-        <section className="rounded-xl bg-gray-600 bg-opacity-50 px-8 py-6 shadow-lg backdrop-blur-md max-w-xl w-full">
-          <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto lg:py-0">
-            <a href="#" className="flex items-center mb-6 text-3xl font-bold">
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://media.discordapp.net/attachments/1216948674119205025/1231642921552314488/Copy_of_Blue_and_White_Project_Proposal_-_Presentation-removebg-preview.png?ex=664ad19b&is=6649801b&hm=0810b0a962e79b72006f3c266dac9b82309ccff3d65f2c88d6eb1bda280dd10a&=&format=webp&quality=lossless"
-                alt="logo"
-              />
-              Risk Forms Register
+        <section className="rounded-xl  px-10 py-12 max-w-xl w-full">
+          <div className="flex flex-col items-center justify-center mx-auto">
+            <a
+              href="#"
+              className="flex items-center mb-6 text-3xl font-semibold text-yellow-500 "
+            >
+              <img className="w-10 h-10 mr-2" src={yellowalert} alt="logo" />
+              YellowAlert
             </a>
-            <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full bg-white rounded-lg shadow">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Create an account
                 </h1>
                 {error && <p className="text-red-500">{error}</p>}
-                <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                <form
+                  className="space-y-4 md:space-y-6"
+                  onSubmit={handleSubmit}
+                >
                   <div>
-                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="email"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       Email
                     </label>
                     <input
@@ -92,7 +98,10 @@ const Register = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="first-name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="first-name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       First Name
                     </label>
                     <input
@@ -107,7 +116,10 @@ const Register = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="last-name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="last-name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       Last Name
                     </label>
                     <input
@@ -122,7 +134,10 @@ const Register = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       Password
                     </label>
                     <div className="relative">
@@ -136,13 +151,22 @@ const Register = () => {
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         required
                       />
-                      <span onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
-                        <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} style={{ color: "black" }} />
+                      <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={showPassword ? faEye : faEyeSlash}
+                          style={{ color: "black" }}
+                        />
                       </span>
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="confirm-password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       Confirm password
                     </label>
                     <div className="relative">
@@ -156,35 +180,58 @@ const Register = () => {
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         required
                       />
-                      <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
-                        <FontAwesomeIcon icon={showConfirmPassword ? faEye : faEyeSlash} style={{ color: "black" }} />
+                      <span
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={showConfirmPassword ? faEye : faEyeSlash}
+                          style={{ color: "black" }}
+                        />
                       </span>
                     </div>
                   </div>
-                  {error && (
-                    <div className="text-red-500 text-sm">
-                      {error}
-                    </div>
-                  )}
+                  {error && <div className="text-red-500 text-sm">{error}</div>}
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
-                      <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300" required />
+                      <input
+                        id="terms"
+                        aria-describedby="terms"
+                        type="checkbox"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
+                        required
+                      />
                     </div>
                     <div className="ml-3 text-sm">
-                      <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">
+                      <label
+                        htmlFor="terms"
+                        className="font-light text-gray-500 dark:text-gray-300"
+                      >
                         I accept the{" "}
-                        <button type="button" className="font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={() => setShowTerms(true)}>
+                        <button
+                          type="button"
+                          className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                          onClick={() => setShowTerms(true)}
+                        >
                           Terms and Conditions
                         </button>
                       </label>
                     </div>
                   </div>
-                  <button type="submit" className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                  <button
+                    type="submit"
+                    className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
                     Register
                   </button>
                   <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                     Already have an account?{" "}
-                    <a href="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                    <a
+                      href="/login"
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    >
                       Login here
                     </a>
                   </p>
@@ -199,30 +246,43 @@ const Register = () => {
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">Terms and Conditions</h2>
             <p className="mb-4">
-              Welcome to our application. By using our services, you agree to the following terms and conditions:
+              Welcome to our application. By using our services, you agree to
+              the following terms and conditions:
             </p>
             <h3 className="text-xl font-semibold mb-2">1. User Account</h3>
             <p className="mb-4">
-              You are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer.
-              You agree to accept responsibility for all activities that occur under your account or password.
+              You are responsible for maintaining the confidentiality of your
+              account and password and for restricting access to your computer.
+              You agree to accept responsibility for all activities that occur
+              under your account or password.
             </p>
             <h3 className="text-xl font-semibold mb-2">2. Privacy</h3>
             <p className="mb-4">
-              Your privacy is important to us. We will not share or sell your personal information to third parties without your consent.
-              Our privacy policy outlines how your information is collected and used.
+              Your privacy is important to us. We will not share or sell your
+              personal information to third parties without your consent. Our
+              privacy policy outlines how your information is collected and
+              used.
             </p>
             <h3 className="text-xl font-semibold mb-2">3. Use of Service</h3>
             <p className="mb-4">
-              You agree not to use the service for any unlawful purpose or in any way that might harm, damage, or disparage any other party.
-              You must not use the service to transmit any harmful or illegal content.
+              You agree not to use the service for any unlawful purpose or in
+              any way that might harm, damage, or disparage any other party. You
+              must not use the service to transmit any harmful or illegal
+              content.
             </p>
             <h3 className="text-xl font-semibold mb-2">4. Termination</h3>
             <p className="mb-4">
-              We reserve the right to terminate or suspend your account and access to the service at our sole discretion, without prior notice or liability, for any reason whatsoever, including but not limited to a breach of the terms.
+              We reserve the right to terminate or suspend your account and
+              access to the service at our sole discretion, without prior notice
+              or liability, for any reason whatsoever, including but not limited
+              to a breach of the terms.
             </p>
             <h3 className="text-xl font-semibold mb-2">5. Changes to Terms</h3>
             <p className="mb-4">
-              We reserve the right to modify these terms at any time. Any changes will be posted on this page, and your continued use of the service after such changes have been made constitutes your acceptance of the new terms.
+              We reserve the right to modify these terms at any time. Any
+              changes will be posted on this page, and your continued use of the
+              service after such changes have been made constitutes your
+              acceptance of the new terms.
             </p>
             <button
               onClick={() => setShowTerms(false)}
