@@ -7,7 +7,7 @@ interface User {
   firstname: string;
   lastname: string;
   email: string;
-  roles: string[];
+  roles: { id: number, name: string }[]; // Adjusted to include role id and name
 }
 
 const Users: React.FC = () => {
@@ -23,23 +23,41 @@ const Users: React.FC = () => {
             "Content-Type": "application/json"
           }
         });
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const data = await response.json();
         setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
-  
+
     fetchUsers();
   }, [token]);
 
   const getInitials = (firstname: string, lastname: string) => {
     return `${firstname.charAt(0)}${lastname.charAt(0)}`;
+  };
+
+  const getRoleDisplayName = (roles: { id: number, name: string }[]) => {
+    const roleNames = roles.map(role => {
+      switch (role.id) {
+        case 1:
+          return "User";
+        case 2:
+          return "Approver";
+        case 3:
+          return "Auditor";
+        case 4:
+          return "Administrator";
+        default:
+          return "User";
+      }
+    });
+    return roleNames.join(", ");
   };
 
   return (
@@ -70,8 +88,6 @@ const Users: React.FC = () => {
                 </button>
               )}
             >
-              <Dropdown.Item>Active</Dropdown.Item>
-              <Dropdown.Item>Deactivated</Dropdown.Item>
               <Dropdown.Item>Admins</Dropdown.Item>
               <Dropdown.Item>Users</Dropdown.Item>
             </Dropdown>
@@ -127,9 +143,6 @@ const Users: React.FC = () => {
                 Position
               </th>
               <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Action
               </th>
             </tr>
@@ -160,13 +173,7 @@ const Users: React.FC = () => {
                     <div className="font-normal text-gray-500">{user.email}</div>
                   </div>
                 </th>
-                <td className="px-6 py-4">User</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                    Active
-                  </div>
-                </td>
+                <td className="px-6 py-4">{getRoleDisplayName(user.roles)}</td>
                 <td className="px-6 py-4">
                   <a href="#" className="font-medium text-blue-600 hover:underline">
                     Edit user
