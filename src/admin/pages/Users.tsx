@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from "flowbite-react";
+import { Dropdown, Button } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 interface User {
@@ -7,7 +7,7 @@ interface User {
   firstname: string;
   lastname: string;
   email: string;
-  roles: { id: number, name: string }[]; // Adjusted to include role id and name
+  roles: { id: number, name: string }[];
 }
 
 const Users: React.FC = () => {
@@ -60,6 +60,38 @@ const Users: React.FC = () => {
     return roleNames.join(", ");
   };
 
+  const handleSaveUser = async (user: User, roleId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/${user.id}/roles`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ roleId })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedUser = await response.json();
+      setUsers(users.map(u => (u.id === updatedUser.id ? updatedUser : u)));
+    } catch (error) {
+      console.error("Error updating user role:", error);
+    }
+  };
+
+  const handleRoleChange = (user: User, roleId: number) => {
+    const currentRoleId = user.roles[0].id;
+    if (currentRoleId === 4 && roleId !== 4) {
+      // Admin cannot be downgraded
+      alert("Admin users cannot be downgraded.");
+      return;
+    }
+    handleSaveUser(user, roleId);
+  };
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
@@ -70,7 +102,7 @@ const Users: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="relative overflow-x-auto">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
+        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
           <div>
             <Dropdown
               label=""
@@ -80,7 +112,7 @@ const Users: React.FC = () => {
                 <button
                   id="dropdownActionButton"
                   data-dropdown-toggle="dropdownAction"
-                  className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 "
+                  className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
                   type="button"
                 >
                   Filter
@@ -92,9 +124,7 @@ const Users: React.FC = () => {
               <Dropdown.Item>Users</Dropdown.Item>
             </Dropdown>
           </div>
-          <label htmlFor="table-search" className="sr-only">
-            Search
-          </label>
+          <label htmlFor="table-search" className="sr-only">Search</label>
           <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -131,20 +161,12 @@ const Users: React.FC = () => {
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
-                  <label htmlFor="checkbox-all-search" className="sr-only">
-                    checkbox
-                  </label>
+                  <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
               </th>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Position
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              <th scope="col" className="px-6 py-3">Name</th>
+              <th scope="col" className="px-6 py-3">Position</th>
+              <th scope="col" className="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -157,9 +179,7 @@ const Users: React.FC = () => {
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                     />
-                    <label htmlFor={`checkbox-table-search-${user.id}`} className="sr-only">
-                      checkbox
-                    </label>
+                    <label htmlFor={`checkbox-table-search-${user.id}`} className="sr-only">checkbox</label>
                   </div>
                 </td>
                 <th scope="row" className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
@@ -175,9 +195,49 @@ const Users: React.FC = () => {
                 </th>
                 <td className="px-6 py-4">{getRoleDisplayName(user.roles)}</td>
                 <td className="px-6 py-4">
-                  <a href="#" className="font-medium text-blue-600 hover:underline">
-                    Edit user
-                  </a>
+                  {user.roles[0].id !== 4 ? (
+                    <Dropdown
+                      label={
+                        user.roles[0].id === 1
+                          ? "User"
+                          : user.roles[0].id === 2
+                          ? "Approver"
+                          : user.roles[0].id === 3
+                          ? "Auditor"
+                          : "Administrator"
+                      }
+                      inline
+                      dismissOnClick={false}
+                      renderTrigger={() => (
+                        <button
+                          id={`dropdown-${user.id}`}
+                          className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                          type="button"
+                        >
+                          {user.roles[0].id === 1
+                            ? "User"
+                            : user.roles[0].id === 2
+                            ? "Approver"
+                            : user.roles[0].id === 3
+                            ? "Auditor"
+                            : "Administrator"}
+                          <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                        </button>
+                      )}
+                    >
+                      <Dropdown.Item onClick={() => handleRoleChange(user, 1)}>User</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleRoleChange(user, 2)}>Approver</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleRoleChange(user, 3)}>Auditor</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleRoleChange(user, 4)}>Administrator</Dropdown.Item>
+                    </Dropdown>
+                  ) : (
+                    <button
+                      className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5"
+                      disabled
+                    >
+                      Administrator
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
