@@ -1296,7 +1296,7 @@ const RiskIdentificationForm: React.FC = () => {
                           </svg>
                           <span className="sr-only">Info</span>
                           <div>
-                            <span className="font-medium">Error!</span> {error}
+                            <span className="font-medium">Error</span> {error}
                           </div>
                         </div>
                       </div>
