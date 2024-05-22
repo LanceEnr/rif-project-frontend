@@ -1,5 +1,10 @@
 import { FC, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import AuthContext, { AuthProvider } from "./auth/AuthContext";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
@@ -25,7 +30,6 @@ import DisplayForm from "./user-side/pages/DisplayForm";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import ProtectedRoute from "./auth/ProtectedRoute";
-import WebForm from "./user-side/components/WebForm"; // Import WebForm
 
 const App: FC = () => {
   return (
@@ -36,7 +40,6 @@ const App: FC = () => {
           <Route path="/*" element={<UserLayout />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/report/:id" element={<WebForm />} /> {/* Add route */}
         </Routes>
       </Router>
     </AuthProvider>
@@ -86,6 +89,7 @@ const UserLayout: FC = () => {
         <Route path="/form" element={<RiskIdentificationForm />} />
         <Route path="/submissions" element={<SubmissionHistory />} />
         <Route path="/displayform" element={<DisplayForm />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
-import { IoMdDownload } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
+import PrintButton from "../components/PrintButton"; // Import the PrintButton component
+import riskform from "../../assets/riskformthumbnail.jpg";
 
 interface RiskFormData {
   id: number;
@@ -18,7 +19,6 @@ interface Report {
 const SubmissionHistory: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const { isAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -49,10 +49,6 @@ const SubmissionHistory: React.FC = () => {
 
     fetchReports();
   }, [isAuthenticated]);
-
-  const handleCardClick = (reportId: number) => {
-    navigate(`/report/${reportId}`);
-  };
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
@@ -153,19 +149,11 @@ const SubmissionHistory: React.FC = () => {
             className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
             key={report.id}
             style={{ cursor: "pointer" }}
-            onClick={() => handleCardClick(report.id)}
           >
             <img
               className="object-cover w-full h-64 rounded-t-lg"
-              src="https://www.pdffiller.com/preview/332/872/332872673.png"
+              src={riskform}
               alt="image"
-              style={{ transition: "transform 1s" }}
-              onMouseOver={(e) => {
-                (e.target as HTMLImageElement).style.transform = "scale(1.03)";
-              }}
-              onMouseOut={(e) => {
-                (e.target as HTMLImageElement).style.transform = "scale(1)";
-              }}
             />
             <div className="p-4 rounded-b-lg">
               <h4 className="text-l font-semibold">
@@ -175,7 +163,8 @@ const SubmissionHistory: React.FC = () => {
                 Report ID: {report.id}
               </p>
               <div className="flex justify-between">
-                <div className="flex">
+                <div className="flex ">
+                  <PrintButton reportId={report.id.toString()} />{" "}
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
