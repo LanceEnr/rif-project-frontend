@@ -1,11 +1,49 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
+interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  roles: string[];
+}
+
 const Users: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const token = localStorage.getItem("token"); // Adjust according to where you store your token
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/users", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+  
+    fetchUsers();
+  }, [token]);
+
+  const getInitials = (firstname: string, lastname: string) => {
+    return `${firstname.charAt(0)}${lastname.charAt(0)}`;
+  };
+
   return (
-    <div className="w-screen-xl px-4  min-h-screen">
+    <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Users</h2>
         <div className="flex justify-between items-center">
@@ -15,7 +53,6 @@ const Users: React.FC = () => {
       </div>
       <div className="relative overflow-x-auto">
         <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
-          {/* Dropdown */}
           <div>
             <Dropdown
               label=""
@@ -39,7 +76,6 @@ const Users: React.FC = () => {
               <Dropdown.Item>Users</Dropdown.Item>
             </Dropdown>
           </div>
-          {/* Search input */}
           <label htmlFor="table-search" className="sr-only">
             Search
           </label>
@@ -69,7 +105,6 @@ const Users: React.FC = () => {
             />
           </div>
         </div>
-        {/* User Table */}
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
@@ -100,184 +135,45 @@ const Users: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b hover:bg-gray-100 ">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-2"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500   focus:ring-2  "
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-2"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/212452355_2957425344585931_358762392788928651_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=9c7eae&_nc_ohc=XHnIDAMRITkAX84EP8U&_nc_ht=scontent.fmnl25-4.fna&oh=00_AfD2qRTCpBrf0k7ejjaTU5kh_tNxLsavN9OZ73QBVpv3hg&oe=65E0872E"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Neil Camacho</div>
-                  <div className="font-normal text-gray-500">2020167888</div>
-                </div>
-              </th>
-              <td className="px-6 py-4">User</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Active
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b  hover:bg-gray-100 ">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-2"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-2"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t1.15752-9/429804587_1091521518559038_6394353266186623924_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=pRnCBqIneGIAX8wM7f3&_nc_ht=scontent.fmnl25-1.fna&oh=03_AdRSJefnN-H6w4XNAOyemtXW3xAZLW1C4jjHzdmk17DCMg&oe=660CFB42"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Charles Jose</div>
-                  <div className="font-normal text-gray-500">2020178789</div>
-                </div>
-              </th>
-              <td className="px-6 py-4">User</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Active
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b hover:bg-gray-100">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-2"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-2"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="https://mymodernmet.com/wp/wp-content/uploads/2019/09/100k-ai-faces-5.jpg"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">Thomas Lean</div>
-                  <div className="font-normal text-gray-500">2020898721</div>
-                </div>
-              </th>
-              <td className="px-6 py-4">User</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                  Active
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white hover:bg-gray-100 ">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-3"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500    focus:ring-2  "
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-3"
-                    className="sr-only"
-                  ></label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src="https://images.nightcafe.studio//assets/man-in-suit.jpg?tr=w-1600,c-at_max"
-                  alt="Jese image"
-                />
-                <div className="ps-3">
-                  <div className="text-base font-semibold">
-                    Leslie Livingston
+            {users.map(user => (
+              <tr key={user.id} className="bg-white border-b hover:bg-gray-100">
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input
+                      id={`checkbox-table-search-${user.id}`}
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    />
+                    <label htmlFor={`checkbox-table-search-${user.id}`} className="sr-only">
+                      checkbox
+                    </label>
                   </div>
-                  <div className="font-normal text-gray-500">2020899829</div>
-                </div>
-              </th>
-              <td className="px-6 py-4">User</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
-                  Deactivated
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
+                </td>
+                <th scope="row" className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                  <div className="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full">
+                    <span className="text-xl font-semibold text-gray-600">
+                      {getInitials(user.firstname, user.lastname)}
+                    </span>
+                  </div>
+                  <div className="ps-3">
+                    <div className="text-base font-semibold">{`${user.firstname} ${user.lastname}`}</div>
+                    <div className="font-normal text-gray-500">{user.email}</div>
+                  </div>
+                </th>
+                <td className="px-6 py-4">User</td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center">
+                    <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                    Active
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <a href="#" className="font-medium text-blue-600 hover:underline">
+                    Edit user
+                  </a>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
