@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Button } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 interface User {
@@ -12,6 +12,8 @@ interface User {
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string | null>(null);
   const token = localStorage.getItem("token"); // Adjust according to where you store your token
 
   useEffect(() => {
@@ -44,14 +46,14 @@ const Users: React.FC = () => {
 
   const getRoleDisplayName = (roles: { id: number, name: string }[]) => {
     const roleNames = roles.map(role => {
-      switch (role.id) {
-        case 1:
+      switch (role.name) {
+        case "ROLE_USER":
           return "User";
-        case 2:
+        case "ROLE_APPROVER":
           return "Approver";
-        case 3:
+        case "ROLE_AUDITOR":
           return "Auditor";
-        case 4:
+        case "ROLE_ADMIN":
           return "Administrator";
         default:
           return "User";
@@ -92,6 +94,33 @@ const Users: React.FC = () => {
     handleSaveUser(user, roleId);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleRoleFilterChange = (role: string | null) => {
+    setRoleFilter(role);
+  };
+
+  const filteredUsers = users.filter(user => {
+    const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
+    const roleMatch = !roleFilter || user.roles.some(role => {
+      switch (roleFilter) {
+        case "User":
+          return role.name === "ROLE_USER";
+        case "Approver":
+          return role.name === "ROLE_APPROVER";
+        case "Auditor":
+          return role.name === "ROLE_AUDITOR";
+        case "Administrator":
+          return role.name === "ROLE_ADMIN";
+        default:
+          return true;
+      }
+    });
+    return fullName.includes(searchQuery.toLowerCase()) && roleMatch;
+  });
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
@@ -105,7 +134,7 @@ const Users: React.FC = () => {
         <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
           <div>
             <Dropdown
-              label=""
+              label={roleFilter ? roleFilter : "Filter"}
               inline
               dismissOnClick={false}
               renderTrigger={() => (
@@ -115,13 +144,16 @@ const Users: React.FC = () => {
                   className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
                   type="button"
                 >
-                  Filter
+                  {roleFilter ? roleFilter : "Filter"}
                   <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
                 </button>
               )}
             >
-              <Dropdown.Item>Admins</Dropdown.Item>
-              <Dropdown.Item>Users</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange(null)}>All</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("User")}>User</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("Approver")}>Approver</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("Auditor")}>Auditor</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("Administrator")}>Administrator</Dropdown.Item>
             </Dropdown>
           </div>
           <label htmlFor="table-search" className="sr-only">Search</label>
@@ -148,99 +180,89 @@ const Users: React.FC = () => {
               id="table-search-users"
               className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search for users"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </div>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                </div>
-              </th>
               <th scope="col" className="px-6 py-3">Name</th>
               <th scope="col" className="px-6 py-3">Position</th>
               <th scope="col" className="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.id} className="bg-white border-b hover:bg-gray-100">
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id={`checkbox-table-search-${user.id}`}
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                    />
-                    <label htmlFor={`checkbox-table-search-${user.id}`} className="sr-only">checkbox</label>
-                  </div>
-                </td>
-                <th scope="row" className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                  <div className="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full">
-                    <span className="text-xl font-semibold text-gray-600">
-                      {getInitials(user.firstname, user.lastname)}
-                    </span>
-                  </div>
-                  <div className="ps-3">
-                    <div className="text-base font-semibold">{`${user.firstname} ${user.lastname}`}</div>
-                    <div className="font-normal text-gray-500">{user.email}</div>
-                  </div>
-                </th>
-                <td className="px-6 py-4">{getRoleDisplayName(user.roles)}</td>
-                <td className="px-6 py-4">
-                  {user.roles[0].id !== 4 ? (
-                    <Dropdown
-                      label={
-                        user.roles[0].id === 1
-                          ? "User"
-                          : user.roles[0].id === 2
-                          ? "Approver"
-                          : user.roles[0].id === 3
-                          ? "Auditor"
-                          : "Administrator"
-                      }
-                      inline
-                      dismissOnClick={false}
-                      renderTrigger={() => (
-                        <button
-                          id={`dropdown-${user.id}`}
-                          className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
-                          type="button"
-                        >
-                          {user.roles[0].id === 1
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map(user => (
+                <tr key={user.id} className="bg-white border-b hover:bg-gray-100">
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full">
+                        <span className="text-xl font-semibold text-gray-600">
+                          {getInitials(user.firstname, user.lastname)}
+                        </span>
+                      </div>
+                      <div className="ps-3">
+                        <div className="text-base font-semibold">{`${user.firstname} ${user.lastname}`}</div>
+                        <div className="font-normal text-gray-500">{user.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">{getRoleDisplayName(user.roles)}</td>
+                  <td className="px-6 py-4">
+                    {user.roles[0].name !== "ROLE_ADMIN" ? (
+                      <Dropdown
+                        label={
+                          user.roles[0].name === "ROLE_USER"
                             ? "User"
-                            : user.roles[0].id === 2
+                            : user.roles[0].name === "ROLE_APPROVER"
                             ? "Approver"
-                            : user.roles[0].id === 3
+                            : user.roles[0].name === "ROLE_AUDITOR"
                             ? "Auditor"
-                            : "Administrator"}
-                          <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
-                        </button>
-                      )}
-                    >
-                      <Dropdown.Item onClick={() => handleRoleChange(user, 1)}>User</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleRoleChange(user, 2)}>Approver</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleRoleChange(user, 3)}>Auditor</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleRoleChange(user, 4)}>Administrator</Dropdown.Item>
-                    </Dropdown>
-                  ) : (
-                    <button
-                      className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5"
-                      disabled
-                    >
-                      Administrator
-                    </button>
-                  )}
-                </td>
+                            : "Administrator"
+                        }
+                        inline
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                          <button
+                            id={`dropdown-${user.id}`}
+                            className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                            type="button"
+                          >
+                            {user.roles[0].name === "ROLE_USER"
+                              ? "User"
+                              : user.roles[0].name === "ROLE_APPROVER"
+                              ? "Approver"
+                              : user.roles[0].name === "ROLE_AUDITOR"
+                              ? "Auditor"
+                              : "Administrator"}
+                            <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                          </button>
+                        )}
+                      >
+                        <Dropdown.Item onClick={() => handleRoleChange(user, 1)}>User</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleRoleChange(user, 2)}>Approver</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleRoleChange(user, 3)}>Auditor</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleRoleChange(user, 4)}>Administrator</Dropdown.Item>
+                      </Dropdown>
+                    ) : (
+                      <button
+                        className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5"
+                        disabled
+                      >
+                        Administrator
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} className="text-center py-4"></td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
