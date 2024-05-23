@@ -56,22 +56,20 @@ interface PrintButtonProps {
 }
 
 const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
-  const [prerequisites, setPrerequisites] = useState<Prerequisite[]>([]);
-  const [specificPrerequisiteId, setSpecificPrerequisiteId] =
-    useState<number>(11);
+  const [prerequisite, setPrerequisite] = useState<Prerequisite | null>(null);
   const [signatureImage, setSignatureImage] = useState("");
 
   useEffect(() => {
     console.log("PrintButton mounted with reportId:", reportId); // Log reportId on mount
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !user) {
       console.error("User is not authenticated");
       return;
     }
 
-    const fetchPrerequisites = async () => {
+    const fetchPrerequisite = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
@@ -85,11 +83,11 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data: Prerequisite[] = await response.json();
-        setPrerequisites(data);
-        console.log("Fetched prerequisites:", data); // Log fetched prerequisites
+        const data: Prerequisite = await response.json();
+        setPrerequisite(data);
+        console.log("Fetched prerequisite:", data); // Log fetched prerequisite
       } catch (error) {
-        console.error("Failed to fetch prerequisites:", error);
+        console.error("Failed to fetch prerequisite:", error);
       }
     };
 
@@ -116,13 +114,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
       }
     };
 
-    fetchPrerequisites();
+    fetchPrerequisite();
     fetchSignature();
-  }, [isAuthenticated]);
-
-  const specificPrerequisite = prerequisites.filter(
-    (p) => p.id === specificPrerequisiteId
-  );
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -318,8 +312,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
           <a id="t.8c3c2da983f659d888d169e3788314b8d34e609f"></a>
           <a id="t.6"></a>
           <table className="c37">
-            {specificPrerequisite.map((prerequisite) => (
-              <tr className="c110" key={prerequisite.id}>
+            {prerequisite && (
+              <tr className="c110">
                 <td className="c80" colSpan={1} rowSpan={1}>
                   <p className="c1">
                     <span className="c45"></span>
@@ -366,12 +360,12 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                   </p>
                 </td>
               </tr>
-            ))}
+            )}
           </table>
         </div>
         <p className="c6">
           <span className="c94">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;
           </span>
         </p>
@@ -386,8 +380,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               <p className="c33">External Client/Stakeholder*</p>
             </td>
           </tr>
-          {specificPrerequisite.map((prerequisite) => (
-            <React.Fragment key={prerequisite.id}>
+          {prerequisite && (
+            <React.Fragment>
               <tr className="c34">
                 <td className="c131" colSpan={1}>
                   <p className="c6">
@@ -447,7 +441,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 </td>
               </tr>
             </React.Fragment>
-          ))}
+          )}
         </table>
         <p className="c1">
           <span className="c60 c98"></span>
