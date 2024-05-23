@@ -31,6 +31,7 @@ import Register from "./auth/Register";
 import Login from "./auth/Login";
 import ResetPassword from './auth/ResetPassword';
 import ProtectedRoute from "./auth/ProtectedRoute";
+import PublicRoute from './auth/PublicRoute';
 
 const App: FC = () => {
   return (
@@ -39,8 +40,16 @@ const App: FC = () => {
         <Routes>
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/*" element={<UserLayout />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          } />
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Router>

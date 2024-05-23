@@ -23,6 +23,7 @@ const Login = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
   const [resetEmail, setResetEmail] = useState<string>("");
+  const [emailSentMessage, setEmailSentMessage] = useState<string>("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -94,7 +95,9 @@ const Login = () => {
       });
 
       if (response.ok) {
-        setError("Password reset email sent.");
+        setError("");
+        setShowForgotPassword(false); // Close the popup after successful email sent
+        setEmailSentMessage("Password reset email sent successfully.");
       } else {
         setError("Failed to send password reset email.");
       }
@@ -128,6 +131,7 @@ const Login = () => {
                   Sign in to your account
                 </h1>
                 {error && <p className="text-red-500">{error}</p>}
+                {emailSentMessage && <p className="text-green-500">{emailSentMessage}</p>}
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label
