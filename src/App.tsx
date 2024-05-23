@@ -29,6 +29,7 @@ import NotFoundPage from "./user-side/pages/NotFoundPage";
 import DisplayForm from "./user-side/pages/DisplayForm";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
+import ResetPassword from './auth/ResetPassword';
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 const App: FC = () => {
@@ -40,6 +41,7 @@ const App: FC = () => {
           <Route path="/*" element={<UserLayout />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Router>
     </AuthProvider>
@@ -89,7 +91,6 @@ const UserLayout: FC = () => {
         <Route path="/form" element={<RiskIdentificationForm />} />
         <Route path="/submissions" element={<SubmissionHistory />} />
         <Route path="/displayform" element={<DisplayForm />} />
-
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

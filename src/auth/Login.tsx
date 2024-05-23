@@ -5,12 +5,12 @@ import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ReCAPTCHA from "react-google-recaptcha";
+import Modal from "./Modal";
 import yellowalert from "../assets/yellowalert.png";
 
-// Define an interface for the JWT payload
 interface JwtPayload {
   roles: string[];
-  [key: string]: any; // Allow other properties
+  [key: string]: any;
 }
 
 const Login = () => {
@@ -21,6 +21,8 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const [attempts, setAttempts] = useState<number>(0);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
+  const [resetEmail, setResetEmail] = useState<string>("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -32,7 +34,7 @@ const Login = () => {
         setIsDisabled(false);
         setAttempts(0);
         setError("");
-      }, 60000); // 1 minute
+      }, 60000);
       return () => clearTimeout(timer);
     }
   }, [attempts]);
@@ -62,7 +64,7 @@ const Login = () => {
         const data = await response.json();
         const token = data.token;
         const decodedToken = jwtDecode<JwtPayload>(token);
-        login(token); // Call login function from context
+        login(token);
         const userRole = decodedToken.roles?.[0];
         if (userRole === "ROLE_ADMIN") {
           navigate("/admin");
@@ -76,6 +78,29 @@ const Login = () => {
     } catch (error) {
       setError("An error occurred during login.");
       console.error("Login error:", error);
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+
+      if (response.ok) {
+        setError("Password reset email sent.");
+      } else {
+        setError("Failed to send password reset email.");
+      }
+    } catch (error) {
+      setError("An error occurred while sending password reset email.");
+      console.error("Forgot password error:", error);
     }
   };
 
@@ -116,9 +141,7 @@ const Login = () => {
                       name="email"
                       id="email"
                       value={email}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setEmail(e.target.value)
-                      }
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       placeholder="user@gmail.com"
                       required
@@ -138,9 +161,7 @@ const Login = () => {
                         id="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setPassword(e.target.value)
-                        }
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         required
                         disabled={isDisabled}
@@ -172,12 +193,13 @@ const Login = () => {
                         </label>
                       </div>
                     </div>
-                    <a
-                      href="#"
+                    <button
+                      type="button"
                       className="text-sm font-medium text-primary-600 hover:underline"
+                      onClick={() => setShowForgotPassword(true)}
                     >
                       Forgot password?
-                    </a>
+                    </button>
                   </div>
                   <div
                     className="recaptcha-container"
@@ -201,10 +223,7 @@ const Login = () => {
                   </button>
                   <p className="text-sm font-light text-gray-500">
                     Don’t have an account yet?{" "}
-                    <a
-                      href="/register"
-                      className="font-medium text-primary-600 hover:underline"
-                    >
+                    <a href="/register" className="font-medium text-primary-600 hover:underline">
                       Sign up
                     </a>
                   </p>
@@ -214,6 +233,38 @@ const Login = () => {
           </div>
         </section>
       </div>
+      {showForgotPassword && (
+        <Modal onClose={() => setShowForgotPassword(false)}>
+          <div className="p-4">
+            <h2 className="text-2xl font-bold mb-4">Forgot Password</h2>
+            <form onSubmit={handleForgotPassword}>
+              <div>
+                <label
+                  htmlFor="resetEmail"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="user@gmail.com"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4"
+              >
+                Send Reset Link
+              </button>
+            </form>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
