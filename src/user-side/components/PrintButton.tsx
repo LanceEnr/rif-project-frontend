@@ -339,7 +339,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 </td>
                 <td className="c135" colSpan={1} rowSpan={1}>
                   <p className="c1">
-                    <span className="c9 c61">{prerequisite.unit}</span>
+                    <span className="c9 c61" style={{ whiteSpace: "nowrap" }}>
+                      {prerequisite.unit}
+                    </span>
                   </p>
                 </td>
                 <td className="c2" colSpan={1} rowSpan={1}>
