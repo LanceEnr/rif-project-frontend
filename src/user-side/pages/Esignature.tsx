@@ -18,12 +18,14 @@ interface ESignatureData {
 async function uploadESignature(
   professionalTitle: string,
   postNominalTitle: string,
-  file: File
+  file?: File
 ) {
   const formData = new FormData();
   formData.append("professionalTitle", professionalTitle);
   formData.append("postNominalTitle", postNominalTitle);
-  formData.append("file", file);
+  if (file) {
+    formData.append("file", file);
+  }
 
   const response = await fetch("http://localhost:8080/api/esignatures/upload", {
     method: "POST",
@@ -133,17 +135,13 @@ const Esignature: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (file) {
-      const response = await uploadESignature(
-        professionalTitle,
-        tags.map((tag) => tag.value).join(", "),
-        file
-      );
-      console.log("Upload response:", response);
-      alert("Signature uploaded successfully!");
-    } else {
-      alert("Please fill in all required fields and upload a file.");
-    }
+    const response = await uploadESignature(
+      professionalTitle,
+      tags.map((tag) => tag.value).join(", "),
+      file || undefined
+    );
+    console.log("Upload response:", response);
+    alert("Saved successfully!");
   };
 
   return (
@@ -229,7 +227,6 @@ const Esignature: React.FC = () => {
                 type="text"
                 name="postNominalTitle"
                 id="postNominalTitle"
-                value={postNominalTitle}
                 onChange={(e) => setPostNominalTitle(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
