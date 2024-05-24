@@ -18,6 +18,9 @@ interface Report {
 
 const SubmissionHistory: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
+  const [filteredReports, setFilteredReports] = useState<Report[]>([]);
+  const [filter, setFilter] = useState<string>("Most Recent");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
@@ -41,6 +44,7 @@ const SubmissionHistory: React.FC = () => {
 
           const data = await response.json();
           setReports(data);
+          setFilteredReports(data);
         } catch (error) {
           console.error("Error fetching reports:", error);
         }
@@ -49,6 +53,45 @@ const SubmissionHistory: React.FC = () => {
 
     fetchReports();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    let sortedReports = [...reports];
+
+    if (filter === "Most Recent") {
+      sortedReports.sort((a, b) => {
+        const dateA = new Date(a.riskFormData[0]?.submissionDate || 0);
+        const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+    } else if (filter === "Oldest") {
+      sortedReports.sort((a, b) => {
+        const dateA = new Date(a.riskFormData[0]?.submissionDate || 0);
+        const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
+        return dateA.getTime() - dateB.getTime();
+      });
+    }
+
+    if (searchQuery) {
+      sortedReports = sortedReports.filter(
+        (report) =>
+          report.riskFormData.some((data) =>
+            data.submissionDate
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
+          ) || report.id.toString().includes(searchQuery)
+      );
+    }
+
+    setFilteredReports(sortedReports);
+  }, [filter, searchQuery, reports]);
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
@@ -82,8 +125,12 @@ const SubmissionHistory: React.FC = () => {
               </button>
             )}
           >
-            <Dropdown.Item>Most Recent</Dropdown.Item>
-            <Dropdown.Item>Oldest</Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Most Recent")}>
+              Most Recent
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Oldest")}>
+              Oldest
+            </Dropdown.Item>
           </Dropdown>
         </div>
         {/* Search input */}
@@ -112,7 +159,9 @@ const SubmissionHistory: React.FC = () => {
             type="text"
             id="table-search-users"
             className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search"
+            placeholder="Search by ID or Date"
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </div>
       </div>
@@ -144,7 +193,7 @@ const SubmissionHistory: React.FC = () => {
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
         </Link>
-        {reports.map((report, index) => (
+        {filteredReports.map((report, index) => (
           <div
             className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
             key={report.id}
