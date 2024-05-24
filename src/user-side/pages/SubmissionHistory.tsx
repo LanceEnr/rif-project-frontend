@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Dropdown, Label, FileInput } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
-import PrintButton from "../components/PrintButton"; // Import the PrintButton component
+import PrintButton from "../components/PrintButton";
 import riskform from "../../assets/riskformthumbnail.jpg";
 
 interface RiskFormData {
@@ -23,6 +23,8 @@ const SubmissionHistory: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -94,12 +96,51 @@ const SubmissionHistory: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const openModal = () => {
+  const openModal = (reportId: number) => {
+    setSelectedReportId(reportId);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedReportId(null);
+    setFile(null);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (file && selectedReportId !== null) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("reportId", selectedReportId.toString());
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:8080/api/riskforms/upload`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        closeModal();
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
   };
 
   return (
@@ -251,11 +292,11 @@ const SubmissionHistory: React.FC = () => {
                     </button>
                   )}
                 >
-                  <Dropdown.Item onClick={openModal}>
-                    Duplicate and Edit
+                  <Dropdown.Item onClick={() => openModal(report.id)}>
+                    Attach Proof
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="#">
-                    Edit Logs
+                    Duplicate and Edit
                   </Dropdown.Item>
                 </Dropdown>
               </div>
@@ -305,32 +346,21 @@ const SubmissionHistory: React.FC = () => {
                 <div className="grid gap-4 mb-4 grid-cols-1">
                   <div className="col-span-1">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Attach Proof (PDF)
+                      Upload PDF file here
                     </label>
-                    <FileInput id="file-upload" />
+                    <FileInput
+                      id="file-upload"
+                      onChange={handleFileChange}
+                      accept="application/pdf"
+                    />
                   </div>
                 </div>
                 <button
                   type="button"
-                  onClick={closeModal}
+                  onClick={handleSubmit}
                   className="text-white inline-flex w-full justify-center bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 >
-                  Proceed to Form
-                  <svg
-                    className="w-3.5 h-3.5 ms-2 my-1 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M1 5h12m0 0L9 1m4 4L9 9"
-                    />
-                  </svg>
+                  Submit
                 </button>
               </form>
             </div>
