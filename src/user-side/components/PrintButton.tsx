@@ -60,6 +60,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisite, setPrerequisite] = useState<Prerequisite | null>(null);
   const [signatureImage, setSignatureImage] = useState("");
+  const [professionalTitle, setProfessionalTitle] = useState("");
+  const [postNominalTitle, setPostNominalTitle] = useState("");
 
   useEffect(() => {
     console.log("PrintButton mounted with reportId:", reportId); // Log reportId on mount
@@ -94,18 +96,29 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
     const fetchSignature = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:8080/api/esignatures/1",
+        const response = await fetch("http://localhost:8080/api/esignatures", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setProfessionalTitle(data.professionalTitle);
+        setPostNominalTitle(data.postNominalTitle);
+        const imageResponse = await fetch(
+          "http://localhost:8080/api/esignatures/image",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!imageResponse.ok) {
+          throw new Error(`HTTP error! Status: ${imageResponse.status}`);
         }
-        const imageBlob = await response.blob();
+        const imageBlob = await imageResponse.blob();
         const imageObjectURL = URL.createObjectURL(imageBlob);
         setSignatureImage(imageObjectURL);
         console.log("Fetched signature image URL:", imageObjectURL); // Log fetched signature image URL
@@ -754,7 +767,11 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 <img
                   src={signatureImage}
                   alt="Signature"
-                  style={{ height: "50px", marginLeft: "10px" }}
+                  style={{
+                    height: "50px",
+                    marginLeft: "10px",
+                    marginBottom: "-10px",
+                  }}
                 />
               </div>
               <span className="c92">
@@ -764,10 +781,24 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
+              <div style={{ marginLeft: "80px" }}>
+                <span className="font-bold border-b border-black">
+                  {professionalTitle} {user?.firstname} {user?.lastname}
+                  {postNominalTitle ? ", " : ""}
+                  {postNominalTitle}
+                  <span className="font-normal">
+                    {" "}
+                    /{" "}
+                    {riskForms.length > 0
+                      ? riskForms[0].submissionDate
+                      : "No Date Provided"}
+                  </span>
+                </span>
+              </div>
+              &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
