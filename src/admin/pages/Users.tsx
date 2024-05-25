@@ -7,7 +7,7 @@ interface User {
   firstname: string;
   lastname: string;
   email: string;
-  roles: { id: number, name: string }[];
+  roles: { id: number; name: string }[];
 }
 
 const Users: React.FC = () => {
@@ -21,9 +21,9 @@ const Users: React.FC = () => {
       try {
         const response = await fetch("http://localhost:8080/api/users", {
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (!response.ok) {
@@ -44,8 +44,8 @@ const Users: React.FC = () => {
     return `${firstname.charAt(0)}${lastname.charAt(0)}`;
   };
 
-  const getRoleDisplayName = (roles: { id: number, name: string }[]) => {
-    const roleNames = roles.map(role => {
+  const getRoleDisplayName = (roles: { id: number; name: string }[]) => {
+    const roleNames = roles.map((role) => {
       switch (role.name) {
         case "ROLE_USER":
           return "User";
@@ -64,21 +64,24 @@ const Users: React.FC = () => {
 
   const handleSaveUser = async (user: User, roleId: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/users/${user.id}/roles`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ roleId })
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/users/${user.id}/roles`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ roleId }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const updatedUser = await response.json();
-      setUsers(users.map(u => (u.id === updatedUser.id ? updatedUser : u)));
+      setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
     } catch (error) {
       console.error("Error updating user role:", error);
     }
@@ -102,22 +105,24 @@ const Users: React.FC = () => {
     setRoleFilter(role);
   };
 
-  const filteredUsers = users.filter(user => {
+  const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
-    const roleMatch = !roleFilter || user.roles.some(role => {
-      switch (roleFilter) {
-        case "User":
-          return role.name === "ROLE_USER";
-        case "Approver":
-          return role.name === "ROLE_APPROVER";
-        case "Auditor":
-          return role.name === "ROLE_AUDITOR";
-        case "Administrator":
-          return role.name === "ROLE_ADMIN";
-        default:
-          return true;
-      }
-    });
+    const roleMatch =
+      !roleFilter ||
+      user.roles.some((role) => {
+        switch (roleFilter) {
+          case "User":
+            return role.name === "ROLE_USER";
+          case "Approver":
+            return role.name === "ROLE_APPROVER";
+          case "Auditor":
+            return role.name === "ROLE_AUDITOR";
+          case "Administrator":
+            return role.name === "ROLE_ADMIN";
+          default:
+            return true;
+        }
+      });
     return fullName.includes(searchQuery.toLowerCase()) && roleMatch;
   });
 
@@ -136,7 +141,7 @@ const Users: React.FC = () => {
             <Dropdown
               label={roleFilter ? roleFilter : "Filter"}
               inline
-              dismissOnClick={false}
+              dismissOnClick={true}
               renderTrigger={() => (
                 <button
                   id="dropdownActionButton"
@@ -149,14 +154,28 @@ const Users: React.FC = () => {
                 </button>
               )}
             >
-              <Dropdown.Item onClick={() => handleRoleFilterChange(null)}>All</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleRoleFilterChange("User")}>User</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleRoleFilterChange("Approver")}>Approver</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleRoleFilterChange("Auditor")}>Auditor</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleRoleFilterChange("Administrator")}>Administrator</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange(null)}>
+                All
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("User")}>
+                User
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("Approver")}>
+                Approver
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleRoleFilterChange("Auditor")}>
+                Auditor
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => handleRoleFilterChange("Administrator")}
+              >
+                Administrator
+              </Dropdown.Item>
             </Dropdown>
           </div>
-          <label htmlFor="table-search" className="sr-only">Search</label>
+          <label htmlFor="table-search" className="sr-only">
+            Search
+          </label>
           <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -188,15 +207,24 @@ const Users: React.FC = () => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
-              <th scope="col" className="px-6 py-3">Name</th>
-              <th scope="col" className="px-6 py-3">Position</th>
-              <th scope="col" className="px-6 py-3">Action</th>
+              <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Role
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.length > 0 ? (
-              filteredUsers.map(user => (
-                <tr key={user.id} className="bg-white border-b hover:bg-gray-100">
+              filteredUsers.map((user) => (
+                <tr
+                  key={user.id}
+                  className="bg-white border-b hover:bg-gray-100"
+                >
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full">
@@ -206,11 +234,15 @@ const Users: React.FC = () => {
                       </div>
                       <div className="ps-3">
                         <div className="text-base font-semibold">{`${user.firstname} ${user.lastname}`}</div>
-                        <div className="font-normal text-gray-500">{user.email}</div>
+                        <div className="font-normal text-gray-500">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">{getRoleDisplayName(user.roles)}</td>
+                  <td className="px-6 py-4">
+                    {getRoleDisplayName(user.roles)}
+                  </td>
                   <td className="px-6 py-4">
                     {user.roles[0].name !== "ROLE_ADMIN" ? (
                       <Dropdown
@@ -242,10 +274,26 @@ const Users: React.FC = () => {
                           </button>
                         )}
                       >
-                        <Dropdown.Item onClick={() => handleRoleChange(user, 1)}>User</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleRoleChange(user, 2)}>Approver</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleRoleChange(user, 3)}>Auditor</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleRoleChange(user, 4)}>Administrator</Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 1)}
+                        >
+                          User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 2)}
+                        >
+                          Approver
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 3)}
+                        >
+                          Auditor
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 4)}
+                        >
+                          Administrator
+                        </Dropdown.Item>
                       </Dropdown>
                     ) : (
                       <button
