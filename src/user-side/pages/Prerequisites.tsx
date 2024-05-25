@@ -2,7 +2,7 @@ import React, { useState, useEffect, FormEvent, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashAlt } from "react-icons/fa";
-import { Dropdown } from "flowbite-react";
+import { Dropdown, Radio, Label } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
 
@@ -12,6 +12,7 @@ interface Stakeholder {
 
 interface Prerequisite {
   unit: string;
+  unitType: string; // Added unitType
   internalStakeholders: Stakeholder[];
   externalStakeholders: Stakeholder[];
 }
@@ -25,6 +26,7 @@ const Prerequisites: React.FC = () => {
     "",
   ]);
   const [unit, setUnit] = useState("");
+  const [unitType, setUnitType] = useState(""); // Added unitType
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -40,6 +42,7 @@ const Prerequisites: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setUnit(data.unit || "");
+          setUnitType(data.unitType || ""); // Set unitType
           setInternalStakeholders(
             data.internalStakeholders.length > 0
               ? data.internalStakeholders.map((s: Stakeholder) => s.name)
@@ -91,9 +94,16 @@ const Prerequisites: React.FC = () => {
       return;
     }
 
+    if (!unitType.trim()) {
+      // Validate unitType
+      alert("Please select the Unit Type.");
+      return;
+    }
+
     const url = "http://localhost:8080/api/prerequisites";
     const data = {
       unit,
+      unitType, // Include unitType in the data
       internalStakeholders: internalStakeholders.map((name) => ({ name })),
       externalStakeholders: externalStakeholders.map((name) => ({ name })),
     };
@@ -189,7 +199,40 @@ const Prerequisites: React.FC = () => {
                     required
                   />
                 </div>
-
+                <div>
+                  <label
+                    htmlFor="unitType"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Unit Type
+                  </label>
+                  <fieldset className="flex max-w-md flex-row gap-4">
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        id="type-academic"
+                        name="unitType"
+                        value="Academic"
+                        className="checked:bg-yellow-500 focus:ring-yellow-500"
+                        checked={unitType === "Academic"}
+                        onChange={(e) => setUnitType(e.target.value)}
+                      />
+                      <Label htmlFor="type-academic">Academic</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        id="type-administrative"
+                        name="unitType"
+                        value="Administrative"
+                        className="checked:bg-yellow-500 focus:ring-yellow-500"
+                        checked={unitType === "Administrative"}
+                        onChange={(e) => setUnitType(e.target.value)}
+                      />
+                      <Label htmlFor="type-administrative">
+                        Administrative
+                      </Label>
+                    </div>
+                  </fieldset>
+                </div>
                 <div className="relative w-full mt-2">
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -256,7 +299,6 @@ const Prerequisites: React.FC = () => {
                     </div>
                   ))}
                 </div>
-
                 <div className="relative w-full mt-2">
                   <div className="flex justify-between items-start mb-2">
                     <div>
