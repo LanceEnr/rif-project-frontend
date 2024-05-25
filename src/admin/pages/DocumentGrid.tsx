@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
-import { IoMdDownload } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import AuthContext from "../../auth/AuthContext";  // Assuming you have AuthContext for authentication
+import PrintButtonAdmin from "../../admin/components/PrintButtonAdmin";
 
 interface Post {
+  id: number;
   title: string;
   img: string;
   content: string;
@@ -12,63 +14,59 @@ interface Post {
 }
 
 const DocumentGrid: React.FC = () => {
-  const posts: Post[] = [
-    {
-      title: "Document Sample 1",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 1",
-      date: "2024-02-26",
-    },
-    {
-      title: "Document Sample 2",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 2",
-      date: "2024-03-26",
-    },
-    {
-      title: "Document Sample 3",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 3",
-      date: "2024-02-26",
-    },
-    {
-      title: "Document Sample 4",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 4",
-      date: "2024-02-26",
-    },
-    {
-      title: "Document Sample 5",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 5",
-      date: "2024-02-26",
-    },
-    {
-      title: "Document Sample 6",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 6",
-      date: "2024-02-26",
-    },
-    {
-      title: "Document Sample 7",
-      img: "https://www.pdffiller.com/preview/332/872/332872673.png",
-      content: "Sample 7",
-      date: "2024-02-26",
-    },
-  ];
+  const [posts, setPosts] = useState<Post[]>([]);
+  const { isAuthenticated } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
+
+        try {
+          const response = await fetch(
+            "http://localhost:8080/api/riskforms/all-reports",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          // Transform the data to match the Post interface if necessary
+          const transformedPosts: Post[] = data.map((report: any) => ({
+            id: report.id,
+            title: `Document Sample ${report.id}`,  // Example title
+            img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
+            content: "Sample content",  // Example content
+            date: report.submissionDate,
+          }));
+          setPosts(transformedPosts);
+        } catch (error) {
+          console.error("Error fetching reports:", error);
+        }
+      }
+    };
+
+    fetchReports();
+  }, [isAuthenticated]);
 
   return (
-    <div className="w-screen-xl px-4  min-h-screen">
+    <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
           <p className="text-neutral-500 text-xl mt-3">
-            College of Computing Sciences
+            Office of Planning and Quality Managament
           </p>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
         {/* Dropdown */}
         <div>
           <Dropdown
@@ -114,7 +112,7 @@ const DocumentGrid: React.FC = () => {
             <Dropdown.Item>2019</Dropdown.Item>
           </Dropdown>
         </div>
-        \{/* Search input */}
+        {/* Search input */}
         <label htmlFor="table-search" className="sr-only">
           Search
         </label>
@@ -168,8 +166,7 @@ const DocumentGrid: React.FC = () => {
               <p className="mb-2 leading-normal text-xs">{item.content}</p>
               <div className="flex justify-between">
                 <div className="flex">
-                  <IoMdDownload className="mr-2 text-gray-500 hover:text-gray-800" />
-
+                <PrintButtonAdmin reportId={item.id.toString()} />
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
