@@ -33,6 +33,7 @@ import ResetPassword from "./auth/ResetPassword";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import PublicRoute from "./auth/PublicRoute";
 import SubmissionRateTable from "./admin/pages/SubmissionRateTable";
+import IdentifiedRisks from "./admin/pages/IdentifiedRisks";
 
 const App: FC = () => {
   return (
@@ -80,6 +81,7 @@ const AdminLayout: FC = () => {
             <Route path="microanalytics" element={<MicroAnalytics />} />
             <Route path="macroanalytics" element={<MacroAnalytics />} />
             <Route path="submissionrate" element={<SubmissionRateTable />} />
+            <Route path="identifiedrisks" element={<IdentifiedRisks />} />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
