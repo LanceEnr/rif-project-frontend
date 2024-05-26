@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
         </a>
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Dropdown
+          {/* <Dropdown
             label={
               <button
                 type="button"
@@ -76,8 +76,7 @@ const Navbar: React.FC = () => {
                 Notifications
               </span>
             </Dropdown.Header>
-            {/* Notification items here */}
-          </Dropdown>
+          </Dropdown> */}
 
           {isAuthenticated && user && (
             <Dropdown
@@ -99,9 +98,9 @@ const Navbar: React.FC = () => {
                   {user.email}
                 </span>
               </Dropdown.Header>
-              <Dropdown.Item>Dashboard</Dropdown.Item>
+              {/* <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>
-              <Dropdown.Divider />
+              <Dropdown.Divider /> */}
               <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
             </Dropdown>
           )}

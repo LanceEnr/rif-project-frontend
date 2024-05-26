@@ -74,7 +74,7 @@ const SideNavbar: React.FC = () => {
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
-                <Dropdown
+                {/* <Dropdown
                   label={
                     <button
                       type="button"
@@ -102,7 +102,7 @@ const SideNavbar: React.FC = () => {
                       Notifications
                     </span>
                   </Dropdown.Header>
-                  {/* Add notification items here */}
+          
                   <Dropdown.Divider />
                   <Dropdown.Item>
                     <div className="inline-flex items-center ">
@@ -123,7 +123,7 @@ const SideNavbar: React.FC = () => {
                       View all
                     </div>
                   </Dropdown.Item>
-                </Dropdown>
+                </Dropdown> */}
 
                 {isAuthenticated && user ? (
                   <Dropdown
@@ -144,9 +144,9 @@ const SideNavbar: React.FC = () => {
                         {user.email}
                       </span>
                     </Dropdown.Header>
-                    <Dropdown.Item>Dashboard</Dropdown.Item>
+                    {/* <Dropdown.Item>Dashboard</Dropdown.Item>
                     <Dropdown.Item>Settings</Dropdown.Item>
-                    <Dropdown.Divider />
+                    <Dropdown.Divider /> */}
                     <Dropdown.Item onClick={handleLogout}>
                       Sign out
                     </Dropdown.Item>
