@@ -33,10 +33,23 @@ const IdentifiedRisks: React.FC = () => {
   const [filteredData, setFilteredData] = useState<RiskFormDataGroupedDTO[]>(
     []
   );
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
   const [sortUnitAsc, setSortUnitAsc] = useState<boolean | null>(null);
   const token = localStorage.getItem("token"); // Adjust according to where you store your token
+
+  // Default date range (1 year minus the current date today)
+  const currentDate = new Date();
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  const [startDate, setStartDate] = useState<string>(formatDate(oneYearAgo));
+  const [endDate, setEndDate] = useState<string>(formatDate(currentDate));
 
   useEffect(() => {
     const fetchData = async () => {
