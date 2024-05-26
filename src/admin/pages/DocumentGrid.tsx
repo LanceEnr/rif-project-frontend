@@ -14,9 +14,29 @@ interface Post {
   submissionDate: string;
 }
 
+interface Prerequisite {
+  unit: string;
+}
+
 const DocumentGrid: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const { isAuthenticated } = useContext(AuthContext);
+
+  const fetchPrerequisite = async (userId: number): Promise<Prerequisite> => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`http://localhost:8080/api/prerequisites/byUserId/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -38,14 +58,34 @@ const DocumentGrid: React.FC = () => {
           }
 
           const data = await response.json();
-          // Transform the data to match the Post interface if necessary
-          const transformedPosts: Post[] = data.map((report: any) => ({
-            id: report.id,
-            title: `Risk Forms ${report.id}`,  // Example title
-            img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
-            date: report.submissionDate,
-            submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
-          }));
+          console.log("Reports data:", data); // Debug log
+          
+          const transformedPosts: Post[] = await Promise.all(
+            data.map(async (report: any) => {
+              console.log("Processing report:", report); // Debug log
+
+              if (report.userId) {
+                const prerequisite = await fetchPrerequisite(report.userId);
+                console.log("Fetched prerequisite:", prerequisite); // Debug log
+
+                return {
+                  id: report.id,
+                  title: `Risk Forms ${report.id} - ${prerequisite.unit || 'Not Available'}`,  // Updated title
+                  img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
+                  date: report.submissionDate,
+                  submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
+                };
+              } else {
+                return {
+                  id: report.id,
+                  title: `Risk Forms ${report.id} - Not Available`,
+                  img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
+                  date: report.submissionDate,
+                  submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
+                };
+              }
+            })
+          );
           setPosts(transformedPosts);
         } catch (error) {
           console.error("Error fetching reports:", error);
@@ -62,7 +102,7 @@ const DocumentGrid: React.FC = () => {
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
           <p className="text-neutral-500 text-xl mt-3">
-            Office of Planning and Quality Managament
+            Office of Planning and Quality Management
           </p>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
