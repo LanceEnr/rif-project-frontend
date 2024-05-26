@@ -11,6 +11,7 @@ interface Post {
   img: string;
   content: string;
   date: string;
+  submissionDate: string;
 }
 
 const DocumentGrid: React.FC = () => {
@@ -40,10 +41,10 @@ const DocumentGrid: React.FC = () => {
           // Transform the data to match the Post interface if necessary
           const transformedPosts: Post[] = data.map((report: any) => ({
             id: report.id,
-            title: `Document Sample ${report.id}`,  // Example title
+            title: `Risk Forms ${report.id}`,  // Example title
             img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
-            content: "Sample content",  // Example content
             date: report.submissionDate,
+            submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
           }));
           setPosts(transformedPosts);
         } catch (error) {
@@ -164,9 +165,11 @@ const DocumentGrid: React.FC = () => {
             <div className="p-4 rounded-b-lg">
               <h4 className="text-l font-semibold">{item.title}</h4>
               <p className="mb-2 leading-normal text-xs">{item.content}</p>
+              <p className="mb-2 leading-normal text-xs">Report ID: {item.id}</p> {/* Added Report ID */}
+              <p className="mb-2 leading-normal text-xs">Submission Date: {item.submissionDate}</p> {/* Added Submission Date */}
               <div className="flex justify-between">
                 <div className="flex">
-                <PrintButtonAdmin reportId={item.id.toString()} />
+                  <PrintButtonAdmin reportId={item.id.toString()} />
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
