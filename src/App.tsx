@@ -36,6 +36,7 @@ import SubmissionRateTable from "./admin/pages/SubmissionRateTable";
 import IdentifiedRisks from "./admin/pages/IdentifiedRisks";
 import IdentifiedRisksHistorical from "./admin/pages/IdentifiedRisksHistorical";
 import SDAComparisonChart from "./admin/pages/SDAComparisonChart";
+import RiskComparisonChart from "./admin/pages/RiskComparisonChart";
 
 const App: FC = () => {
   return (
@@ -89,6 +90,10 @@ const AdminLayout: FC = () => {
               element={<IdentifiedRisksHistorical />}
             />
             <Route path="sdacomparisonchart" element={<SDAComparisonChart />} />
+            <Route
+              path="riskcomparisonchart"
+              element={<RiskComparisonChart />}
+            />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

@@ -292,6 +292,14 @@ const SideNavbar: React.FC = () => {
                       Identified Risks per SDA Summary
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="riskcomparisonchart"
+                      className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                      Initial Risks vs Residual Risks
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>
