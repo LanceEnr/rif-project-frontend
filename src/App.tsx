@@ -34,6 +34,8 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import PublicRoute from "./auth/PublicRoute";
 import SubmissionRateTable from "./admin/pages/SubmissionRateTable";
 import IdentifiedRisks from "./admin/pages/IdentifiedRisks";
+import IdentifiedRisksHistorical from "./admin/pages/IdentifiedRisksHistorical";
+import SDAComparisonChart from "./admin/pages/SDAComparisonChart";
 
 const App: FC = () => {
   return (
@@ -82,6 +84,11 @@ const AdminLayout: FC = () => {
             <Route path="macroanalytics" element={<MacroAnalytics />} />
             <Route path="submissionrate" element={<SubmissionRateTable />} />
             <Route path="identifiedrisks" element={<IdentifiedRisks />} />
+            <Route
+              path="identifiedriskshistorical"
+              element={<IdentifiedRisksHistorical />}
+            />
+            <Route path="sdacomparisonchart" element={<SDAComparisonChart />} />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
