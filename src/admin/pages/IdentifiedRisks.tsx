@@ -112,14 +112,14 @@ const IdentifiedRisks: React.FC = () => {
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Issue Particulars
+                Issues
               </th>
               <th scope="col" className="px-6 py-3">
-                Risk Particular Descriptions
+                Risks
               </th>
               <th scope="col" className="px-6 py-3">
                 <div className="flex items-center">
-                  Unit
+                  Units
                   <button onClick={() => setSortUnitAsc((prev) => !prev)}>
                     <svg
                       className="w-3 h-3 ms-1.5"
@@ -142,7 +142,7 @@ const IdentifiedRisks: React.FC = () => {
             {filteredData.length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-100">
-                  <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
+                  <td className="px-6 py-4 text-gray-900 break-words text-justify whitespace-normal">
                     {item.issueParticulars}
                   </td>
                   <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
