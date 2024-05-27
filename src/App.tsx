@@ -37,6 +37,7 @@ import IdentifiedRisks from "./admin/pages/IdentifiedRisks";
 import IdentifiedRisksHistorical from "./admin/pages/IdentifiedRisksHistorical";
 import SDAComparisonChart from "./admin/pages/SDAComparisonChart";
 import RiskComparisonChart from "./admin/pages/RiskComparisonChart";
+import ApproverDetails from "./user-side/pages/ApproverDetails";
 
 const App: FC = () => {
   return (
@@ -123,6 +124,8 @@ const UserLayout: FC = () => {
         <Route path="/form" element={<RiskIdentificationForm />} />
         <Route path="/submissions" element={<SubmissionHistory />} />
         <Route path="/displayform" element={<DisplayForm />} />
+        <Route path="/approverdetails" element={<ApproverDetails />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
