@@ -154,31 +154,45 @@ const SubmissionRateTable: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div id="print-section" className="relative overflow-x-auto">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
-          <div className="flex justify-center mb-8">
-            <div className="flex items-center">
-              <label htmlFor="startDate" className="mr-2">
-                Start Date:
-              </label>
-              <input
-                type="date"
-                id="startDate"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="border rounded p-2"
-              />
-            </div>
-            <div className="flex items-center ml-4">
-              <label htmlFor="endDate" className="mr-2">
-                End Date:
-              </label>
-              <input
-                type="date"
-                id="endDate"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="border rounded p-2"
-              />
+        <div className="flex flex-column items-center justify-between space-y-4 pb-4">
+          <div className="mb-8">
+            <label
+              htmlFor="sdaSelect"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
+              Set Academic Year
+            </label>
+            <div className="flex flex-column items-center ">
+              <div className="flex items-center">
+                <label
+                  htmlFor="startDate"
+                  className="block text-sm font-medium text-gray-700 mr-2"
+                >
+                  Start Date:
+                </label>
+                <input
+                  type="date"
+                  id="startDate"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border rounded p-2"
+                />
+              </div>
+              <div className="flex items-center">
+                <label
+                  htmlFor="endDate"
+                  className="block text-sm font-medium text-gray-700 mx-2"
+                >
+                  End Date:
+                </label>
+                <input
+                  type="date"
+                  id="endDate"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border rounded p-2"
+                />
+              </div>
             </div>
           </div>
         </div>

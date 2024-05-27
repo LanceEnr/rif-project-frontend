@@ -33,23 +33,22 @@ const IdentifiedRisks: React.FC = () => {
   const [filteredData, setFilteredData] = useState<RiskFormDataGroupedDTO[]>(
     []
   );
+
+  // Calculate default start date as one year ago
+  const defaultStartDate = new Date();
+  defaultStartDate.setFullYear(defaultStartDate.getFullYear() - 1);
+  const formattedDefaultStartDate = defaultStartDate
+    .toISOString()
+    .split("T")[0];
+
+  // Calculate default end date as today
+  const defaultEndDate = new Date();
+  const formattedDefaultEndDate = defaultEndDate.toISOString().split("T")[0];
+
+  const [startDate, setStartDate] = useState<string>(formattedDefaultStartDate);
+  const [endDate, setEndDate] = useState<string>(formattedDefaultEndDate);
   const [sortUnitAsc, setSortUnitAsc] = useState<boolean | null>(null);
   const token = localStorage.getItem("token"); // Adjust according to where you store your token
-
-  // Default date range (1 year minus the current date today)
-  const currentDate = new Date();
-  const oneYearAgo = new Date();
-  oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
-
-  const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    const day = ("0" + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [startDate, setStartDate] = useState<string>(formatDate(oneYearAgo));
-  const [endDate, setEndDate] = useState<string>(formatDate(currentDate));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,13 +110,13 @@ const IdentifiedRisks: React.FC = () => {
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3  w-2/5">
                 Issues
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 w-2/5">
                 Risks
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 w-1/5">
                 <div className="flex items-center">
                   Units
                   <button onClick={() => setSortUnitAsc((prev) => !prev)}>
@@ -142,7 +141,7 @@ const IdentifiedRisks: React.FC = () => {
             {filteredData.length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-100">
-                  <td className="px-6 py-4 text-gray-900 break-words text-justify whitespace-normal">
+                  <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
                     {item.issueParticulars}
                   </td>
                   <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
@@ -229,30 +228,46 @@ const IdentifiedRisks: React.FC = () => {
             ))}
           </select>
         </div>
-        <div className="flex">
-          <div className="flex items-center">
-            <label htmlFor="startDate" className="mr-2">
-              Start Date:
+        <div className="flex flex-column items-center justify-between space-y-4 pb-4">
+          <div className="mb-8">
+            <label
+              htmlFor="sdaSelect"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
+              Set Academic Year:
             </label>
-            <input
-              type="date"
-              id="startDate"
-              className="border rounded p-2"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center ml-4">
-            <label htmlFor="endDate" className="mr-2">
-              End Date:
-            </label>
-            <input
-              type="date"
-              id="endDate"
-              className="border rounded p-2"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
+            <div className="flex flex-column items-center ">
+              <div className="flex items-center">
+                <label
+                  htmlFor="startDate"
+                  className="block text-sm font-medium text-gray-700 mr-2"
+                >
+                  Start Date:
+                </label>
+                <input
+                  type="date"
+                  id="startDate"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border rounded p-2"
+                />
+              </div>
+              <div className="flex items-center">
+                <label
+                  htmlFor="endDate"
+                  className="block text-sm font-medium text-gray-700 mx-2"
+                >
+                  End Date:
+                </label>
+                <input
+                  type="date"
+                  id="endDate"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border rounded p-2"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
