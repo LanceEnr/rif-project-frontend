@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -73,8 +73,13 @@ const Login = () => {
           navigate("/");
         }
       } else {
-        setAttempts((prev) => prev + 1);
-        setError("Login failed. Please check your credentials.");
+        const errorData = await response.text();
+        if (errorData.includes("disabled")) {
+          setError("Your account is disabled. Please contact support.");
+        } else {
+          setAttempts((prev) => prev + 1);
+          setError("Login failed. Please check your credentials.");
+        }
       }
     } catch (error) {
       setError("An error occurred during login.");
