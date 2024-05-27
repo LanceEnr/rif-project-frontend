@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import AuthContext from "../../auth/AuthContext";  // Assuming you have AuthContext for authentication
+import AuthContext from "../../auth/AuthContext";
 import PrintButtonAdmin from "../../admin/components/PrintButtonAdmin";
 
 interface Post {
@@ -12,20 +12,22 @@ interface Post {
   content: string;
   date: string;
   submissionDate: string;
+  userId: number;
 }
 
 interface Prerequisite {
   unit: string;
+  userId: number;
 }
 
 const DocumentGrid: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const { isAuthenticated } = useContext(AuthContext);
 
-  const fetchPrerequisite = async (userId: number): Promise<Prerequisite> => {
+  const fetchAllPrerequisites = async (): Promise<Prerequisite[]> => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`http://localhost:8080/api/prerequisites/byUserId/${userId}`, {
+    const response = await fetch(`http://localhost:8080/api/prerequisites/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -49,7 +51,7 @@ const DocumentGrid: React.FC = () => {
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-              },
+              }
             }
           );
 
@@ -58,34 +60,28 @@ const DocumentGrid: React.FC = () => {
           }
 
           const data = await response.json();
-          console.log("Reports data:", data); // Debug log
-          
-          const transformedPosts: Post[] = await Promise.all(
-            data.map(async (report: any) => {
-              console.log("Processing report:", report); // Debug log
+          console.log("Reports data:", data);
 
-              if (report.userId) {
-                const prerequisite = await fetchPrerequisite(report.userId);
-                console.log("Fetched prerequisite:", prerequisite); // Debug log
+          const fetchedPrerequisites = await fetchAllPrerequisites();
+          console.log("Fetched prerequisites:", fetchedPrerequisites);
 
-                return {
-                  id: report.id,
-                  title: `Risk Forms ${report.id} - ${prerequisite.unit || 'Not Available'}`,  // Updated title
-                  img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
-                  date: report.submissionDate,
-                  submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
-                };
-              } else {
-                return {
-                  id: report.id,
-                  title: `Risk Forms ${report.id} - Not Available`,
-                  img: "https://www.pdffiller.com/preview/332/872/332872673.png", // Placeholder image
-                  date: report.submissionDate,
-                  submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
-                };
-              }
-            })
-          );
+          // Ensure prerequisites are mapped correctly
+          const transformedPosts: Post[] = data.map((report: any) => {
+            console.log("Processing report:", report);
+
+            const prerequisite = fetchedPrerequisites.find(prereq => prereq.userId === report.userId);
+            console.log("Mapped prerequisite for userId", report.userId, ":", prerequisite);
+
+            return {
+              id: report.id,
+              title: `Risk Forms ${report.id} - ${prerequisite ? prerequisite.unit : 'Not Available'}`,
+              img: "https://www.pdffiller.com/preview/332/872/332872673.png",
+              date: report.submissionDate,
+              submissionDate: report.riskFormData[0]?.submissionDate || "No Date",
+              userId: report.userId,
+            };
+          });
+
           setPosts(transformedPosts);
         } catch (error) {
           console.error("Error fetching reports:", error);
@@ -205,8 +201,8 @@ const DocumentGrid: React.FC = () => {
             <div className="p-4 rounded-b-lg">
               <h4 className="text-l font-semibold">{item.title}</h4>
               <p className="mb-2 leading-normal text-xs">{item.content}</p>
-              <p className="mb-2 leading-normal text-xs">Report ID: {item.id}</p> {/* Added Report ID */}
-              <p className="mb-2 leading-normal text-xs">Submission Date: {item.submissionDate}</p> {/* Added Submission Date */}
+              <p className="mb-2 leading-normal text-xs">Report ID: {item.id}</p>
+              <p className="mb-2 leading-normal text-xs">Submission Date: {item.submissionDate}</p>
               <div className="flex justify-between">
                 <div className="flex">
                   <PrintButtonAdmin reportId={item.id.toString()} />
