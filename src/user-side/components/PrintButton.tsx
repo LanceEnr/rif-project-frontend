@@ -770,9 +770,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                   src={signatureImage}
                   alt="Signature"
                   style={{
-                    height: "50px",
+                    height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-10px",
+                    marginBottom: "-20px",
                   }}
                 />
               </div>

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
+import SignaturePad from "react-signature-pad-wrapper";
 
 interface Tag {
   id: number;
@@ -18,7 +19,7 @@ interface ESignatureData {
 async function uploadESignature(
   professionalTitle: string,
   postNominalTitle: string,
-  file?: File
+  file?: Blob
 ) {
   const formData = new FormData();
   formData.append("professionalTitle", professionalTitle);
@@ -70,10 +71,10 @@ async function fetchESignatureImage() {
 const Esignature: React.FC = () => {
   const { user } = useContext(AuthContext);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [postNominalTitle, setPostNominalTitle] = useState("");
+  const signaturePadRef = useRef<SignaturePad | null>(null);
 
   useEffect(() => {
     const loadESignature = async () => {
@@ -101,21 +102,9 @@ const Esignature: React.FC = () => {
     loadESignature();
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const file = event.target.files[0];
-      setFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const removeImage = () => {
-    setFile(null);
+  const handleClearSignature = () => {
+    signaturePadRef.current?.clear();
     setPreviewUrl(null);
-    const fileInput = document.getElementById(
-      "dropzone-file"
-    ) as HTMLInputElement;
-    if (fileInput) fileInput.value = "";
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -135,13 +124,17 @@ const Esignature: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const response = await uploadESignature(
-      professionalTitle,
-      tags.map((tag) => tag.value).join(", "),
-      file || undefined
-    );
-    console.log("Upload response:", response);
-    alert("Saved successfully!");
+    const dataUrl = signaturePadRef.current?.toDataURL();
+    if (dataUrl) {
+      const blob = await (await fetch(dataUrl)).blob();
+      const response = await uploadESignature(
+        professionalTitle,
+        tags.map((tag) => tag.value).join(", "),
+        blob
+      );
+      console.log("Upload response:", response);
+      alert("Saved successfully!");
+    }
   };
 
   return (
@@ -254,10 +247,10 @@ const Esignature: React.FC = () => {
           <hr className="mt-4 mb-8" />
           <div className="mb-10">
             <label
-              htmlFor="dropzone-file"
+              htmlFor="draw-signature"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Upload your E-signature
+              Draw your E-signature
             </label>
             <p
               id="helper-text-explanation"
@@ -273,45 +266,28 @@ const Esignature: React.FC = () => {
             {previewUrl && (
               <img
                 src={previewUrl}
-                alt="Preview"
-                className=" w-auto max-h-full object-cover rounded-lg mt-4"
+                alt="Stored Signature"
+                className="w-auto max-h-32 object-cover rounded-lg mt-4"
                 style={{ opacity: 0.85 }}
               />
             )}
+            <SignaturePad
+              ref={signaturePadRef}
+              options={{ minWidth: 1, maxWidth: 3, penColor: "black" }}
+              canvasProps={{
+                width: "500px",
+                height: "200px",
+                className: "signatureCanvas bg-white border border-gray-300",
+              }}
+            />
             <div className="flex items-center justify-center w-full my-4">
-              <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg
-                    className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      d="M13 13h3a3 3 0 00 0-6h-.025A5.56 5.56 0 0016 6.5 5.5 5.5 0 005.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 000 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                    />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">
-                      Click to upload your E-signature
-                    </span>{" "}
-                    or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    PNG or JPG (MAX. 800x400px)
-                  </p>
-                </div>
-                <input
-                  id="dropzone-file"
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </label>
+              <button
+                type="button"
+                className="text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 mr-2"
+                onClick={handleClearSignature}
+              >
+                Clear Signature
+              </button>
             </div>
             <button
               type="submit"
