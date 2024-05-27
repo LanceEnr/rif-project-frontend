@@ -8,13 +8,14 @@ interface User {
   lastname: string;
   email: string;
   roles: { id: number; name: string }[];
+  active: boolean; // Add active status field
 }
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
-  const token = localStorage.getItem("token"); // Adjust according to where you store your token
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -95,6 +96,31 @@ const Users: React.FC = () => {
       return;
     }
     handleSaveUser(user, roleId);
+  };
+
+  const handleStatusChange = async (user: User, isActive: boolean) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/users/${user.id}/status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ active: isActive }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedUser = await response.json();
+      setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,6 +240,9 @@ const Users: React.FC = () => {
                 Role
               </th>
               <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Action
               </th>
             </tr>
@@ -244,71 +273,85 @@ const Users: React.FC = () => {
                     {getRoleDisplayName(user.roles)}
                   </td>
                   <td className="px-6 py-4">
-                    {user.roles[0].name !== "ROLE_ADMIN" ? (
-                      <Dropdown
-                        label={
-                          user.roles[0].name === "ROLE_USER"
-                            ? "User"
-                            : user.roles[0].name === "ROLE_APPROVER"
-                            ? "Approver"
-                            : user.roles[0].name === "ROLE_AUDITOR"
-                            ? "Auditor"
-                            : "Administrator"
-                        }
-                        inline
-                        dismissOnClick={false}
-                        renderTrigger={() => (
-                          <button
-                            id={`dropdown-${user.id}`}
-                            className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
-                            type="button"
-                          >
-                            {user.roles[0].name === "ROLE_USER"
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        user.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {user.active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex space-x-2">
+                      {user.roles[0].name !== "ROLE_ADMIN" && (
+                        <button
+                          onClick={() => handleStatusChange(user, !user.active)}
+                          className={`inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ${
+                            user.active ? "text-red-500" : "text-green-500"
+                          }`}
+                        >
+                          {user.active ? "Deactivate" : "Activate"}
+                        </button>
+                      )}
+                      {user.roles[0].name !== "ROLE_ADMIN" && (
+                        <Dropdown
+                          label={
+                            user.roles[0].name === "ROLE_USER"
                               ? "User"
                               : user.roles[0].name === "ROLE_APPROVER"
                               ? "Approver"
                               : user.roles[0].name === "ROLE_AUDITOR"
                               ? "Auditor"
-                              : "Administrator"}
-                            <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
-                          </button>
-                        )}
-                      >
-                        <Dropdown.Item
-                          onClick={() => handleRoleChange(user, 1)}
+                              : "Administrator"
+                          }
+                          inline
+                          dismissOnClick={false}
+                          renderTrigger={() => (
+                            <button
+                              id={`dropdown-${user.id}`}
+                              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                              type="button"
+                            >
+                              {user.roles[0].name === "ROLE_USER"
+                                ? "User"
+                                : user.roles[0].name === "ROLE_APPROVER"
+                                ? "Approver"
+                                : user.roles[0].name === "ROLE_AUDITOR"
+                                ? "Auditor"
+                                : "Administrator"}
+                              <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                            </button>
+                          )}
                         >
-                          User
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleRoleChange(user, 2)}
-                        >
-                          Approver
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleRoleChange(user, 3)}
-                        >
-                          Auditor
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleRoleChange(user, 4)}
-                        >
-                          Administrator
-                        </Dropdown.Item>
-                      </Dropdown>
-                    ) : (
-                      <button
-                        className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5"
-                        disabled
-                      >
-                        Administrator
-                      </button>
-                    )}
+                          <Dropdown.Item
+                            onClick={() => handleRoleChange(user, 1)}
+                          >
+                            User
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handleRoleChange(user, 2)}
+                          >
+                            Approver
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handleRoleChange(user, 3)}
+                          >
+                            Auditor
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handleRoleChange(user, 4)}
+                          >
+                            Administrator
+                          </Dropdown.Item>
+                        </Dropdown>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="text-center py-4"></td>
+                <td colSpan={4} className="text-center py-4"></td>
               </tr>
             )}
           </tbody>
