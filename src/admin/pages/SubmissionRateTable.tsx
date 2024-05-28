@@ -116,14 +116,22 @@ const SubmissionRateTable: React.FC = () => {
     fetchCounts();
   }, [startDate, endDate, token]);
 
-  const academicSubmissionRate = (
-    (data.academicCount / data.academicUnitCount) *
-    100
-  ).toFixed(2);
-  const administrativeSubmissionRate = (
-    (data.administrativeCount / data.administrativeUnitCount) *
-    100
-  ).toFixed(2);
+  const calculateSubmissionRate = (
+    count: number,
+    unitCount: number
+  ): string => {
+    if (unitCount === 0) return "0.00";
+    return ((count / unitCount) * 100).toFixed(2);
+  };
+
+  const academicSubmissionRate = calculateSubmissionRate(
+    data.academicCount,
+    data.academicUnitCount
+  );
+  const administrativeSubmissionRate = calculateSubmissionRate(
+    data.administrativeCount,
+    data.administrativeUnitCount
+  );
 
   const handlePrint = () => {
     const printContents = document.getElementById("print-section")!.innerHTML;
@@ -160,7 +168,7 @@ const SubmissionRateTable: React.FC = () => {
               htmlFor="sdaSelect"
               className="block text-sm font-medium text-gray-700 mb-3"
             >
-              Set Academic Year
+              Set Academic Year:
             </label>
             <div className="flex flex-column items-center ">
               <div className="flex items-center">
@@ -199,8 +207,8 @@ const SubmissionRateTable: React.FC = () => {
 
         <div className="mb-8">
           <h3 className=" text-xl font-bold mb-4">Academic Units</h3>
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
+          <table className="w-full text-sm text-left rtl:text-right shadow-md sm:rounded-lg">
+            <thead className="text-xs text-white uppercase bg-yellow-500">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Total Acad Units
@@ -214,7 +222,7 @@ const SubmissionRateTable: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white border-b text-xl hover:bg-gray-100">
+              <tr className="bg-yellow-100 border-b text-xl ">
                 <td className="px-6 py-6">{data.academicUnitCount}</td>
                 <td className="px-6 py-6">{data.academicCount}</td>
                 <td className="px-6 py-6 font-medium text-gray-900 whitespace-nowrap">
@@ -227,8 +235,8 @@ const SubmissionRateTable: React.FC = () => {
 
         <div>
           <h3 className=" text-xl font-bold mb-4">Administrative Units</h3>
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
+          <table className="w-full text-sm text-left rtl:text-right shadow-md sm:rounded-lg">
+            <thead className="text-xs text-white uppercase bg-yellow-500">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Total Admin Units
@@ -242,7 +250,7 @@ const SubmissionRateTable: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white border-b text-xl hover:bg-gray-100">
+              <tr className="bg-yellow-100 border-b text-xl ">
                 <td className="px-6 py-6">{data.administrativeUnitCount}</td>
                 <td className="px-6 py-6">{data.administrativeCount}</td>
                 <td className="px-6 py-6 font-medium text-gray-900 whitespace-nowrap">

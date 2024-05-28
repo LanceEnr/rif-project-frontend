@@ -107,8 +107,8 @@ const IdentifiedRisks: React.FC = () => {
     <>
       <h3 className="text-xl font-bold mb-4">{sdaMapping[sdaNumber]}</h3>
       <div className="overflow-x-auto mb-8">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
+        <table className="w-full text-sm text-left rtl:text-right shadow-md rounded-lg">
+          <thead className="text-xs text-white uppercase bg-yellow-500">
             <tr>
               <th scope="col" className="px-6 py-3  w-2/5">
                 Issues
@@ -140,7 +140,10 @@ const IdentifiedRisks: React.FC = () => {
           <tbody>
             {filteredData.length > 0 ? (
               filteredData.map((item, index) => (
-                <tr key={index} className="bg-white border-b hover:bg-gray-100">
+                <tr
+                  key={index}
+                  className="bg-yellow-100 border-b border-yellow-300"
+                >
                   <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
                     {item.issueParticulars}
                   </td>
@@ -162,7 +165,7 @@ const IdentifiedRisks: React.FC = () => {
                 </tr>
               ))
             ) : (
-              <tr>
+              <tr className="bg-yellow-100 border-b">
                 <td colSpan={4} className="text-center py-4">
                   No data available
                 </td>
@@ -229,7 +232,7 @@ const IdentifiedRisks: React.FC = () => {
           </select>
         </div>
         <div className="flex flex-column items-center justify-between space-y-4 pb-4">
-          <div className="mb-8">
+          <div>
             <label
               htmlFor="sdaSelect"
               className="block text-sm font-medium text-gray-700 mb-3"
