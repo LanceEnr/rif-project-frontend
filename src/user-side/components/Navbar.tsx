@@ -169,6 +169,14 @@ const Navbar: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    to="submissionhistoryapprover"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    History
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="faqs"
                     className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
                   >
