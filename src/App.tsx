@@ -45,6 +45,7 @@ const App: FC = () => {
       <Router>
         <Routes>
           <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/approver/*" element={<ApproverLayout />} />
           <Route path="/*" element={<UserLayout />} />
           <Route
             path="/register"
@@ -95,11 +96,26 @@ const AdminLayout: FC = () => {
               path="riskcomparisonchart"
               element={<RiskComparisonChart />}
             />
-
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </div>
+    </ProtectedRoute>
+  );
+};
+
+const ApproverLayout: FC = () => {
+  return (
+    <ProtectedRoute allowedRoles={["ROLE_APPROVER"]}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="approverdetails" element={<ApproverDetails />} />
+        <Route path="faqs" element={<Faqs />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      <Footer />
     </ProtectedRoute>
   );
 };
@@ -109,6 +125,10 @@ const UserLayout: FC = () => {
 
   if (role === "ROLE_ADMIN") {
     return <Navigate to="/admin" />;
+  }
+
+  if (role === "ROLE_APPROVER") {
+    return <Navigate to="/approver" />;
   }
 
   return (
@@ -124,8 +144,6 @@ const UserLayout: FC = () => {
         <Route path="/form" element={<RiskIdentificationForm />} />
         <Route path="/submissions" element={<SubmissionHistory />} />
         <Route path="/displayform" element={<DisplayForm />} />
-        <Route path="/approverdetails" element={<ApproverDetails />} />
-
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

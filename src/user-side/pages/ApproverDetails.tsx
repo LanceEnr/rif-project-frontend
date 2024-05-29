@@ -16,13 +16,13 @@ interface ApproverData {
 async function uploadApprover(
   professionalTitle: string,
   postNominalTitle: string,
-  unit: string,
+  approverUnit: string,
   file?: Blob
 ) {
   const formData = new FormData();
   formData.append("professionalTitle", professionalTitle);
   formData.append("postNominalTitle", postNominalTitle);
-  formData.append("unit", unit);
+  formData.append("approverUnit", approverUnit);
   if (file) {
     formData.append("file", file);
   }
@@ -102,6 +102,8 @@ const ApproverDetails: React.FC = () => {
       if (data) {
         setProfessionalTitle(data.professionalTitle);
         setPostNominalTitle(data.postNominalTitle);
+        setSelectedUnit(data.approverUnit); // Updated line
+        setSearch(data.approverUnit); // Updated line
         if (data.postNominalTitle) {
           setTags(
             data.postNominalTitle
@@ -121,8 +123,8 @@ const ApproverDetails: React.FC = () => {
     };
 
     const loadUnits = async () => {
-      const fetchedUnits = await fetchUnits();
-      setUnits(fetchedUnits);
+      const units = await fetchUnits();
+      setUnits(units);
     };
 
     loadApprover();
@@ -178,45 +180,6 @@ const ApproverDetails: React.FC = () => {
           <h1 className="py-2 text-2xl font-semibold">Set your details here</h1>
         </div>
         <hr className="mt-4 mb-8" />
-        <div className="mb-4">
-          <label
-            htmlFor="unit"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Select Unit
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
-              placeholder="Search unit..."
-              value={search}
-              onFocus={() => setDropdownOpen(true)}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {dropdownOpen && (
-              <div className="absolute z-10 bg-white border border-gray-300 rounded-lg w-full mt-1 max-h-40 overflow-y-auto">
-                {units
-                  .filter((unit) =>
-                    unit.toLowerCase().includes(search.toLowerCase())
-                  )
-                  .map((unit, index) => (
-                    <div
-                      key={index}
-                      className="p-2 hover:bg-yellow-200 cursor-pointer"
-                      onClick={() => {
-                        setSelectedUnit(unit);
-                        setSearch(unit);
-                        setDropdownOpen(false);
-                      }}
-                    >
-                      {unit}
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-        </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label
@@ -244,7 +207,7 @@ const ApproverDetails: React.FC = () => {
           <div>
             <label
               htmlFor="postNominalTitle"
-              className="block mb_2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Post-Nominal Title
             </label>
@@ -276,7 +239,45 @@ const ApproverDetails: React.FC = () => {
             </div>
           </div>
         </div>
-
+        <div className="mt-4 mb-8">
+          <label
+            htmlFor="approverUnit"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Unit
+          </label>
+          <input
+            type="text"
+            name="approverUnit"
+            id="approverUnit"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onFocus={() => setDropdownOpen(true)}
+            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
+            placeholder="Search and select a unit"
+          />
+          {dropdownOpen && (
+            <div className="mt-2 bg-white border border-gray-300 rounded-lg max-h-60 overflow-y-auto">
+              {units
+                .filter((unit) =>
+                  unit.toLowerCase().includes(search.toLowerCase())
+                )
+                .map((unit, index) => (
+                  <div
+                    key={index}
+                    className="p-2 hover:bg-yellow-100 cursor-pointer"
+                    onClick={() => {
+                      setSelectedUnit(unit);
+                      setSearch(unit);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {unit}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
         <hr className="mt-4 mb-8" />
         <div className="mb-10">
           <label

@@ -48,36 +48,6 @@ const Navbar: React.FC = () => {
         </a>
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          {/* <Dropdown
-            label={
-              <button
-                type="button"
-                data-dropdown-toggle="notification-dropdown"
-                className="p-2 mr-1 text-gray-500 rounded-lg hover:text-yellow-500"
-              >
-                <span className="sr-only">View notifications</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 14 20"
-                >
-                  <path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
-                </svg>
-              </button>
-            }
-            placement="top"
-            arrowIcon={false}
-            inline
-          >
-            <Dropdown.Header>
-              <span className="text-center block truncate text-sm font-medium">
-                Notifications
-              </span>
-            </Dropdown.Header>
-          </Dropdown> */}
-
           {isAuthenticated && user && (
             <Dropdown
               label={
@@ -98,9 +68,6 @@ const Navbar: React.FC = () => {
                   {user.email}
                 </span>
               </Dropdown.Header>
-              {/* <Dropdown.Item>Dashboard</Dropdown.Item>
-              <Dropdown.Item>Settings</Dropdown.Item>
-              <Dropdown.Divider /> */}
               <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
             </Dropdown>
           )}
@@ -146,7 +113,7 @@ const Navbar: React.FC = () => {
                 Home
               </Link>
             </li>
-            {isAuthenticated && (
+            {isAuthenticated && role === "ROLE_USER" && (
               <>
                 <li>
                   <Link
@@ -172,24 +139,52 @@ const Navbar: React.FC = () => {
                     Prerequisites
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/faqs"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    FAQs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    Contact
+                  </Link>
+                </li>
               </>
             )}
-            <li>
-              <Link
-                to="/FAQS"
-                className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-              >
-                FAQs
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/Contact"
-                className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-              >
-                Contact
-              </Link>
-            </li>
+            {isAuthenticated && role === "ROLE_APPROVER" && (
+              <>
+                <li>
+                  <Link
+                    to="approverdetails"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    Approver Details
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="faqs"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    FAQs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="contact"
+                    className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                  >
+                    Contact
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

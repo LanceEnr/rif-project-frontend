@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -69,6 +69,8 @@ const Login = () => {
         const userRole = decodedToken.roles?.[0];
         if (userRole === "ROLE_ADMIN") {
           navigate("/admin");
+        } else if (userRole === "ROLE_APPROVER") {
+          navigate("/approver");
         } else if (userRole === "ROLE_USER") {
           navigate("/");
         }
@@ -91,13 +93,16 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: resetEmail }),
-      });
+      const response = await fetch(
+        "http://localhost:8080/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: resetEmail }),
+        }
+      );
 
       if (response.ok) {
         setError("");
@@ -136,7 +141,9 @@ const Login = () => {
                   Sign in to your account
                 </h1>
                 {error && <p className="text-red-500">{error}</p>}
-                {emailSentMessage && <p className="text-green-500">{emailSentMessage}</p>}
+                {emailSentMessage && (
+                  <p className="text-green-500">{emailSentMessage}</p>
+                )}
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label
@@ -150,7 +157,9 @@ const Login = () => {
                       name="email"
                       id="email"
                       value={email}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setEmail(e.target.value)
+                      }
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       placeholder="user@gmail.com"
                       required
@@ -170,7 +179,9 @@ const Login = () => {
                         id="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setPassword(e.target.value)
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         required
                         disabled={isDisabled}
@@ -232,7 +243,10 @@ const Login = () => {
                   </button>
                   <p className="text-sm font-light text-gray-500">
                     Don’t have an account yet?{" "}
-                    <a href="/register" className="font-medium text-primary-600 hover:underline">
+                    <a
+                      href="/register"
+                      className="font-medium text-primary-600 hover:underline"
+                    >
                       Sign up
                     </a>
                   </p>
