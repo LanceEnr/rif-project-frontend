@@ -54,18 +54,20 @@ interface Stakeholder {
 interface PrintButtonApproverProps {
   reportId: string;
 }
+
 const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
   reportId,
 }) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisite, setPrerequisite] = useState<Prerequisite | null>(null);
   const [signatureImage, setSignatureImage] = useState("");
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [postNominalTitle, setPostNominalTitle] = useState("");
+  const [approverPhoto, setApproverPhoto] = useState("");
 
   useEffect(() => {
-    console.log("PrintButtonApprover mounted with reportId:", reportId); // Log reportId on mount
+    console.log("PrintButtonApprover mounted with reportId:", reportId);
 
     const fetchReportDetails = async () => {
       try {
@@ -84,7 +86,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         const data = await response.json();
         setRiskForms(data.report.riskFormData);
         setPrerequisite(data.prerequisite);
-        console.log("Fetched report details:", data); // Log fetched report details
+        console.log("Fetched report details:", data);
       } catch (error) {
         console.error("Failed to fetch report details:", error);
       }
@@ -93,7 +95,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
     const fetchSignature = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/api/esignatures", {
+        const response = await fetch("http://localhost:8080/api/approvers", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -104,8 +106,15 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         const data = await response.json();
         setProfessionalTitle(data.professionalTitle);
         setPostNominalTitle(data.postNominalTitle);
+
+        setApproverPhoto(
+          data.approverPhoto
+            ? URL.createObjectURL(new Blob([data.approverPhoto]))
+            : ""
+        );
+
         const imageResponse = await fetch(
-          "http://localhost:8080/api/esignatures/image",
+          "http://localhost:8080/api/approvers/image",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,7 +127,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         const imageBlob = await imageResponse.blob();
         const imageObjectURL = URL.createObjectURL(imageBlob);
         setSignatureImage(imageObjectURL);
-        console.log("Fetched signature image URL:", imageObjectURL); // Log fetched signature image URL
+        console.log("Fetched signature image URL:", imageObjectURL);
       } catch (error) {
         console.error("Error fetching signature:", error);
       }
@@ -737,18 +746,39 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   }}
                 />
               </div>
-              <span className="c92">
-                Reviewed/Approved by: ______________________
-              </span>
+              <span className="c92">Reviewed/Approved by:</span>
+              <div className="block">
+                <img
+                  src={signatureImage}
+                  alt="Signature"
+                  style={{
+                    height: "80px",
+                    marginLeft: "10px",
+                    marginBottom: "-20px",
+                  }}
+                />
+                <span className="font-bold border-b border-black">
+                  {professionalTitle} {user?.firstname} {user?.lastname}
+                  {postNominalTitle ? ", " : ""}
+                  {postNominalTitle}
+                  <span className="font-normal">
+                    {" "}
+                    /{" "}
+                    {riskForms.length > 0
+                      ? riskForms[0].submissionDate
+                      : "No Date Provided"}
+                  </span>
+                </span>
+              </div>
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
               <div style={{ marginLeft: "80px" }}>
                 <span className="font-bold border-b border-black">
-                  {/* {professionalTitle} {user?.firstname} {user?.lastname}
+                  {professionalTitle} {user?.firstname} {user?.lastname}
                   {postNominalTitle ? ", " : ""}
-                  {postNominalTitle} */}
+                  {postNominalTitle}
                   <span className="font-normal">
                     {" "}
                     /{" "}
