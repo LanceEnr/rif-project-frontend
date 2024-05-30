@@ -65,6 +65,13 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [postNominalTitle, setPostNominalTitle] = useState("");
   const [approverPhoto, setApproverPhoto] = useState("");
+  const [userFirstname, setUserFirstname] = useState("");
+  const [userLastname, setUserLastname] = useState("");
+  const [esignatureProfessionalTitle, setEsignatureProfessionalTitle] =
+    useState("");
+  const [esignaturePostNominalTitle, setEsignaturePostNominalTitle] =
+    useState("");
+  const [esignaturePhoto, setEsignaturePhoto] = useState("");
 
   useEffect(() => {
     console.log("PrintButtonApprover mounted with reportId:", reportId);
@@ -86,13 +93,26 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         const data = await response.json();
         setRiskForms(data.report.riskFormData);
         setPrerequisite(data.prerequisite);
+        setUserFirstname(data.userFirstname);
+        setUserLastname(data.userLastname);
+        setEsignatureProfessionalTitle(data.esignatureProfessionalTitle);
+        setEsignaturePostNominalTitle(data.esignaturePostNominalTitle);
+        if (data.esignaturePhoto) {
+          const byteArray = new Uint8Array(
+            atob(data.esignaturePhoto)
+              .split("")
+              .map((char) => char.charCodeAt(0))
+          );
+          const blob = new Blob([byteArray], { type: "image/png" });
+          setEsignaturePhoto(URL.createObjectURL(blob));
+        }
         console.log("Fetched report details:", data);
       } catch (error) {
         console.error("Failed to fetch report details:", error);
       }
     };
 
-    const fetchSignature = async () => {
+    const fetchApprover = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:8080/api/approvers", {
@@ -106,12 +126,15 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         const data = await response.json();
         setProfessionalTitle(data.professionalTitle);
         setPostNominalTitle(data.postNominalTitle);
-
-        setApproverPhoto(
-          data.approverPhoto
-            ? URL.createObjectURL(new Blob([data.approverPhoto]))
-            : ""
-        );
+        if (data.approverPhoto) {
+          const byteArray = new Uint8Array(
+            atob(data.approverPhoto)
+              .split("")
+              .map((char) => char.charCodeAt(0))
+          );
+          const blob = new Blob([byteArray], { type: "image/png" });
+          setApproverPhoto(URL.createObjectURL(blob));
+        }
 
         const imageResponse = await fetch(
           "http://localhost:8080/api/approvers/image",
@@ -134,7 +157,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
     };
 
     fetchReportDetails();
-    fetchSignature();
+    fetchApprover();
   }, [reportId]);
 
   const paragraphStyle: React.CSSProperties = {
@@ -737,7 +760,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span className="c92">Prepared by:</span>
                 <img
-                  src={signatureImage}
+                  src={esignaturePhoto}
                   alt="Signature"
                   style={{
                     height: "80px",
@@ -749,7 +772,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               <span className="c92">Reviewed/Approved by:</span>
               <div className="block">
                 <img
-                  src={signatureImage}
+                  src={approverPhoto}
                   alt="Signature"
                   style={{
                     height: "80px",
@@ -761,13 +784,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   {professionalTitle} {user?.firstname} {user?.lastname}
                   {postNominalTitle ? ", " : ""}
                   {postNominalTitle}
-                  <span className="font-normal">
-                    {" "}
-                    /{" "}
-                    {riskForms.length > 0
-                      ? riskForms[0].submissionDate
-                      : "No Date Provided"}
-                  </span>
+                  <span className="font-normal"> / Date</span>
                 </span>
               </div>
             </div>
@@ -776,9 +793,9 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
             <span className="c14">
               <div style={{ marginLeft: "80px" }}>
                 <span className="font-bold border-b border-black">
-                  {professionalTitle} {user?.firstname} {user?.lastname}
-                  {postNominalTitle ? ", " : ""}
-                  {postNominalTitle}
+                  {esignatureProfessionalTitle} {userFirstname} {userLastname}
+                  {esignaturePostNominalTitle ? ", " : ""}
+                  {esignaturePostNominalTitle}
                   <span className="font-normal">
                     {" "}
                     /{" "}
