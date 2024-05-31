@@ -153,8 +153,8 @@ const ApproverDetails: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const dataUrl = signaturePadRef.current?.toDataURL();
-    if (dataUrl) {
+    if (signaturePadRef.current && !signaturePadRef.current.isEmpty()) {
+      const dataUrl = signaturePadRef.current.toDataURL();
       const blob = await (await fetch(dataUrl)).blob();
       const response = await uploadApprover(
         professionalTitle,
@@ -164,6 +164,19 @@ const ApproverDetails: React.FC = () => {
       );
       console.log("Upload response:", response);
       alert("Saved successfully!");
+    } else {
+      // If the signature pad is empty, retain the previous signature if available
+      if (previewUrl) {
+        const response = await uploadApprover(
+          professionalTitle,
+          tags.map((tag) => tag.value).join(", "),
+          selectedUnit
+        );
+        console.log("Upload response:", response);
+        alert("Saved successfully without new signature!");
+      } else {
+        alert("Please draw your signature before saving.");
+      }
     }
   };
 
