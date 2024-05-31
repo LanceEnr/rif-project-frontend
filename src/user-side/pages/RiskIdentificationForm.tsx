@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown, MdClose, MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface Opportunity {
   description: string;
@@ -64,7 +64,9 @@ const RiskIdentificationForm: React.FC = () => {
 
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
+    {}
+  );
   const [date, setDate] = useState(""); // Add state for managing date input
   const [riskRating, setRiskRating] = useState(0);
   const [rowsData, setRowsData] = useState<FormData[]>([]);
@@ -513,41 +515,60 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const validateForm = () => {
-    // Check that other required fields are filled, excluding 'issueType' and 'userEmail'
-    const requiredFieldsFilled = Object.entries(formData).every(
-      ([key, value]) => {
-        if (
-          key === "issueType" || // Exclude 'issueType' from required checks
-          key === "userEmail" || // Exclude 'userEmail' from required checks
-          key === "opportunities" ||
-          key === "actionPlans" ||
-          key === "riskParticulars" ||
-          key === "responsiblePersonNames"
-        ) {
-          return true;
-        }
-        return value !== "" && value !== 0;
-      }
-    );
+    const newErrors: Partial<Record<keyof FormData, string>> = {};
 
-    const hasValidOpportunities = formData.opportunities.some(
-      (opportunity) => opportunity.description.trim() !== ""
-    );
-    const hasValidActionPlans = formData.actionPlans.some(
-      (actionPlan) => actionPlan.description.trim() !== ""
-    );
-    const hasValidRiskParticulars = formData.riskParticulars.some(
-      (riskParticular) => riskParticular.description.trim() !== ""
-    );
-    const hasResponsiblePersons = tags.length > 0;
+    if (!formData.sdaNumber) {
+      newErrors.sdaNumber = "SDA Number is required";
+    }
+    if (!formData.issueParticulars.trim()) {
+      newErrors.issueParticulars = "Issue particulars are required";
+    }
+    if (!formData.date.trim()) {
+      newErrors.date = "Date is required";
+    }
+    if (!formData.riskSEV) {
+      newErrors.riskSEV = "Severity (SEV) is required";
+    }
+    if (!formData.riskPROB) {
+      newErrors.riskPROB = "Probability (PROB) is required";
+    }
+    if (!formData.riskLevel.trim()) {
+      newErrors.riskLevel = "Risk level is required";
+    }
+    if (!formData.riskType.trim()) {
+      newErrors.riskType = "Risk type is required";
+    }
+    if (!formData.status.trim()) {
+      newErrors.status = "Status is required";
+    }
+    if (
+      !formData.opportunities.some(
+        (opportunity) => opportunity.description.trim() !== ""
+      )
+    ) {
+      newErrors.opportunities = "At least one opportunity is required";
+    }
+    if (
+      !formData.actionPlans.some(
+        (actionPlan) => actionPlan.description.trim() !== ""
+      )
+    ) {
+      newErrors.actionPlans = "At least one action plan is required";
+    }
+    if (
+      !formData.riskParticulars.some(
+        (riskParticular) => riskParticular.description.trim() !== ""
+      )
+    ) {
+      newErrors.riskParticulars = "At least one risk particular is required";
+    }
+    if (!tags.length) {
+      newErrors.responsiblePersonNames =
+        "At least one responsible person is required";
+    }
 
-    return (
-      requiredFieldsFilled &&
-      hasValidOpportunities &&
-      hasValidActionPlans &&
-      hasValidRiskParticulars &&
-      hasResponsiblePersons
-    );
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleAddRow = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -845,6 +866,11 @@ const RiskIdentificationForm: React.FC = () => {
                             </button>
                           </div>
                         ))}
+                        {errors.riskParticulars && (
+                          <p className="text-red-500">
+                            {errors.riskParticulars}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -1097,6 +1123,9 @@ const RiskIdentificationForm: React.FC = () => {
                             </button>
                           </div>
                         ))}
+                        {errors.opportunities && (
+                          <p className="text-red-500">{errors.opportunities}</p>
+                        )}
                       </div>
                     </div>
 
@@ -1164,6 +1193,9 @@ const RiskIdentificationForm: React.FC = () => {
                             </button>
                           </div>
                         ))}
+                        {errors.actionPlans && (
+                          <p className="text-red-500">{errors.actionPlans}</p>
+                        )}
                       </div>
                     </div>
 
@@ -1189,6 +1221,9 @@ const RiskIdentificationForm: React.FC = () => {
                           placeholder="Select date"
                         />
                       </div>
+                      {errors.date && (
+                        <p className="text-red-500">{errors.date}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-3">
@@ -1223,6 +1258,11 @@ const RiskIdentificationForm: React.FC = () => {
                           </div>
                         ))}
                       </div>
+                      {errors.responsiblePersonNames && (
+                        <p className="text-red-500">
+                          {errors.responsiblePersonNames}
+                        </p>
+                      )}
                     </div>
 
                     <div className="md:col-span-5">
@@ -1245,6 +1285,9 @@ const RiskIdentificationForm: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Enter status description here..."
                       ></textarea>
+                      {errors.status && (
+                        <p className="text-red-500">{errors.status}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-5">
