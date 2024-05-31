@@ -122,11 +122,17 @@ const Prerequisites: React.FC = () => {
         console.log("Prerequisites saved successfully");
         alert("Data saved successfully!");
       } else {
-        throw new Error("Failed to save data");
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
       }
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error saving data");
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        alert(error.message);
+      } else {
+        console.error("Unexpected error", error);
+        alert("An unexpected error occurred");
+      }
     }
   };
 
