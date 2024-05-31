@@ -47,6 +47,11 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!email.endsWith("@ust.edu.ph")) {
+      setError("Please use a ust email");
+      return;
+    }
+
     if (!captchaValue) {
       setError("Please complete the CAPTCHA");
       return;

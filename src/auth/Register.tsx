@@ -20,6 +20,11 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!email.endsWith("@ust.edu.ph")) {
+      setError("Please use a ust email");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
