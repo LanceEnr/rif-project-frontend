@@ -24,7 +24,6 @@ const SubmissionHistory: React.FC = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
-  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -104,43 +103,6 @@ const SubmissionHistory: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReportId(null);
-    setFile(null);
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (file && selectedReportId !== null) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("reportId", selectedReportId.toString());
-
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `http://localhost:8080/api/riskforms/upload`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        closeModal();
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-    }
   };
 
   return (
@@ -309,9 +271,9 @@ const SubmissionHistory: React.FC = () => {
           aria-hidden="true"
           className="fixed inset-0 z-50 flex items-center justify-center w-full p-4 bg-black bg-opacity-50"
         >
-          <div className="relative w-full max-w-md">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div className="relative w-full max-w-xl">
+            <div className="relative bg-white rounded-lg shadow ">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Attach Proof
                 </h3>
@@ -340,20 +302,47 @@ const SubmissionHistory: React.FC = () => {
               </div>
               <form className="p-4 md:p-5">
                 <div className="grid gap-4 mb-4 grid-cols-1">
+                  <div className="col-span-1 pb-8 border-b">
+                    <div className="flex justify-between">
+                      <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
+                        Row 1
+                      </label>
+                      <input
+                        className="block w-1/8 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none"
+                        id="small_size"
+                        type="file"
+                        placeholder="Attach proof"
+                      />
+                    </div>
+                    <textarea
+                      name="notes"
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                      placeholder="Notes"
+                    ></textarea>
+                  </div>
                   <div className="col-span-1">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Upload PDF file here
-                    </label>
-                    <FileInput
-                      id="file-upload"
-                      onChange={handleFileChange}
-                      accept="application/pdf"
-                    />
+                    <div className="flex justify-between">
+                      <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
+                        Row 2
+                      </label>
+                      <input
+                        className="block w-1/8 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none"
+                        id="small_size"
+                        type="file"
+                        placeholder="Attach proof"
+                      />
+                    </div>
+                    <textarea
+                      name="notes"
+                      rows={4}
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                      placeholder="Notes"
+                    ></textarea>
                   </div>
                 </div>
                 <button
                   type="button"
-                  onClick={handleSubmit}
                   className="text-white inline-flex w-full justify-center bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 >
                   Submit
