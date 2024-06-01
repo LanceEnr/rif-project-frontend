@@ -17,11 +17,23 @@ const Register = () => {
   const [showTerms, setShowTerms] = useState(false);
   const navigate = useNavigate();
 
+  const isPasswordValid = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{6,})/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email.endsWith("@ust.edu.ph")) {
       setError("Please use a ust email");
+      return;
+    }
+
+    if (!isPasswordValid(password)) {
+      setError(
+        "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
+      );
       return;
     }
 
@@ -79,7 +91,6 @@ const Register = () => {
                 <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Create an account
                 </h1>
-                {error && <p className="text-red-500">{error}</p>}
                 <form
                   className="space-y-4 md:space-y-6"
                   onSubmit={handleSubmit}
@@ -198,7 +209,6 @@ const Register = () => {
                       </span>
                     </div>
                   </div>
-                  {error && <div className="text-red-500 text-sm">{error}</div>}
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
                       <input
@@ -225,6 +235,7 @@ const Register = () => {
                       </label>
                     </div>
                   </div>
+                  {error && <div className="text-red-500 text-sm">{error}</div>}
                   <button
                     type="submit"
                     className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
