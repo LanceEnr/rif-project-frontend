@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown, MdClose, MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface Opportunity {
   description: string;
@@ -686,7 +686,7 @@ const RiskIdentificationForm: React.FC = () => {
               <div className="lg:col-span-2">
                 <form onSubmit={handleSubmitFinal} method="post">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                    <div className="md:col-span-3">
+                    {/* <div className="md:col-span-3">
                       <label
                         htmlFor="file_input"
                         className="block mb-2 text-sm font-medium text-gray-900"
@@ -699,8 +699,8 @@ const RiskIdentificationForm: React.FC = () => {
                         onChange={handleFileChange}
                         accept=".pdf"
                       />
-                    </div>
-                    <div className="md:col-span-2">
+                    </div> */}
+                    <div className="md:col-span-5">
                       <label
                         htmlFor="sdaNumber"
                         className="block mb-2 text-sm font-medium text-gray-900"
@@ -1204,7 +1204,7 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="datepicker"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Date
+                        Target Completion Date
                       </label>
                       <div className="relative max-w-sm">
                         <input
