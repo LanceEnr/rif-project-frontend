@@ -146,13 +146,9 @@ const SubmissionHistory: React.FC = () => {
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
-        <h2 className="font-bold text-5xl mt-5 tracking-tight">
-          Submission History
-        </h2>
+        <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
-          <p className="text-neutral-500 text-xl mt-3">
-            View the submission history and track progress.
-          </p>
+          <p className="text-neutral-500 text-xl mt-3">View unit submissions</p>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
