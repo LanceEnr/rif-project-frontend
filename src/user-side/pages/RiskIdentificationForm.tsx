@@ -258,22 +258,25 @@ const RiskIdentificationForm: React.FC = () => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => {
-    const updatedRiskParticulars = formData.riskParticulars.map((item, i) => {
-      if (i === index) {
-        return { ...item, description: e.target.value };
-      }
-      return item;
-    });
-    setFormData({ ...formData, riskParticulars: updatedRiskParticulars });
+    const { value } = e.target;
+    if (value.length <= 500) {
+      const updatedRiskParticulars = formData.riskParticulars.map((item, i) => {
+        if (i === index) {
+          return { ...item, description: value };
+        }
+        return item;
+      });
+      setFormData({ ...formData, riskParticulars: updatedRiskParticulars });
 
-    // Update rowsData with the changed riskParticulars
-    if (activeRowIndex !== null) {
-      const updatedRowsData = rowsData.map((data, idx) =>
-        idx === activeRowIndex
-          ? { ...data, riskParticulars: updatedRiskParticulars }
-          : data
-      );
-      setRowsData(updatedRowsData);
+      // Update rowsData with the changed riskParticulars
+      if (activeRowIndex !== null) {
+        const updatedRowsData = rowsData.map((data, idx) =>
+          idx === activeRowIndex
+            ? { ...data, riskParticulars: updatedRiskParticulars }
+            : data
+        );
+        setRowsData(updatedRowsData);
+      }
     }
   };
 
@@ -342,22 +345,25 @@ const RiskIdentificationForm: React.FC = () => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => {
-    const updatedOpportunities = formData.opportunities.map((item, i) => {
-      if (i === index) {
-        return { ...item, description: e.target.value };
-      }
-      return item;
-    });
-    setFormData({ ...formData, opportunities: updatedOpportunities });
+    const { value } = e.target;
+    if (value.length <= 500) {
+      const updatedOpportunities = formData.opportunities.map((item, i) => {
+        if (i === index) {
+          return { ...item, description: value };
+        }
+        return item;
+      });
+      setFormData({ ...formData, opportunities: updatedOpportunities });
 
-    // Update rowsData with the changed opportunities
-    if (activeRowIndex !== null) {
-      const updatedRowsData = rowsData.map((data, idx) =>
-        idx === activeRowIndex
-          ? { ...data, opportunities: updatedOpportunities }
-          : data
-      );
-      setRowsData(updatedRowsData);
+      // Update rowsData with the changed opportunities
+      if (activeRowIndex !== null) {
+        const updatedRowsData = rowsData.map((data, idx) =>
+          idx === activeRowIndex
+            ? { ...data, opportunities: updatedOpportunities }
+            : data
+        );
+        setRowsData(updatedRowsData);
+      }
     }
   };
 
@@ -365,22 +371,25 @@ const RiskIdentificationForm: React.FC = () => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => {
-    const updatedActionPlans = formData.actionPlans.map((item, i) => {
-      if (i === index) {
-        return { ...item, description: e.target.value };
-      }
-      return item;
-    });
-    setFormData({ ...formData, actionPlans: updatedActionPlans });
+    const { value } = e.target;
+    if (value.length <= 500) {
+      const updatedActionPlans = formData.actionPlans.map((item, i) => {
+        if (i === index) {
+          return { ...item, description: value };
+        }
+        return item;
+      });
+      setFormData({ ...formData, actionPlans: updatedActionPlans });
 
-    // Update rowsData with the changed action plans
-    if (activeRowIndex !== null) {
-      const updatedRowsData = rowsData.map((data, idx) =>
-        idx === activeRowIndex
-          ? { ...data, actionPlans: updatedActionPlans }
-          : data
-      );
-      setRowsData(updatedRowsData);
+      // Update rowsData with the changed action plans
+      if (activeRowIndex !== null) {
+        const updatedRowsData = rowsData.map((data, idx) =>
+          idx === activeRowIndex
+            ? { ...data, actionPlans: updatedActionPlans }
+            : data
+        );
+        setRowsData(updatedRowsData);
+      }
     }
   };
 
@@ -766,6 +775,7 @@ const RiskIdentificationForm: React.FC = () => {
                         className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                         placeholder="Description"
                         onChange={handleChange}
+                        maxLength={500}
                       ></textarea>
                       <div className="text-right text-xs text-gray-500">
                         {formData.issueParticulars.length} / 500
@@ -854,6 +864,7 @@ const RiskIdentificationForm: React.FC = () => {
                               }
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
+                              maxLength={500}
                             />
                             <div className="text-right text-xs text-gray-500">
                               {particular.description.length} / 500
@@ -1114,6 +1125,7 @@ const RiskIdentificationForm: React.FC = () => {
                               }
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
+                              maxLength={500}
                             />
                             <div className="text-right text-xs text-gray-500">
                               {opportunity.description.length} / 500
@@ -1187,6 +1199,7 @@ const RiskIdentificationForm: React.FC = () => {
                               onChange={(e) => handleActionPlanChange(e, index)}
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
+                              maxLength={500}
                             />
                             <div className="text-right text-xs text-gray-500">
                               {action.description.length} / 500
@@ -1295,6 +1308,7 @@ const RiskIdentificationForm: React.FC = () => {
                         }
                         onChange={handleChange}
                         placeholder="Enter status description here..."
+                        maxLength={500}
                       ></textarea>
                       <div className="text-right text-xs text-gray-500">
                         {formData.status.length} / 500
