@@ -5,6 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
 import PrintButton from "../components/PrintButton";
 import riskform from "../../assets/riskformthumbnail.jpg";
+import { FaFilePdf } from "react-icons/fa6";
 
 interface RiskFormData {
   id: number;
@@ -201,10 +202,26 @@ const SubmissionHistory: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Handle successful response
       closeModal();
     } catch (error) {
       console.error("Error submitting proof and notes:", error);
+    }
+  };
+
+  const viewPdfProof = async (reportId: number, riskFormDataId: number) => {
+    const token = localStorage.getItem("token");
+    const url = `http://localhost:8080/api/riskforms/report/${reportId}/pdf/${riskFormDataId}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const pdfBlob = await response.blob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
+    } else {
+      console.error("Error fetching PDF proof");
     }
   };
 
@@ -218,7 +235,6 @@ const SubmissionHistory: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
-        {/* Dropdown */}
         <div>
           <Dropdown
             label=""
@@ -244,7 +260,6 @@ const SubmissionHistory: React.FC = () => {
             </Dropdown.Item>
           </Dropdown>
         </div>
-        {/* Search input */}
         <label htmlFor="table-search" className="sr-only">
           Search
         </label>
@@ -262,7 +277,7 @@ const SubmissionHistory: React.FC = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a 7 7 0 0 1 14 0Z"
               />
             </svg>
           </div>
@@ -279,10 +294,7 @@ const SubmissionHistory: React.FC = () => {
       <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
         <Link
           to="/form"
-          style={{
-            cursor: "pointer",
-            transition: "all 1s ease",
-          }}
+          style={{ cursor: "pointer", transition: "all 1s ease" }}
           className="rounded-lg p-4 flex justify-center items-center border-dashed border-2 border-gray-400"
           onMouseOver={(event) =>
             (event.currentTarget.style.boxShadow =
@@ -323,7 +335,7 @@ const SubmissionHistory: React.FC = () => {
                 Report ID: {report.id}
               </p>
               <div className="flex justify-between">
-                <div className="flex ">
+                <div className="flex">
                   <PrintButton reportId={report.id.toString()} />{" "}
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
@@ -354,7 +366,9 @@ const SubmissionHistory: React.FC = () => {
                   )}
                 >
                   <Dropdown.Item onClick={() => openModal(report.id)}>
-                    Attach Proof
+                    {report.riskFormData.some((data) => data.pdfProof)
+                      ? "View Proof"
+                      : "Attach Proof"}
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="#">
                     Duplicate and Edit
@@ -366,7 +380,6 @@ const SubmissionHistory: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div
           id="crud-modal"
@@ -378,7 +391,9 @@ const SubmissionHistory: React.FC = () => {
             <div className="relative bg-white rounded-lg shadow">
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Attach Proof
+                  {selectedRiskFormData.some((data) => data.pdfProof)
+                    ? "View Proof"
+                    : "Attach Proof"}
                 </h3>
                 <button
                   type="button"
@@ -403,7 +418,7 @@ const SubmissionHistory: React.FC = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              <form className="p-2 md:p-5 ">
+              <form className="p-2 md:p-5">
                 <div className="max-h-96 px-2 overflow-y-auto">
                   {selectedRiskFormData.map((data, index) => (
                     <div key={data.id} className="col-span-1">
@@ -411,25 +426,38 @@ const SubmissionHistory: React.FC = () => {
                         <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
                           Row {index + 1}
                         </label>
-                        <div>
-                          <input
-                            className="block w-1/8 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                            id={`proof_${index}`}
-                            type="file"
-                            accept="application/pdf"
-                            onChange={(e) =>
-                              handleProofChange(
-                                index,
-                                e.target.files ? e.target.files[0] : null
-                              )
-                            }
-                          />
-                          <p
-                            className="mt-1 text-xs text-right text-gray-500 dark:text-gray-300 mb-4"
-                            id="file_input_help"
-                          >
-                            PDF (MAX. 20MB).
-                          </p>
+                        <div className="flex justify-between">
+                          {data.pdfProof && (
+                            <button
+                              type="button"
+                              className="mr-2 mb-9 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white rounded inline-flex items-center"
+                              onClick={() =>
+                                viewPdfProof(selectedReportId!, data.id)
+                              }
+                            >
+                              View PDF
+                            </button>
+                          )}
+                          <div>
+                            <input
+                              className="block w-1/8 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                              id={`proof_${index}`}
+                              type="file"
+                              accept="application/pdf"
+                              onChange={(e) =>
+                                handleProofChange(
+                                  index,
+                                  e.target.files ? e.target.files[0] : null
+                                )
+                              }
+                            />
+                            <p
+                              className="mt-1 text-xs text-right text-gray-500 dark:text-gray-300 mb-4"
+                              id="file_input_help"
+                            >
+                              PDF (MAX. 20MB).
+                            </p>
+                          </div>
                         </div>
                       </div>
                       {data.fileError && (
