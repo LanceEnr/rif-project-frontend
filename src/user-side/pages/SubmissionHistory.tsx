@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown, Label, FileInput } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
 import PrintButton from "../components/PrintButton";
@@ -9,6 +9,10 @@ import riskform from "../../assets/riskformthumbnail.jpg";
 interface RiskFormData {
   id: number;
   submissionDate: string;
+  pdfProof: File | null;
+  notes: string | null;
+  fileError: string | null;
+  charCount: number;
 }
 
 interface Report {
@@ -24,6 +28,11 @@ const SubmissionHistory: React.FC = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
+  const [selectedRiskFormData, setSelectedRiskFormData] = useState<
+    RiskFormData[]
+  >([]);
+  const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+  const MAX_CHARS = 500;
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -95,14 +104,108 @@ const SubmissionHistory: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const openModal = (reportId: number) => {
+  const openModal = async (reportId: number) => {
     setSelectedReportId(reportId);
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/report/${reportId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const riskFormDataWithDefaults = data.riskFormData.map(
+        (item: RiskFormData) => ({
+          ...item,
+          fileError: null,
+          charCount: item.notes ? item.notes.length : 0,
+        })
+      );
+      setSelectedRiskFormData(riskFormDataWithDefaults);
+    } catch (error) {
+      console.error("Error fetching risk form data:", error);
+    }
+
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReportId(null);
+    setSelectedRiskFormData([]);
+  };
+
+  const handleProofChange = (index: number, file: File | null) => {
+    const updatedRiskFormData = [...selectedRiskFormData];
+    if (file && file.size > MAX_FILE_SIZE) {
+      updatedRiskFormData[index].fileError = `File size exceeds ${
+        MAX_FILE_SIZE / (1024 * 1024)
+      }MB`;
+    } else if (file && file.type !== "application/pdf") {
+      updatedRiskFormData[index].fileError = "Only PDF files are allowed";
+    } else {
+      updatedRiskFormData[index].pdfProof = file;
+      updatedRiskFormData[index].fileError = null;
+    }
+    setSelectedRiskFormData(updatedRiskFormData);
+  };
+
+  const handleNotesChange = (index: number, notes: string) => {
+    if (notes.length > MAX_CHARS) return;
+    const updatedRiskFormData = [...selectedRiskFormData];
+    updatedRiskFormData[index] = {
+      ...updatedRiskFormData[index],
+      notes,
+      charCount: notes.length,
+    };
+    setSelectedRiskFormData(updatedRiskFormData);
+  };
+
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("reportId", selectedReportId!.toString());
+
+    selectedRiskFormData.forEach((data) => {
+      if (data.pdfProof) {
+        formData.append(`pdfProofs`, data.pdfProof);
+      }
+      if (data.notes) {
+        formData.append(`notes`, data.notes);
+      }
+    });
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/riskforms/update",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Handle successful response
+      closeModal();
+    } catch (error) {
+      console.error("Error submitting proof and notes:", error);
+    }
   };
 
   return (
@@ -271,9 +374,9 @@ const SubmissionHistory: React.FC = () => {
           aria-hidden="true"
           className="fixed inset-0 z-50 flex items-center justify-center w-full p-4 bg-black bg-opacity-50"
         >
-          <div className="relative w-full max-w-xl">
-            <div className="relative bg-white rounded-lg shadow ">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+          <div className="relative w-full max-w-3xl">
+            <div className="relative bg-white rounded-lg shadow">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Attach Proof
                 </h3>
@@ -300,50 +403,61 @@ const SubmissionHistory: React.FC = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              <form className="p-4 md:p-5">
-                <div className="grid gap-4 mb-4 grid-cols-1">
-                  <div className="col-span-1 pb-8 border-b">
-                    <div className="flex justify-between">
-                      <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
-                        Row 1
-                      </label>
-                      <input
-                        className="block w-1/8 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none"
-                        id="small_size"
-                        type="file"
-                        placeholder="Attach proof"
-                      />
+              <form className="p-2 md:p-5 ">
+                <div className="max-h-96 px-2 overflow-y-auto">
+                  {selectedRiskFormData.map((data, index) => (
+                    <div key={data.id} className="col-span-1">
+                      <div className="flex justify-between">
+                        <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
+                          Row {index + 1}
+                        </label>
+                        <div>
+                          <input
+                            className="block w-1/8 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                            id={`proof_${index}`}
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) =>
+                              handleProofChange(
+                                index,
+                                e.target.files ? e.target.files[0] : null
+                              )
+                            }
+                          />
+                          <p
+                            className="mt-1 text-xs text-right text-gray-500 dark:text-gray-300 mb-4"
+                            id="file_input_help"
+                          >
+                            PDF (MAX. 20MB).
+                          </p>
+                        </div>
+                      </div>
+                      {data.fileError && (
+                        <p className="text-red-600 text-xs mb-2">
+                          {data.fileError}
+                        </p>
+                      )}
+                      <textarea
+                        name="notes"
+                        rows={4}
+                        className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                        placeholder="Notes"
+                        value={data.notes || ""}
+                        onChange={(e) =>
+                          handleNotesChange(index, e.target.value)
+                        }
+                      ></textarea>
+                      <p className="text-gray-500 text-xs text-right">
+                        {data.charCount} / {MAX_CHARS}
+                      </p>
+                      <hr className="my-8" />
                     </div>
-                    <textarea
-                      name="notes"
-                      rows={4}
-                      className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
-                      placeholder="Notes"
-                    ></textarea>
-                  </div>
-                  <div className="col-span-1">
-                    <div className="flex justify-between">
-                      <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
-                        Row 2
-                      </label>
-                      <input
-                        className="block w-1/8 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none"
-                        id="small_size"
-                        type="file"
-                        placeholder="Attach proof"
-                      />
-                    </div>
-                    <textarea
-                      name="notes"
-                      rows={4}
-                      className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
-                      placeholder="Notes"
-                    ></textarea>
-                  </div>
+                  ))}
                 </div>
                 <button
                   type="button"
-                  className="text-white inline-flex w-full justify-center bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                  className="text-white inline-flex w-full justify-center bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  onClick={handleSubmit}
                 >
                   Submit
                 </button>
