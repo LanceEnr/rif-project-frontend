@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown, MdClose, MdEdit } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface Opportunity {
   description: string;
@@ -640,7 +640,7 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4   min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Risk Identification Form
@@ -661,7 +661,7 @@ const RiskIdentificationForm: React.FC = () => {
               <button
                 id="dropdownActionButton"
                 data-dropdown-toggle="dropdownAction"
-                className="inline-flex w-full py-2.5 items-center  bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100  rounded-lg text-sm px-3 "
+                className="inline-flex w-full py-2.5 items-center bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-3"
                 type="button"
               >
                 <div className="flex justify-between w-full">
@@ -767,7 +767,9 @@ const RiskIdentificationForm: React.FC = () => {
                         placeholder="Description"
                         onChange={handleChange}
                       ></textarea>
-
+                      <div className="text-right text-xs text-gray-500">
+                        {formData.issueParticulars.length} / 500
+                      </div>
                       {errors.issueParticulars && (
                         <p className="text-red-500">
                           {errors.issueParticulars}
@@ -853,6 +855,9 @@ const RiskIdentificationForm: React.FC = () => {
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
                             />
+                            <div className="text-right text-xs text-gray-500">
+                              {particular.description.length} / 500
+                            </div>
                             <button
                               onClick={() => handleRemoveRiskParticular(index)}
                               className={`ml-2 py-1 px-3 rounded ${
@@ -1088,7 +1093,7 @@ const RiskIdentificationForm: React.FC = () => {
                           <button
                             type="button"
                             onClick={handleAddOpportunity}
-                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white  rounded inline-flex items-center"
+                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white rounded inline-flex items-center"
                           >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
@@ -1110,12 +1115,15 @@ const RiskIdentificationForm: React.FC = () => {
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
                             />
+                            <div className="text-right text-xs text-gray-500">
+                              {opportunity.description.length} / 500
+                            </div>
                             <button
                               onClick={() => handleRemoveOpportunity(index)}
                               className={`ml-2 py-1 px-3 rounded ${
                                 index === 0
                                   ? "text-gray-500 cursor-not-allowed"
-                                  : "text-red-500 hover:text-red-600 "
+                                  : "text-red-500 hover:text-red-600"
                               }`}
                               disabled={index === 0}
                             >
@@ -1160,7 +1168,7 @@ const RiskIdentificationForm: React.FC = () => {
                           <button
                             type="button"
                             onClick={handleAddActionPlan}
-                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white  rounded inline-flex items-center"
+                            className="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white rounded inline-flex items-center"
                           >
                             <FiPlus className="mr-2" />
                             <span>Add</span>
@@ -1180,12 +1188,15 @@ const RiskIdentificationForm: React.FC = () => {
                               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
                               placeholder="Write here..."
                             />
+                            <div className="text-right text-xs text-gray-500">
+                              {action.description.length} / 500
+                            </div>
                             <button
                               onClick={() => handleRemoveActionPlan(index)}
                               className={`ml-2 py-1 px-3 rounded ${
                                 index === 0
                                   ? "text-gray-500 cursor-not-allowed"
-                                  : "text-red-500 hover:text-red-600 "
+                                  : "text-red-500 hover:text-red-600"
                               }`}
                               disabled={index === 0}
                             >
@@ -1285,6 +1296,9 @@ const RiskIdentificationForm: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Enter status description here..."
                       ></textarea>
+                      <div className="text-right text-xs text-gray-500">
+                        {formData.status.length} / 500
+                      </div>
                       {errors.status && (
                         <p className="text-red-500">{errors.status}</p>
                       )}
@@ -1299,7 +1313,7 @@ const RiskIdentificationForm: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleAddRow}
-                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium   rounded-md text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-600"
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium rounded-md text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-600"
                         >
                           Add Another Row
                         </button>
