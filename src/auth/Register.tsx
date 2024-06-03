@@ -6,15 +6,15 @@ import Modal from "./Modal"; // Assume you have a Modal component
 import yellowalert from "../assets/yellowalert.png";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [showTerms, setShowTerms] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [showTerms, setShowTerms] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const isPasswordValid = (password: string): boolean => {
@@ -22,7 +22,22 @@ const Register = () => {
     return passwordRegex.test(password);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const checkEmailExists = async (email: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/auth/check-email?email=${email}`);
+      if (!response.ok) {
+        throw new Error('Failed to check email');
+      }
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Email check error:", error);
+      setError("An error occurred while checking the email. Please try again.");
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!email.endsWith("@ust.edu.ph")) {
@@ -39,6 +54,12 @@ const Register = () => {
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+
+    const emailExists = await checkEmailExists(email);
+    if (emailExists) {
+      setError("Email already exists. Please use a different email.");
       return;
     }
 
@@ -60,7 +81,12 @@ const Register = () => {
       if (response.ok) {
         navigate("/login");
       } else {
-        setError("Registration failed. Please try again.");
+        const errorData = await response.json();
+        if (errorData.message === "Error: Email is already taken!") {
+          setError("Email already exists. Please use a different email.");
+        } else {
+          setError("Registration failed. Please try again.");
+        }
       }
     } catch (error) {
       setError("An error occurred during registration.");
@@ -200,7 +226,7 @@ const Register = () => {
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items.center cursor-pointer"
                       >
                         <FontAwesomeIcon
                           icon={showConfirmPassword ? faEye : faEyeSlash}
@@ -209,8 +235,8 @@ const Register = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
+                  <div className="flex items.start">
+                    <div className="flex items.center h-5">
                       <input
                         id="terms"
                         aria-describedby="terms"
