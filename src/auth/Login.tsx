@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -80,9 +80,13 @@ const Login = () => {
           navigate("/");
         }
       } else {
-        const errorData = await response.text();
-        if (errorData.includes("disabled")) {
+        const errorData = await response.json();
+        if (errorData.message === "Account is disabled") {
           setError("Your account is disabled. Please contact support.");
+        } else if (errorData.message === "Incorrect email") {
+          setError("Email is incorrect. Please check your email.");
+        } else if (errorData.message === "Incorrect password") {
+          setError("Password is incorrect. Please check your password.");
         } else {
           setAttempts((prev) => prev + 1);
           setError("Login failed. Please check your credentials.");
