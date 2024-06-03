@@ -27,7 +27,9 @@ const Users: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
+  const [showRoleConfirmation, setShowRoleConfirmation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -139,7 +141,9 @@ const Users: React.FC = () => {
       setSelectedUser(user);
       setShowAdminConfirmation(true);
     } else {
-      handleSaveUser(user, roleId);
+      setSelectedUser(user);
+      setSelectedRoleId(roleId);
+      setShowRoleConfirmation(true);
     }
   };
 
@@ -150,6 +154,21 @@ const Users: React.FC = () => {
       setSelectedUser(null);
       alert("User has been promoted to Administrator. This action is irreversible.");
     }
+  };
+
+  const confirmRoleChange = () => {
+    if (selectedUser && selectedRoleId !== null) {
+      handleSaveUser(selectedUser, selectedRoleId);
+      setShowRoleConfirmation(false);
+      setSelectedUser(null);
+      setSelectedRoleId(null);
+    }
+  };
+
+  const cancelRoleChange = () => {
+    setShowRoleConfirmation(false);
+    setSelectedUser(null);
+    setSelectedRoleId(null);
   };
 
   const cancelAdminPromotion = () => {
@@ -438,6 +457,29 @@ const Users: React.FC = () => {
               <button
                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
                 onClick={confirmAdminPromotion}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRoleConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Confirm Role Change</h2>
+            <p className="mb-4">Are you sure you want to change this user's role?</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelRoleChange}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={confirmRoleChange}
               >
                 Confirm
               </button>
