@@ -9,10 +9,21 @@ interface User {
   email: string;
   roles: { id: number; name: string }[];
   active: boolean;
+  unit: string;
+}
+
+interface Approver {
+  id: number;
+  professionalTitle: string;
+  postNominalTitle: string;
+  approverPhoto: string;
+  approverUnit: string;
+  user: User;
 }
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [approvers, setApprovers] = useState<{ [key: number]: Approver }>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
@@ -42,6 +53,34 @@ const Users: React.FC = () => {
 
     fetchUsers();
   }, [token]);
+
+  useEffect(() => {
+    const fetchApprover = async (userId: number) => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/approvers/byUserId/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const approver = await response.json();
+        setApprovers(prev => ({ ...prev, [userId]: approver }));
+      } catch (error) {
+        console.error("Error fetching approver:", error);
+      }
+    };
+
+    users.forEach(user => {
+      if (user.roles.some(role => role.name === "ROLE_APPROVER")) {
+        fetchApprover(user.id);
+      }
+    });
+  }, [users, token]);
 
   const getInitials = (firstname: string, lastname: string) => {
     return `${firstname.charAt(0)}${lastname.charAt(0)}`;
@@ -263,6 +302,9 @@ const Users: React.FC = () => {
                 Status
               </th>
               <th scope="col" className="px-6 py-3">
+                Unit
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Action
               </th>
             </tr>
@@ -300,6 +342,9 @@ const Users: React.FC = () => {
                     >
                       {user.active ? "Active" : "Inactive"}
                     </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {user.unit || approvers[user.id]?.approverUnit || "N/A"}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex space-x-2">
@@ -371,7 +416,7 @@ const Users: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="text-center py-4"></td>
+                <td colSpan={5} className="text-center py-4">No users found</td>
               </tr>
             )}
           </tbody>
