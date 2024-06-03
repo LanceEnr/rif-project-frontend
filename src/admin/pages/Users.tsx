@@ -59,26 +59,29 @@ const Users: React.FC = () => {
   useEffect(() => {
     const fetchApprover = async (userId: number) => {
       try {
-        const response = await fetch(`http://localhost:8080/api/approvers/byUserId/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://localhost:8080/api/approvers/byUserId/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const approver = await response.json();
-        setApprovers(prev => ({ ...prev, [userId]: approver }));
+        setApprovers((prev) => ({ ...prev, [userId]: approver }));
       } catch (error) {
         console.error("Error fetching approver:", error);
       }
     };
 
-    users.forEach(user => {
-      if (user.roles.some(role => role.name === "ROLE_APPROVER")) {
+    users.forEach((user) => {
+      if (user.roles.some((role) => role.name === "ROLE_APPROVER")) {
         fetchApprover(user.id);
       }
     });
@@ -95,8 +98,7 @@ const Users: React.FC = () => {
           return "User";
         case "ROLE_APPROVER":
           return "Approver";
-        case "ROLE_AUDITOR":
-          return "Auditor";
+
         case "ROLE_ADMIN":
           return "Administrator";
         default:
@@ -152,7 +154,9 @@ const Users: React.FC = () => {
       handleSaveUser(selectedUser, 4);
       setShowAdminConfirmation(false);
       setSelectedUser(null);
-      alert("User has been promoted to Administrator. This action is irreversible.");
+      alert(
+        "User has been promoted to Administrator. This action is irreversible."
+      );
     }
   };
 
@@ -219,8 +223,7 @@ const Users: React.FC = () => {
             return role.name === "ROLE_USER";
           case "Approver":
             return role.name === "ROLE_APPROVER";
-          case "Auditor":
-            return role.name === "ROLE_AUDITOR";
+
           case "Administrator":
             return role.name === "ROLE_ADMIN";
           default:
@@ -267,9 +270,7 @@ const Users: React.FC = () => {
               <Dropdown.Item onClick={() => handleRoleFilterChange("Approver")}>
                 Approver
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleRoleFilterChange("Auditor")}>
-                Auditor
-              </Dropdown.Item>
+
               <Dropdown.Item
                 onClick={() => handleRoleFilterChange("Administrator")}
               >
@@ -318,10 +319,10 @@ const Users: React.FC = () => {
                 Role
               </th>
               <th scope="col" className="px-6 py-3">
-                Status
+                Unit
               </th>
               <th scope="col" className="px-6 py-3">
-                Unit
+                Status
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -354,17 +355,20 @@ const Users: React.FC = () => {
                     {getRoleDisplayName(user.roles)}
                   </td>
                   <td className="px-6 py-4">
+                    {user.unit || approvers[user.id]?.approverUnit || "N/A"}
+                  </td>
+                  <td className="px-6 py-4">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        user.active
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
                       }`}
                     >
                       {user.active ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    {user.unit || approvers[user.id]?.approverUnit || "N/A"}
-                  </td>
+
                   <td className="px-6 py-4">
                     <div className="flex space-x-2">
                       {user.roles[0].name !== "ROLE_ADMIN" && (
@@ -384,8 +388,6 @@ const Users: React.FC = () => {
                               ? "User"
                               : user.roles[0].name === "ROLE_APPROVER"
                               ? "Approver"
-                              : user.roles[0].name === "ROLE_AUDITOR"
-                              ? "Auditor"
                               : "Administrator"
                           }
                           inline
@@ -400,8 +402,6 @@ const Users: React.FC = () => {
                                 ? "User"
                                 : user.roles[0].name === "ROLE_APPROVER"
                                 ? "Approver"
-                                : user.roles[0].name === "ROLE_AUDITOR"
-                                ? "Auditor"
                                 : "Administrator"}
                               <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
                             </button>
@@ -417,11 +417,7 @@ const Users: React.FC = () => {
                           >
                             Approver
                           </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => handleRoleChange(user, 3)}
-                          >
-                            Auditor
-                          </Dropdown.Item>
+
                           <Dropdown.Item
                             onClick={() => handleRoleChange(user, 4)}
                           >
@@ -435,7 +431,9 @@ const Users: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-4">No users found</td>
+                <td colSpan={5} className="text-center py-4">
+                  No users found
+                </td>
               </tr>
             )}
           </tbody>
@@ -446,7 +444,10 @@ const Users: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Confirm Promotion</h2>
-            <p className="mb-4">Promoting a user to Administrator is irreversible. Do you want to proceed?</p>
+            <p className="mb-4">
+              Promoting a user to Administrator is irreversible. Do you want to
+              proceed?
+            </p>
             <div className="flex justify-end">
               <button
                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
@@ -469,7 +470,9 @@ const Users: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Confirm Role Change</h2>
-            <p className="mb-4">Are you sure you want to change this user's role?</p>
+            <p className="mb-4">
+              Are you sure you want to change this user's role?
+            </p>
             <div className="flex justify-end">
               <button
                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
