@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
@@ -9,6 +8,8 @@ import riskform from "../../assets/riskformthumbnail.jpg";
 interface RiskFormData {
   id: number;
   submissionDate: string;
+  pdfProof: File | null;
+  notes: string | null;
 }
 
 interface Report {
@@ -22,9 +23,11 @@ const SubmissionHistoryApprover: React.FC = () => {
   const [filter, setFilter] = useState<string>("Most Recent");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated, user } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [selectedRiskFormData, setSelectedRiskFormData] = useState<
+    RiskFormData[]
+  >([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -96,50 +99,60 @@ const SubmissionHistoryApprover: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const openModal = (reportId: number) => {
+  const openModal = async (reportId: number) => {
     setSelectedReportId(reportId);
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/report/${reportId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const riskFormDataWithDefaults = data.riskFormData.map(
+        (item: RiskFormData) => ({
+          ...item,
+          fileError: null,
+          charCount: item.notes ? item.notes.length : 0,
+        })
+      );
+      setSelectedRiskFormData(riskFormDataWithDefaults);
+    } catch (error) {
+      console.error("Error fetching risk form data:", error);
+    }
+
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReportId(null);
-    setFile(null);
+    setSelectedRiskFormData([]);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (file && selectedReportId !== null) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("reportId", selectedReportId.toString());
-
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `http://localhost:8080/api/riskforms/upload`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        closeModal();
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
+  const viewPdfProof = async (reportId: number, riskFormDataId: number) => {
+    const token = localStorage.getItem("token");
+    const url = `http://localhost:8080/api/riskforms/report/${reportId}/pdf/${riskFormDataId}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const pdfBlob = await response.blob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
+    } else {
+      console.error("Error fetching PDF proof");
     }
   };
 
@@ -197,7 +210,7 @@ const SubmissionHistoryApprover: React.FC = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a 7 7 0 0 1 14 0Z"
               />
             </svg>
           </div>
@@ -261,11 +274,18 @@ const SubmissionHistoryApprover: React.FC = () => {
                     </button>
                   )}
                 >
-                  <Dropdown.Item onClick={() => openModal(report.id)}>
-                    Attach Proof
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="#">
-                    Duplicate and Edit
+                  <Dropdown.Item
+                    onClick={() => openModal(report.id)}
+                    disabled={
+                      !report.riskFormData.some((data) => data.pdfProof)
+                    }
+                    className={
+                      !report.riskFormData.some((data) => data.pdfProof)
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }
+                  >
+                    View Proof
                   </Dropdown.Item>
                 </Dropdown>
               </div>
@@ -282,11 +302,11 @@ const SubmissionHistoryApprover: React.FC = () => {
           aria-hidden="true"
           className="fixed inset-0 z-50 flex items-center justify-center w-full p-4 bg-black bg-opacity-50"
         >
-          <div className="relative w-full max-w-md">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div className="relative w-full max-w-3xl">
+            <div className="relative bg-white rounded-lg shadow">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Attach Proof
+                  View Proof
                 </h3>
                 <button
                   type="button"
@@ -311,29 +331,43 @@ const SubmissionHistoryApprover: React.FC = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              <form className="p-4 md:p-5">
-                <div className="grid gap-4 mb-4 grid-cols-1">
-                  <div className="col-span-1">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Upload PDF file here
-                    </label>
-                    <input
-                      type="file"
-                      id="file-upload"
-                      onChange={handleFileChange}
-                      accept="application/pdf"
-                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                    />
-                  </div>
+              <div className="p-2 md:p-5">
+                <div className="max-h-96 px-2 overflow-y-auto">
+                  {selectedRiskFormData
+                    .filter((data) => data.notes || data.pdfProof)
+                    .map((data, index) => (
+                      <div key={data.id} className="col-span-1">
+                        <div className="flex justify-between">
+                          <label className="block mb-2 text-md font-bold text-yellow-600 uppercase">
+                            Row {index + 1}
+                          </label>
+                          <div className="flex items-center">
+                            {data.pdfProof && (
+                              <button
+                                type="button"
+                                className="mr-2 mb-4 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 text-xs font-medium text-center text-white rounded inline-flex items-center"
+                                onClick={() =>
+                                  viewPdfProof(selectedReportId!, data.id)
+                                }
+                              >
+                                View PDF
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <textarea
+                          name="notes"
+                          rows={4}
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                          placeholder="Notes"
+                          value={data.notes || ""}
+                          readOnly
+                        ></textarea>
+                        <hr className="my-8" />
+                      </div>
+                    ))}
                 </div>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="text-white inline-flex w-full justify-center bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                >
-                  Submit
-                </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
