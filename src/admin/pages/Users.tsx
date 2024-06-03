@@ -8,13 +8,15 @@ interface User {
   lastname: string;
   email: string;
   roles: { id: number; name: string }[];
-  active: boolean; // Add active status field
+  active: boolean;
 }
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
+  const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -91,11 +93,29 @@ const Users: React.FC = () => {
   const handleRoleChange = (user: User, roleId: number) => {
     const currentRoleId = user.roles[0].id;
     if (currentRoleId === 4 && roleId !== 4) {
-      // Admin cannot be downgraded
       alert("Admin users cannot be downgraded.");
       return;
     }
-    handleSaveUser(user, roleId);
+    if (roleId === 4 && currentRoleId !== 4) {
+      setSelectedUser(user);
+      setShowAdminConfirmation(true);
+    } else {
+      handleSaveUser(user, roleId);
+    }
+  };
+
+  const confirmAdminPromotion = () => {
+    if (selectedUser) {
+      handleSaveUser(selectedUser, 4);
+      setShowAdminConfirmation(false);
+      setSelectedUser(null);
+      alert("User has been promoted to Administrator. This action is irreversible.");
+    }
+  };
+
+  const cancelAdminPromotion = () => {
+    setShowAdminConfirmation(false);
+    setSelectedUser(null);
   };
 
   const handleStatusChange = async (user: User, isActive: boolean) => {
@@ -357,6 +377,29 @@ const Users: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      {showAdminConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Confirm Promotion</h2>
+            <p className="mb-4">Promoting a user to Administrator is irreversible. Do you want to proceed?</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelAdminPromotion}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={confirmAdminPromotion}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
