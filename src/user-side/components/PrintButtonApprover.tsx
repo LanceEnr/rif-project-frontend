@@ -72,6 +72,10 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
   const [esignaturePostNominalTitle, setEsignaturePostNominalTitle] =
     useState("");
   const [esignaturePhoto, setEsignaturePhoto] = useState("");
+  const [approverApproveDate, setApproverApproveDate] = useState<string | null>(
+    null
+  );
+  const [reportStatus, setReportStatus] = useState<string>("");
 
   useEffect(() => {
     console.log("PrintButtonApprover mounted with reportId:", reportId);
@@ -97,6 +101,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         setUserLastname(data.userLastname);
         setEsignatureProfessionalTitle(data.esignatureProfessionalTitle);
         setEsignaturePostNominalTitle(data.esignaturePostNominalTitle);
+        setReportStatus(data.report.status);
         if (data.esignaturePhoto) {
           const byteArray = new Uint8Array(
             atob(data.esignaturePhoto)
@@ -105,6 +110,18 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
           );
           const blob = new Blob([byteArray], { type: "image/png" });
           setEsignaturePhoto(URL.createObjectURL(blob));
+        }
+        if (data.report.approverApproveDate) {
+          const approveDate = new Date(data.report.approverApproveDate);
+          setApproverApproveDate(
+            approveDate.toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })
+          );
+        } else {
+          setApproverApproveDate(null);
         }
         console.log("Fetched report details:", data);
       } catch (error) {
@@ -758,40 +775,63 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92">Prepared by:</span>
+                <span className="c92" style={{ marginBottom: "-110px" }}>
+                  Prepared by:
+                </span>
                 <img
                   src={esignaturePhoto}
                   alt="Signature"
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-20px",
+                    marginBottom: "-75px",
                   }}
                 />
               </div>
-              <span className="c92">Reviewed/Approved by:</span>
-              <div className="block">
-                <img
-                  src={approverPhoto}
-                  alt="Signature"
-                  style={{
-                    height: "80px",
-                    marginLeft: "10px",
-                    marginBottom: "-20px",
-                  }}
-                />
-                <span className="font-bold border-b border-black">
-                  {professionalTitle} {user?.firstname} {user?.lastname}
-                  {postNominalTitle ? ", " : ""}
-                  {postNominalTitle}
-                  <span className="font-normal"> / Date</span>
+              {reportStatus === "APPROVER_APPROVED" ? (
+                <>
+                  <span
+                    className="c92"
+                    style={{ marginLeft: "200px", marginBottom: "-65px" }}
+                  >
+                    Reviewed/Approved by:
+                  </span>
+                  <div className="block ">
+                    <img
+                      src={approverPhoto}
+                      alt="Signature"
+                      style={{
+                        height: "80px",
+                        marginLeft: "10px",
+                        marginBottom: "-20px",
+                      }}
+                    />
+                    <span className="font-bold border-b border-black">
+                      {professionalTitle} {user?.firstname} {user?.lastname}
+                      {postNominalTitle ? ", " : ""}
+                      {postNominalTitle}
+                      <span className="font-normal">
+                        {" "}
+                        /{" "}
+                        {approverApproveDate
+                          ? new Date(approverApproveDate)
+                              .toISOString()
+                              .split("T")[0]
+                          : "No Date Provided"}
+                      </span>
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <span className="c92">
+                  Reviewed/Approved by: ______________________
                 </span>
-              </div>
+              )}
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
             <span className="c14">
-              <div style={{ marginLeft: "80px" }}>
+              <div style={{ marginLeft: "88px" }}>
                 <span className="font-bold border-b border-black">
                   {esignatureProfessionalTitle} {userFirstname} {userLastname}
                   {esignaturePostNominalTitle ? ", " : ""}

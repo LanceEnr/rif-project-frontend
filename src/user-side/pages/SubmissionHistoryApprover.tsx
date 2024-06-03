@@ -17,6 +17,7 @@ interface Report {
   riskFormData: RiskFormData[];
   status: string;
   approverComment: string | null;
+  approverApproveDate: string | null;
 }
 
 const MAX_CHARS = 500;
@@ -193,14 +194,24 @@ const SubmissionHistoryApprover: React.FC = () => {
       setReports((prevReports) =>
         prevReports.map((report) =>
           report.id === reportToApprove
-            ? { ...report, status: "APPROVER_APPROVED", approverComment: null }
+            ? {
+                ...report,
+                status: "APPROVER_APPROVED",
+                approverComment: null,
+                approverApproveDate: new Date().toISOString(),
+              }
             : report
         )
       );
       setFilteredReports((prevReports) =>
         prevReports.map((report) =>
           report.id === reportToApprove
-            ? { ...report, status: "APPROVER_APPROVED", approverComment: null }
+            ? {
+                ...report,
+                status: "APPROVER_APPROVED",
+                approverComment: null,
+                approverApproveDate: new Date().toISOString(),
+              }
             : report
         )
       );
