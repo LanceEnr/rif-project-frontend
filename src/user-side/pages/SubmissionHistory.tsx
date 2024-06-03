@@ -19,6 +19,8 @@ interface RiskFormData {
 interface Report {
   id: number;
   riskFormData: RiskFormData[];
+  status: string;
+  approverComment: string | null;
 }
 
 const SubmissionHistory: React.FC = () => {
@@ -32,6 +34,8 @@ const SubmissionHistory: React.FC = () => {
   const [selectedRiskFormData, setSelectedRiskFormData] = useState<
     RiskFormData[]
   >([]);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<string | null>(null);
   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
   const MAX_CHARS = 500;
 
@@ -145,6 +149,16 @@ const SubmissionHistory: React.FC = () => {
     setSelectedRiskFormData([]);
   };
 
+  const openCommentModal = (comment: string) => {
+    setSelectedComment(comment);
+    setIsCommentModalOpen(true);
+  };
+
+  const closeCommentModal = () => {
+    setIsCommentModalOpen(false);
+    setSelectedComment(null);
+  };
+
   const handleProofChange = (index: number, file: File | null) => {
     const updatedRiskFormData = [...selectedRiskFormData];
     if (file && file.size > MAX_FILE_SIZE) {
@@ -222,6 +236,29 @@ const SubmissionHistory: React.FC = () => {
       window.open(pdfUrl);
     } else {
       console.error("Error fetching PDF proof");
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "APPROVER_APPROVED":
+        return (
+          <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-400">
+            Approved
+          </span>
+        );
+      case "APPROVER_FOR_REVISION":
+        return (
+          <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
+            For Revision
+          </span>
+        );
+      default:
+        return (
+          <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded border border-yellow-300">
+            Pending
+          </span>
+        );
     }
   };
 
@@ -318,7 +355,7 @@ const SubmissionHistory: React.FC = () => {
         </Link>
         {filteredReports.map((report, index) => (
           <div
-            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
+            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm relative"
             key={report.id}
             style={{ cursor: "pointer" }}
           >
@@ -373,7 +410,17 @@ const SubmissionHistory: React.FC = () => {
                   <Dropdown.Item as={Link} to="#">
                     Duplicate and Edit
                   </Dropdown.Item>
+                  {report.status === "APPROVER_FOR_REVISION" && (
+                    <Dropdown.Item
+                      onClick={() => openCommentModal(report.approverComment!)}
+                    >
+                      View Comment
+                    </Dropdown.Item>
+                  )}
                 </Dropdown>
+              </div>
+              <div className="absolute top-2 right-2">
+                {getStatusIcon(report.status)}
               </div>
             </div>
           </div>
@@ -490,6 +537,57 @@ const SubmissionHistory: React.FC = () => {
                   Submit
                 </button>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isCommentModalOpen && (
+        <div
+          id="comment-modal"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="fixed inset-0 z-50 flex items-center justify-center w-full p-4 bg-black bg-opacity-50"
+        >
+          <div className="relative w-full max-w-3xl">
+            <div className="relative bg-white rounded-lg shadow">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Approver's Comment
+                </h3>
+                <button
+                  type="button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  onClick={closeCommentModal}
+                >
+                  <svg
+                    className="w-3 h-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                    />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div className="p-2 md:p-5">
+                <textarea
+                  name="comment"
+                  rows={4}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                  placeholder="Approver's Comment"
+                  value={selectedComment || ""}
+                  readOnly
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
