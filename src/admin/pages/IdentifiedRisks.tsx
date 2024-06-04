@@ -128,13 +128,13 @@ const IdentifiedRisks: React.FC = () => {
         <table className="w-full text-sm text-left rtl:text-right shadow-md rounded-lg">
           <thead className="text-xs text-white uppercase bg-yellow-500">
             <tr>
-              <th scope="col" className="px-6 py-3  w-2/5">
+              <th scope="col" className="px-6 py-3  w-3/12">
                 Issues
               </th>
-              <th scope="col" className="px-6 py-3 w-2/5">
+              <th scope="col" className="px-6 py-3 w-3/12">
                 Risks
               </th>
-              <th scope="col" className="px-6 py-3 w-1/5">
+              <th scope="col" className="px-6 py-3 w-1/12">
                 <div className="flex items-center">
                   Risk Rating
                   <button onClick={() => setSortRiskRatingAsc((prev) => !prev)}>
@@ -150,7 +150,7 @@ const IdentifiedRisks: React.FC = () => {
                   </button>
                 </div>
               </th>
-              <th scope="col" className="px-6 py-3 w-1/5">
+              <th scope="col" className="px-6 py-3 w-2/12">
                 <div className="flex items-center">
                   Units
                   <button onClick={() => setSortUnitAsc((prev) => !prev)}>

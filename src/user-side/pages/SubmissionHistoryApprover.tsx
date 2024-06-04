@@ -15,7 +15,12 @@ interface RiskFormData {
 interface Report {
   id: number;
   riskFormData: RiskFormData[];
+  status: string;
+  approverComment: string | null;
+  approverApproveDate: string | null;
 }
+
+const MAX_CHARS = 500;
 
 const SubmissionHistoryApprover: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
@@ -28,6 +33,10 @@ const SubmissionHistoryApprover: React.FC = () => {
     RiskFormData[]
   >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [reportToApprove, setReportToApprove] = useState<number | null>(null);
+  const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
+  const [revisionComment, setRevisionComment] = useState<string>("");
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -49,6 +58,7 @@ const SubmissionHistoryApprover: React.FC = () => {
           }
 
           const data = await response.json();
+          console.log("Fetched reports:", data); // Debugging log
           setReports(data);
           setFilteredReports(data);
         } catch (error) {
@@ -88,6 +98,7 @@ const SubmissionHistoryApprover: React.FC = () => {
       );
     }
 
+    console.log("Filtered reports:", sortedReports); // Debugging log
     setFilteredReports(sortedReports);
   }, [filter, searchQuery, reports]);
 
@@ -156,8 +167,167 @@ const SubmissionHistoryApprover: React.FC = () => {
     }
   };
 
+  const approveReport = async () => {
+    if (reportToApprove === null) return;
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/approve`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ reportId: reportToApprove }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Approve report response:", data); // Debugging log
+      // Update the report status in the state
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === reportToApprove
+            ? {
+                ...report,
+                status: "APPROVER_APPROVED",
+                approverComment: null,
+                approverApproveDate: new Date().toISOString(),
+              }
+            : report
+        )
+      );
+      setFilteredReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === reportToApprove
+            ? {
+                ...report,
+                status: "APPROVER_APPROVED",
+                approverComment: null,
+                approverApproveDate: new Date().toISOString(),
+              }
+            : report
+        )
+      );
+    } catch (error) {
+      console.error("Error approving report:", error);
+    } finally {
+      setIsApproveModalOpen(false);
+      setReportToApprove(null);
+    }
+  };
+
+  const confirmApproveReport = (reportId: number) => {
+    setReportToApprove(reportId);
+    setIsApproveModalOpen(true);
+  };
+
+  const cancelApproveReport = () => {
+    setIsApproveModalOpen(false);
+    setReportToApprove(null);
+  };
+
+  const confirmMarkForRevision = (reportId: number) => {
+    setSelectedReportId(reportId);
+    setIsRevisionModalOpen(true);
+  };
+
+  const cancelMarkForRevision = () => {
+    setIsRevisionModalOpen(false);
+    setRevisionComment("");
+    setSelectedReportId(null);
+  };
+
+  const markReportForRevision = async () => {
+    if (selectedReportId === null) return;
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/for-revision`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reportId: selectedReportId,
+            comment: revisionComment,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Mark for revision response:", data); // Debugging log
+      // Update the report status and comment in the state
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === selectedReportId
+            ? {
+                ...report,
+                status: "APPROVER_FOR_REVISION",
+                approverComment: revisionComment,
+              }
+            : report
+        )
+      );
+      setFilteredReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === selectedReportId
+            ? {
+                ...report,
+                status: "APPROVER_FOR_REVISION",
+                approverComment: revisionComment,
+              }
+            : report
+        )
+      );
+    } catch (error) {
+      console.error("Error marking report for revision:", error);
+    } finally {
+      setIsRevisionModalOpen(false);
+      setRevisionComment("");
+      setSelectedReportId(null);
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    console.log("Status Icon for status:", status); // Debugging log
+    switch (status) {
+      case "APPROVER_APPROVED":
+        return (
+          <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-400">
+            Approved
+          </span>
+        );
+      case "APPROVER_FOR_REVISION":
+        return (
+          <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
+            For Revision
+          </span>
+        );
+      default:
+        return (
+          <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded border border-yellow-300">
+            Pending
+          </span>
+        );
+    }
+  };
+
   return (
-    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24 bg-gray-50">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
@@ -227,7 +397,7 @@ const SubmissionHistoryApprover: React.FC = () => {
       <div className="grid gap-7 lg:grid-cols-5 p-1 pl-18 relative">
         {filteredReports.map((report, index) => (
           <div
-            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm"
+            className="w-full bg-white rounded-lg shadow-md lg:max-w-sm relative"
             key={report.id}
             style={{ cursor: "pointer" }}
           >
@@ -244,7 +414,7 @@ const SubmissionHistoryApprover: React.FC = () => {
                 Report ID: {report.id}
               </p>
               <div className="flex justify-between">
-                <div className="flex ">
+                <div className="flex">
                   <PrintButtonApprover reportId={report.id.toString()} />{" "}
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
@@ -287,12 +457,85 @@ const SubmissionHistoryApprover: React.FC = () => {
                   >
                     View Proof
                   </Dropdown.Item>
+                  <Dropdown.Item
+                    className="text-green-600"
+                    onClick={() => confirmApproveReport(report.id)}
+                  >
+                    Approve
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    className="text-red-600"
+                    onClick={() => confirmMarkForRevision(report.id)}
+                  >
+                    Mark for Revision
+                  </Dropdown.Item>
                 </Dropdown>
+              </div>
+              <div className="absolute top-2 right-2">
+                {getStatusIcon(report.status)}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Approve Modal */}
+      {isApproveModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Confirm Approval</h2>
+            <p className="mb-4">
+              Are you sure you want to approve this report?
+            </p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelApproveReport}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={approveReport}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Revision Modal */}
+      {isRevisionModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">
+              Leave a Comment for Revision
+            </h2>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-lg"
+              rows={5}
+              placeholder="Enter your comment here..."
+              value={revisionComment}
+              onChange={(e) => setRevisionComment(e.target.value)}
+            ></textarea>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelMarkForRevision}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={markReportForRevision}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (
