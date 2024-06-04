@@ -784,7 +784,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-75px",
+                    marginBottom: "-20px",
                   }}
                 />
               </div>

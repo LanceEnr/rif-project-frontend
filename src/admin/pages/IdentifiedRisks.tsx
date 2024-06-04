@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface RiskParticularDTO {
   description: string;
@@ -41,16 +43,12 @@ const IdentifiedRisks: React.FC = () => {
   // Calculate default start date as one year ago
   const defaultStartDate = new Date();
   defaultStartDate.setFullYear(defaultStartDate.getFullYear() - 1);
-  const formattedDefaultStartDate = defaultStartDate
-    .toISOString()
-    .split("T")[0];
+  const [startDate, setStartDate] = useState<Date | null>(defaultStartDate);
 
   // Calculate default end date as today
   const defaultEndDate = new Date();
-  const formattedDefaultEndDate = defaultEndDate.toISOString().split("T")[0];
+  const [endDate, setEndDate] = useState<Date | null>(defaultEndDate);
 
-  const [startDate, setStartDate] = useState<string>(formattedDefaultStartDate);
-  const [endDate, setEndDate] = useState<string>(formattedDefaultEndDate);
   const [sortUnitAsc, setSortUnitAsc] = useState<boolean | null>(null);
   const token = localStorage.getItem("token"); // Adjust according to where you store your token
 
@@ -91,7 +89,8 @@ const IdentifiedRisks: React.FC = () => {
     if (startDate && endDate) {
       filtered = filtered.filter(
         (item) =>
-          item.submissionDate >= startDate && item.submissionDate <= endDate
+          new Date(item.submissionDate) >= startDate &&
+          new Date(item.submissionDate) <= endDate
       );
     }
     if (sortUnitAsc !== null) {
@@ -272,39 +271,31 @@ const IdentifiedRisks: React.FC = () => {
           <div>
             <label
               htmlFor="sdaSelect"
-              className="block text-sm font-medium text-gray-700 mb-3"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
               Set Academic Year:
             </label>
             <div className="flex flex-column items-center ">
               <div className="flex items-center">
-                <label
-                  htmlFor="startDate"
-                  className="block text-sm font-medium text-gray-700 mr-2"
-                >
-                  Start Date:
-                </label>
-                <input
-                  type="date"
-                  id="startDate"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="border rounded p-2"
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Select start date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
-              </div>
-              <div className="flex items-center">
-                <label
-                  htmlFor="endDate"
-                  className="block text-sm font-medium text-gray-700 mx-2"
-                >
-                  End Date:
-                </label>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="border rounded p-2"
+                <span className="mx-4 text-gray-500">to</span>
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Select end date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
               </div>
             </div>

@@ -4,6 +4,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
 import PrintButtonApprover from "../components/PrintButtonApprover";
 import riskform from "../../assets/riskformthumbnail.jpg";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface RiskFormData {
   id: number;
@@ -37,6 +39,8 @@ const SubmissionHistoryApprover: React.FC = () => {
   const [reportToApprove, setReportToApprove] = useState<number | null>(null);
   const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
   const [revisionComment, setRevisionComment] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -85,6 +89,29 @@ const SubmissionHistoryApprover: React.FC = () => {
         const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
         return dateA.getTime() - dateB.getTime();
       });
+    } else if (filter === "Approved") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_APPROVED"
+      );
+    } else if (filter === "For Revision") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_FOR_REVISION"
+      );
+    } else if (filter === "Pending") {
+      sortedReports = sortedReports.filter(
+        (report) =>
+          report.status !== "APPROVER_APPROVED" &&
+          report.status !== "APPROVER_FOR_REVISION"
+      );
+    }
+
+    if (startDate && endDate) {
+      sortedReports = sortedReports.filter((report) => {
+        const reportDate = new Date(
+          report.riskFormData[0]?.submissionDate || 0
+        );
+        return reportDate >= startDate && reportDate <= endDate;
+      });
     }
 
     if (searchQuery) {
@@ -100,7 +127,7 @@ const SubmissionHistoryApprover: React.FC = () => {
 
     console.log("Filtered reports:", sortedReports); // Debugging log
     setFilteredReports(sortedReports);
-  }, [filter, searchQuery, reports]);
+  }, [filter, searchQuery, reports, startDate, endDate]);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
@@ -327,7 +354,7 @@ const SubmissionHistoryApprover: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24 bg-gray-50">
+    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
@@ -337,7 +364,7 @@ const SubmissionHistoryApprover: React.FC = () => {
       </div>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
         {/* Dropdown */}
-        <div>
+        <div className="flex justify-between">
           <Dropdown
             label=""
             inline
@@ -354,13 +381,47 @@ const SubmissionHistoryApprover: React.FC = () => {
               </button>
             )}
           >
+            <Dropdown.Item onClick={() => handleFilterChange("All")}>
+              All
+            </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Most Recent")}>
               Most Recent
             </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Oldest")}>
               Oldest
             </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Approved")}>
+              Approved
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("For Revision")}>
+              For Revision
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Pending")}>
+              Pending
+            </Dropdown.Item>
           </Dropdown>
+          <div className="ml-4 flex items-center">
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Select A.Y. start date"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+            <span className="mx-4 text-gray-500">to</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Select A.Y. end date"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
         </div>
         {/* Search input */}
         <label htmlFor="table-search" className="sr-only">
@@ -458,8 +519,13 @@ const SubmissionHistoryApprover: React.FC = () => {
                     View Proof
                   </Dropdown.Item>
                   <Dropdown.Item
-                    className="text-green-600"
+                    className={
+                      report.status === "APPROVER_APPROVED"
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-green-600"
+                    }
                     onClick={() => confirmApproveReport(report.id)}
+                    disabled={report.status === "APPROVER_APPROVED"}
                   >
                     Approve
                   </Dropdown.Item>

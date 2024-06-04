@@ -5,7 +5,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
 import PrintButton from "../components/PrintButton";
 import riskform from "../../assets/riskformthumbnail.jpg";
-import { FaFilePdf } from "react-icons/fa6";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface RiskFormData {
   id: number;
@@ -36,6 +37,8 @@ const SubmissionHistory: React.FC = () => {
   >([]);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [selectedComment, setSelectedComment] = useState<string | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
   const MAX_CHARS = 500;
 
@@ -85,6 +88,29 @@ const SubmissionHistory: React.FC = () => {
         const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
         return dateA.getTime() - dateB.getTime();
       });
+    } else if (filter === "Approved") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_APPROVED"
+      );
+    } else if (filter === "For Revision") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_FOR_REVISION"
+      );
+    } else if (filter === "Pending") {
+      sortedReports = sortedReports.filter(
+        (report) =>
+          report.status !== "APPROVER_APPROVED" &&
+          report.status !== "APPROVER_FOR_REVISION"
+      );
+    }
+
+    if (startDate && endDate) {
+      sortedReports = sortedReports.filter((report) => {
+        const reportDate = new Date(
+          report.riskFormData[0]?.submissionDate || 0
+        );
+        return reportDate >= startDate && reportDate <= endDate;
+      });
     }
 
     if (searchQuery) {
@@ -99,7 +125,7 @@ const SubmissionHistory: React.FC = () => {
     }
 
     setFilteredReports(sortedReports);
-  }, [filter, searchQuery, reports]);
+  }, [filter, searchQuery, reports, startDate, endDate]);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
@@ -272,7 +298,7 @@ const SubmissionHistory: React.FC = () => {
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
-        <div>
+        <div className="flex justify-between">
           <Dropdown
             label=""
             inline
@@ -289,13 +315,48 @@ const SubmissionHistory: React.FC = () => {
               </button>
             )}
           >
+            <Dropdown.Item onClick={() => handleFilterChange("All")}>
+              All
+            </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Most Recent")}>
               Most Recent
             </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Oldest")}>
               Oldest
             </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Approved")}>
+              Approved
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("For Revision")}>
+              For Revision
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleFilterChange("Pending")}>
+              Pending
+            </Dropdown.Item>
           </Dropdown>
+
+          <div className="ml-4 flex items-center">
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Select A.Y. start date"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+            <span className="mx-4 text-gray-500">to</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Select A.Y. end date"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
         </div>
         <label htmlFor="table-search" className="sr-only">
           Search

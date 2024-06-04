@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface ReportCount {
   academicCount: number;
@@ -17,26 +19,19 @@ const SubmissionRateTable: React.FC = () => {
 
   const token = localStorage.getItem("token");
 
-  // Get current date and date one year ago
-  const currentDate = new Date();
-  const oneYearAgo = new Date();
-  oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+  // Calculate default start date as one year ago
+  const defaultStartDate = new Date();
+  defaultStartDate.setFullYear(defaultStartDate.getFullYear() - 1);
+  const [startDate, setStartDate] = useState<Date | null>(defaultStartDate);
 
-  // Format dates to yyyy-MM-dd
-  const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    const day = ("0" + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [startDate, setStartDate] = useState<string>(formatDate(oneYearAgo));
-  const [endDate, setEndDate] = useState<string>(formatDate(currentDate));
+  // Calculate default end date as today
+  const defaultEndDate = new Date();
+  const [endDate, setEndDate] = useState<Date | null>(defaultEndDate);
 
   const fetchCounts = async () => {
     try {
       const academicResponse = await fetch(
-        `http://localhost:8080/api/riskforms/unitTypeCount/academic/dateRange?startDate=${startDate}&endDate=${endDate}`,
+        `http://localhost:8080/api/riskforms/unitTypeCount/academic/dateRange?startDate=${startDate?.toISOString()}&endDate=${endDate?.toISOString()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +47,7 @@ const SubmissionRateTable: React.FC = () => {
       const academicData = await academicResponse.json();
 
       const administrativeResponse = await fetch(
-        `http://localhost:8080/api/riskforms/unitTypeCount/administrative/dateRange?startDate=${startDate}&endDate=${endDate}`,
+        `http://localhost:8080/api/riskforms/unitTypeCount/administrative/dateRange?startDate=${startDate?.toISOString()}&endDate=${endDate?.toISOString()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,52 +156,43 @@ const SubmissionRateTable: React.FC = () => {
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
-      <div id="print-section" className="relative overflow-x-auto">
-        <div className="flex flex-column items-center justify-between space-y-4 pb-4">
-          <div className="mb-8">
-            <label
-              htmlFor="sdaSelect"
-              className="block text-sm font-medium text-gray-700 mb-3"
-            >
-              Set Academic Year:
-            </label>
-            <div className="flex flex-column items-center ">
-              <div className="flex items-center">
-                <label
-                  htmlFor="startDate"
-                  className="block text-sm font-medium text-gray-700 mr-2"
-                >
-                  Start Date:
-                </label>
-                <input
-                  type="date"
-                  id="startDate"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="border rounded p-2"
-                />
-              </div>
-              <div className="flex items-center">
-                <label
-                  htmlFor="endDate"
-                  className="block text-sm font-medium text-gray-700 mx-2"
-                >
-                  End Date:
-                </label>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="border rounded p-2"
-                />
-              </div>
+      <div className="flex flex-column items-center justify-end space-y-4 pb-4">
+        <div>
+          <label
+            htmlFor="sdaSelect"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Set Academic Year:
+          </label>
+          <div className="flex flex-column items-center ">
+            <div className="flex items-center">
+              <DatePicker
+                selected={startDate}
+                onChange={(date: Date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="Select start date"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+              <span className="mx-4 text-gray-500">to</span>
+              <DatePicker
+                selected={endDate}
+                onChange={(date: Date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                placeholderText="Select end date"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
             </div>
           </div>
         </div>
-
+      </div>
+      <div id="print-section" className="relative overflow-x-auto">
         <div className="mb-8">
-          <h3 className=" text-xl font-bold mb-4">Academic Units</h3>
+          <h3 className="text-xl font-bold mb-4">Academic Units</h3>
           <table className="w-full text-sm text-left rtl:text-right shadow-md sm:rounded-lg">
             <thead className="text-xs text-white uppercase bg-yellow-500">
               <tr>
@@ -234,7 +220,7 @@ const SubmissionRateTable: React.FC = () => {
         </div>
 
         <div>
-          <h3 className=" text-xl font-bold mb-4">Administrative Units</h3>
+          <h3 className="text-xl font-bold mb-4">Administrative Units</h3>
           <table className="w-full text-sm text-left rtl:text-right shadow-md sm:rounded-lg">
             <thead className="text-xs text-white uppercase bg-yellow-500">
               <tr>
