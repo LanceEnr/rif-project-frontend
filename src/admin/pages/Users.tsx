@@ -28,8 +28,10 @@ const Users: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
   const [showRoleConfirmation, setShowRoleConfirmation] = useState(false);
+  const [showStatusConfirmation, setShowStatusConfirmation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+  const [statusAction, setStatusAction] = useState<"activate" | "deactivate" | null>(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -176,29 +178,46 @@ const Users: React.FC = () => {
     setSelectedUser(null);
   };
 
-  const handleStatusChange = async (user: User, isActive: boolean) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/users/${user.id}/status`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ active: isActive }),
+  const handleStatusChange = (user: User, isActive: boolean) => {
+    setSelectedUser(user);
+    setStatusAction(isActive ? "activate" : "deactivate");
+    setShowStatusConfirmation(true);
+  };
+
+  const confirmStatusChange = async () => {
+    if (selectedUser && statusAction !== null) {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/users/${selectedUser.id}/status`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ active: statusAction === "activate" }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const updatedUser = await response.json();
+        setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
+        setShowStatusConfirmation(false);
+        setSelectedUser(null);
+        setStatusAction(null);
+      } catch (error) {
+        console.error("Error updating user status:", error);
       }
-
-      const updatedUser = await response.json();
-      setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
-    } catch (error) {
-      console.error("Error updating user status:", error);
     }
+  };
+
+  const cancelStatusChange = () => {
+    setShowStatusConfirmation(false);
+    setSelectedUser(null);
+    setStatusAction(null);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -480,6 +499,33 @@ const Users: React.FC = () => {
               <button
                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
                 onClick={confirmRoleChange}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showStatusConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">
+              Confirm {statusAction === "activate" ? "Activation" : "Deactivation"}
+            </h2>
+            <p className="mb-4">
+              Are you sure you want to {statusAction === "activate" ? "activate" : "deactivate"} this user?
+            </p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelStatusChange}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={confirmStatusChange}
               >
                 Confirm
               </button>
