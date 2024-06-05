@@ -226,7 +226,7 @@ const Register = () => {
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
-                        className="absolute inset-y-0 right-0 pr-3 flex items.center cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                       >
                         <FontAwesomeIcon
                           icon={showConfirmPassword ? faEye : faEyeSlash}
