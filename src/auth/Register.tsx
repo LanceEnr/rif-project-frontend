@@ -41,7 +41,7 @@ const Register = () => {
     e.preventDefault();
 
     if (!email.endsWith("@ust.edu.ph")) {
-      setError("Please use a ust email");
+      setError("Please use a university email (@ust.edu.ph).");
       return;
     }
 
@@ -53,7 +53,7 @@ const Register = () => {
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Passwords do not match.");
       return;
     }
 
@@ -226,7 +226,7 @@ const Register = () => {
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
-                        className="absolute inset-y-0 right-0 pr-3 flex items.center cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                       >
                         <FontAwesomeIcon
                           icon={showConfirmPassword ? faEye : faEyeSlash}
@@ -235,8 +235,8 @@ const Register = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items.start">
-                    <div className="flex items.center h-5">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
                       <input
                         id="terms"
                         aria-describedby="terms"

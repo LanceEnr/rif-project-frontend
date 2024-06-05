@@ -48,12 +48,12 @@ const Login = () => {
     e.preventDefault();
 
     if (!email.endsWith("@ust.edu.ph")) {
-      setError("Please use your university email");
+      setError("Please use your university email (@ust.edu.ph).");
       return;
     }
 
     if (!captchaValue) {
-      setError("Please complete the CAPTCHA");
+      setError("Please complete the CAPTCHA.");
       return;
     }
 
@@ -283,7 +283,7 @@ const Login = () => {
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="user@gmail.com"
+                  placeholder="user@ust.edu.ph"
                   required
                 />
               </div>
