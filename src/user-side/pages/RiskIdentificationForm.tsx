@@ -1,6 +1,8 @@
 import { useContext, useState, ChangeEvent, useEffect } from "react";
 import { Label, Radio, Dropdown, Checkbox } from "flowbite-react";
 import { MdKeyboardArrowDown, MdClose, MdEdit } from "react-icons/md";
+import { FaCircle } from "react-icons/fa";
+
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
@@ -74,6 +76,10 @@ const RiskIdentificationForm: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]); // State to hold the tags
 
   useEffect(() => {
+    updateRiskLevel(riskRating);
+  }, [riskRating]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken: any = jwtDecode(token);
@@ -83,6 +89,32 @@ const RiskIdentificationForm: React.FC = () => {
       }));
     }
   }, []);
+
+  const getRiskLevel = (rating: number): string => {
+    if (rating >= 1 && rating <= 7) {
+      return "L";
+    } else if (rating >= 8 && rating <= 14) {
+      return "M";
+    } else if (rating >= 15 && rating <= 25) {
+      return "H";
+    }
+    return "";
+  };
+
+  const updateRiskLevel = (rating: number) => {
+    const riskLevel = getRiskLevel(rating);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      riskLevel: riskLevel,
+    }));
+    if (activeRowIndex !== null) {
+      setRowsData((prevRowsData) =>
+        prevRowsData.map((row, index) =>
+          index === activeRowIndex ? { ...row, riskLevel: riskLevel } : row
+        )
+      );
+    }
+  };
 
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -854,7 +886,10 @@ const RiskIdentificationForm: React.FC = () => {
                             key={index}
                             className="relative flex items-center mb-2"
                           >
-                            <div className="mr-3">{index + 1}.</div>
+                            <div className="mr-3">
+                              {" "}
+                              <FaCircle className="w-2 h-2 text-yellow-600" />
+                            </div>
                             <textarea
                               name="riskParticulars"
                               rows={4}
@@ -970,7 +1005,7 @@ const RiskIdentificationForm: React.FC = () => {
                     <div className="md:col-span-5">
                       <label
                         htmlFor="message"
-                        className="block my-2 text-sm font-bold text-gray-900"
+                        className="block my-2 text-sm font-medium text-gray-900"
                       >
                         Risk Categorization
                       </label>
@@ -989,54 +1024,43 @@ const RiskIdentificationForm: React.FC = () => {
                             id="risk-l"
                             name="riskLevel"
                             value="L"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].riskLevel === "L"
-                                : formData.riskLevel === "L"
-                            }
+                            checked={formData.riskLevel === "L"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
+                            readOnly
+                            disabled
                           />
-
-                          <Label htmlFor="risk-l">Low</Label>
+                          <Label htmlFor="risk-l">Low (1-7)</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-m"
                             name="riskLevel"
                             value="M"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].riskLevel === "M"
-                                : formData.riskLevel === "M"
-                            }
+                            checked={formData.riskLevel === "M"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
+                            readOnly
+                            disabled
                           />
-
-                          <Label htmlFor="risk-m">Medium</Label>
+                          <Label htmlFor="risk-m">Medium (8-14)</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Radio
                             id="risk-h"
                             name="riskLevel"
                             value="H"
-                            checked={
-                              activeRowIndex !== null
-                                ? rowsData[activeRowIndex].riskLevel === "H"
-                                : formData.riskLevel === "H"
-                            }
+                            checked={formData.riskLevel === "H"}
                             className="checked:bg-yellow-500 focus:ring-yellow-500"
-                            onChange={handleChange}
+                            readOnly
+                            disabled
                           />
-
-                          <Label htmlFor="risk-h">High</Label>
+                          <Label htmlFor="risk-h">High (15-25)</Label>
                         </div>
                       </fieldset>
                       {errors.riskLevel && (
                         <p className="text-red-500">{errors.riskLevel}</p>
                       )}
                     </div>
+
                     <div className="md:col-span-2">
                       <label
                         htmlFor="message"
@@ -1115,7 +1139,10 @@ const RiskIdentificationForm: React.FC = () => {
                             key={index}
                             className="relative flex items-center mb-2"
                           >
-                            <div className="mr-3">{index + 1}.</div>
+                            <div className="mr-3">
+                              <FaCircle className="w-2 h-2 text-yellow-600" />
+                            </div>{" "}
+                            {/* Bullet point */}
                             <textarea
                               name="opportunities"
                               rows={4}
@@ -1143,6 +1170,7 @@ const RiskIdentificationForm: React.FC = () => {
                             </button>
                           </div>
                         ))}
+
                         {errors.opportunities && (
                           <p className="text-red-500">{errors.opportunities}</p>
                         )}
@@ -1191,7 +1219,9 @@ const RiskIdentificationForm: React.FC = () => {
                             key={index}
                             className="relative flex items-center mb-2"
                           >
-                            <div className="mr-3">{index + 1}.</div>
+                            <div className="mr-3">
+                              <FaCircle className="w-2 h-2 text-yellow-600" />
+                            </div>
                             <textarea
                               name="actionPlan"
                               rows={4}
