@@ -13,7 +13,8 @@ interface RiskFormDataGroupedDTO {
   riskParticularDescriptions: string[];
   unit: string;
   submissionDate: string;
-  riskRating: number; // Ensure riskRating is included
+  riskRating: number;
+  riskLevel: string;
 }
 
 const sdaMapping: { [key: number]: string } = {
@@ -39,18 +40,19 @@ const IdentifiedRisks: React.FC = () => {
   const [sortRiskRatingAsc, setSortRiskRatingAsc] = useState<boolean | null>(
     null
   );
+  const [sortRiskLevelAsc, setSortRiskLevelAsc] = useState<boolean | null>(
+    null
+  );
 
-  // Calculate default start date as one year ago
   const defaultStartDate = new Date();
   defaultStartDate.setFullYear(defaultStartDate.getFullYear() - 1);
   const [startDate, setStartDate] = useState<Date | null>(defaultStartDate);
 
-  // Calculate default end date as today
   const defaultEndDate = new Date();
   const [endDate, setEndDate] = useState<Date | null>(defaultEndDate);
 
   const [sortUnitAsc, setSortUnitAsc] = useState<boolean | null>(null);
-  const token = localStorage.getItem("token"); // Adjust according to where you store your token
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,6 +109,13 @@ const IdentifiedRisks: React.FC = () => {
           : b.riskRating - a.riskRating
       );
     }
+    if (sortRiskLevelAsc !== null) {
+      filtered.sort((a, b) =>
+        sortRiskLevelAsc
+          ? riskLevelToNumber(a.riskLevel) - riskLevelToNumber(b.riskLevel)
+          : riskLevelToNumber(b.riskLevel) - riskLevelToNumber(a.riskLevel)
+      );
+    }
     setFilteredData(filtered);
   }, [
     selectedSdaNumber,
@@ -114,8 +123,47 @@ const IdentifiedRisks: React.FC = () => {
     endDate,
     sortUnitAsc,
     sortRiskRatingAsc,
+    sortRiskLevelAsc,
     data,
   ]);
+
+  const getRiskLevelBadge = (riskLevel: string) => {
+    switch (riskLevel) {
+      case "L":
+        return (
+          <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400">
+            Low
+          </span>
+        );
+      case "M":
+        return (
+          <span className="bg-orange-100 text-orange-600 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-orange-500">
+            Medium
+          </span>
+        );
+      case "H":
+        return (
+          <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-red-400">
+            High
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const riskLevelToNumber = (riskLevel: string) => {
+    switch (riskLevel) {
+      case "L":
+        return 1;
+      case "M":
+        return 2;
+      case "H":
+        return 3;
+      default:
+        return 0;
+    }
+  };
 
   const renderTable = (
     filteredData: RiskFormDataGroupedDTO[],
@@ -127,7 +175,7 @@ const IdentifiedRisks: React.FC = () => {
         <table className="w-full text-sm text-left rtl:text-right shadow-md rounded-lg">
           <thead className="text-xs text-white uppercase bg-yellow-500">
             <tr>
-              <th scope="col" className="px-6 py-3  w-3/12">
+              <th scope="col" className="px-6 py-3 w-3/12">
                 Issues
               </th>
               <th scope="col" className="px-6 py-3 w-3/12">
@@ -137,6 +185,22 @@ const IdentifiedRisks: React.FC = () => {
                 <div className="flex items-center">
                   Risk Rating
                   <button onClick={() => setSortRiskRatingAsc((prev) => !prev)}>
+                    <svg
+                      className="w-3 h-3 ms-1.5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                    </svg>
+                  </button>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3 w-1/12">
+                <div className="flex items-center">
+                  Risk Level
+                  <button onClick={() => setSortRiskLevelAsc((prev) => !prev)}>
                     <svg
                       className="w-3 h-3 ms-1.5"
                       aria-hidden="true"
@@ -192,6 +256,9 @@ const IdentifiedRisks: React.FC = () => {
                   <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
                     {item.riskRating}
                   </td>
+                  <td className="px-6 py-4 font-medium break-words whitespace-normal">
+                    {getRiskLevelBadge(item.riskLevel)}
+                  </td>
                   <td className="px-6 py-4 font-medium text-gray-900 break-words whitespace-normal">
                     {item.unit}
                   </td>
@@ -202,7 +269,7 @@ const IdentifiedRisks: React.FC = () => {
               ))
             ) : (
               <tr className="bg-yellow-100 border-b">
-                <td colSpan={4} className="text-center py-4">
+                <td colSpan={5} className="text-center py-4">
                   No data available
                 </td>
               </tr>
