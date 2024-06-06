@@ -112,14 +112,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
           setEsignaturePhoto(URL.createObjectURL(blob));
         }
         if (data.report.approverApproveDate) {
-          const approveDate = new Date(data.report.approverApproveDate);
-          setApproverApproveDate(
-            approveDate.toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })
-          );
+          setApproverApproveDate(data.report.approverApproveDate);
         } else {
           setApproverApproveDate(null);
         }
@@ -128,7 +121,6 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         console.error("Failed to fetch report details:", error);
       }
     };
-
     const fetchApprover = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -768,7 +760,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-70px", // marginBottom: "-80px", "-110px"
+                    marginBottom: "-30px", // marginBottom: "-80px", "-110px"
                   }}
                 />
               </div>
@@ -790,8 +782,9 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                       alt="Signature"
                       style={{
                         height: "80px",
+                        marginRight: "60px",
                         marginLeft: "60px",
-                        marginBottom: "-50px", // marginBottom: "-50px",
+                        marginBottom: "-30px", // marginBottom: "-50px",
                       }}
                     />
                   </div>

@@ -745,7 +745,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 alignItems: "center",
                 width: "100%",
                 justifyContent: "space-between",
-                marginTop:"10px"
+                marginTop: "10px",
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -758,7 +758,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-50px",
+                    marginBottom: "-30px", // marginBottom: "-80px", "-110px"
                   }}
                 />
               </div>
@@ -766,11 +766,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               <span className="c92" style={{ marginBottom: "-60px" }}>
                 Reviewed/Approved by: _________________________________________
               </span>
-
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
-            
             <span className="c14">
               <div style={{ marginLeft: "90px" }}>
                 <span className="font-bold border-b border-black">
@@ -788,17 +786,18 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               </div>
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature
+              over Printed Name/Date
             </span>
           </p>
         </div>
 
         <tr className="page-break"></tr>
         <div style={{ pageBreakBefore: "always" }}>
-        
           {/* <p className="c21">
             <span className="c14"></span>
           </p> */}
@@ -813,7 +812,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 </p>
                 <a id="t.e093c7e7721baa52a33c27063dc75e026cd26f4c"></a>
                 <a id="t.2"></a> */}
-                
+
                 <table className="c37">
                   <tr className="c34">
                     <td className="c47 c73" colSpan={2} rowSpan={1}>
@@ -921,7 +920,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                     </td>
                     <td className="c48" colSpan={1} rowSpan={1}>
                       <p className="c6">
-                        <span className="c42">Student Welfare and Services</span>
+                        <span className="c42">
+                          Student Welfare and Services
+                        </span>
                       </p>
                     </td>
                   </tr>
@@ -1130,8 +1131,9 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               <a id="t.7bece1298abb30b95fd3fdb8197d8426f5217a65"></a>
               <a id="t.3"></a>
               <table className="c37">
-
-              <tr style={{height: "30px"}}><td>&nbsp;</td></tr>
+                <tr style={{ height: "30px" }}>
+                  <td>&nbsp;</td>
+                </tr>
 
                 <tr className="c34">
                   <td className="c19 c47" colSpan={1} rowSpan={1}>
@@ -1210,7 +1212,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                     <p className="c6">
                       <span className="c9">Initial Risk Level</span>
                       <span className="c14">
-                        &nbsp;- Level of risk before action is taken to reduce it
+                        &nbsp;- Level of risk before action is taken to reduce
+                        it
                       </span>
                     </p>
                     <p className="c6">
@@ -1227,8 +1230,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                     <p className="c6">
                       <span className="c9">Opportunity </span>
                       <span className="c14">
-                        - Favorable condition that can arise as a result of action
-                        plan to address risk
+                        - Favorable condition that can arise as a result of
+                        action plan to address risk
                       </span>
                     </p>
                   </td>
@@ -1248,7 +1251,8 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                     <p className="c6">
                       <span className="c9">Person Responsible</span>
                       <span className="c14">
-                        -- Who implements or ensures implementation of action plan
+                        -- Who implements or ensures implementation of action
+                        plan
                       </span>
                     </p>
                   </td>

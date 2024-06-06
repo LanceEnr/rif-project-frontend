@@ -31,7 +31,9 @@ const SubmissionHistoryApprover: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated, user } = useContext(AuthContext);
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
-  const [selectedRiskFormData, setSelectedRiskFormData] = useState<RiskFormData[]>([]);
+  const [selectedRiskFormData, setSelectedRiskFormData] = useState<
+    RiskFormData[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [reportToApprove, setReportToApprove] = useState<number | null>(null);
@@ -40,7 +42,8 @@ const SubmissionHistoryApprover: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [notifications, setNotifications] = useState<string[]>([]);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
+  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
+    useState(false);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -244,7 +247,7 @@ const SubmissionHistoryApprover: React.FC = () => {
       );
       setNotifications((prevNotifications) => [
         ...prevNotifications,
-        `Approval email sent to user associated with report ID ${reportToApprove}`
+        `Approval email sent to user associated with report ID ${reportToApprove}`,
       ]);
     } catch (error) {
       console.error("Error approving report:", error);
@@ -326,7 +329,7 @@ const SubmissionHistoryApprover: React.FC = () => {
       );
       setNotifications((prevNotifications) => [
         ...prevNotifications,
-        `Revision email sent to user associated with report ID ${selectedReportId}`
+        `Revision email sent to user associated with report ID ${selectedReportId}`,
       ]);
     } catch (error) {
       console.error("Error marking report for revision:", error);
@@ -384,10 +387,15 @@ const SubmissionHistoryApprover: React.FC = () => {
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20">
                     <div className="py-2">
                       {notifications.length === 0 ? (
-                        <div className="px-4 py-2 text-gray-600">No notifications</div>
+                        <div className="px-4 py-2 text-gray-600">
+                          No notifications
+                        </div>
                       ) : (
                         notifications.map((notification, index) => (
-                          <div key={index} className="px-4 py-2 text-gray-800 hover:bg-gray-200">
+                          <div
+                            key={index}
+                            className="px-4 py-2 text-gray-800 hover:bg-gray-200"
+                          >
                             {notification}
                           </div>
                         ))
