@@ -89,7 +89,9 @@ const Prerequisites: React.FC = () => {
       return;
     }
 
-    if (!unit.trim()) {
+    const trimmedUnit = unit.trim();
+
+    if (!trimmedUnit) {
       alert("Please fill in the Administrative/Academic Unit field.");
       return;
     }
@@ -102,7 +104,7 @@ const Prerequisites: React.FC = () => {
 
     const url = "http://localhost:8080/api/prerequisites";
     const data = {
-      unit,
+      unit: trimmedUnit,
       unitType, // Include unitType in the data
       internalStakeholders: internalStakeholders.map((name) => ({ name })),
       externalStakeholders: externalStakeholders.map((name) => ({ name })),
