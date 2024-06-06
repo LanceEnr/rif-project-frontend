@@ -769,11 +769,12 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 alignItems: "center",
                 width: "100%",
                 justifyContent: "space-between",
-                marginTop:"-40px"
+                marginTop:"20px"
+                // marginTop:"-40px"
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92" style={{ marginBottom: "-130px" }}>
+                <span className="c92" style={{ marginBottom: "-60px" }}>  {/* marginBottom: "-130px" */}
                   Prepared by:
                 </span>
                 <img
@@ -782,47 +783,40 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-80px",
+                    marginBottom: "-70px", // marginBottom: "-80px", "-110px"
                   }}
                 />
               </div>
-              {reportStatus === "APPROVER_APPROVED" ? (
-                <>
-                  <span
-                    className="c92"
-                    style={{ marginLeft: "200px", marginBottom: "-80px" }}
-                  >
-                    Reviewed/Approved by:
-                  </span>
-                  <div className="block">
-                    <img
-                      src={approverPhoto}
-                      alt="Signature"
-                      style={{
-                        height: "80px",
-                        marginLeft: "60px",
-                        marginBottom: "2px",
-                      }}
-                    />
-                    <span className="font-bold border-b border-black">
-                      {professionalTitle} {user?.firstname} {user?.lastname}
-                      {postNominalTitle ? ", " : ""}
-                      {postNominalTitle}
-                      <span className="font-normal">
-                        {" "}
-                        /{" "}
-                        {approverApproveDate
-                          ? new Date(approverApproveDate).toISOString().split("T")[0]
-                          : "No Date Provided"}
-                      </span>
+              
+                {reportStatus === "APPROVER_APPROVED" ? (
+                  <>
+                    <span
+                      className="c92"
+                      style={{ marginLeft: "100px", marginBottom: "-55px" }} // marginBottom: "-80px"
+                    >
+                      Reviewed/Approved by:
                     </span>
-                  </div>
-                </>
-              ) : (
-                <span className="c92">
-                  Reviewed/Approved by: ______________________
-                </span>
-              ) }
+                    
+                    <div> {/* <div className="block"> */}
+                      <img
+                        src={approverPhoto}
+                        alt="Signature"
+                        style={{
+                          height: "80px",   
+                          marginLeft: "60px",
+                          marginBottom: "-50px", // marginBottom: "-50px",
+                        }}
+                      />
+                      
+                    </div>
+
+                  </>
+                ) : (
+                  <span className="c92">
+                    Reviewed/Approved by: ______________________
+                  </span>
+                ) }
+              
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
@@ -841,6 +835,22 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   </span>
                 </span>
               </div>
+
+              <div style={{ marginTop: "-25px", marginLeft: "638px" }}>
+                <span className="font-bold border-b border-black">
+                  {professionalTitle} {user?.firstname} {user?.lastname}
+                  {postNominalTitle ? ", " : ""}
+                  {postNominalTitle}
+                  <span className="font-normal">
+                    {" "}
+                    /{" "}
+                    {approverApproveDate
+                      ? new Date(approverApproveDate).toISOString().split("T")[0]
+                      : "No Date Provided"}
+                  </span>
+                </span>
+              </div>
+
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
@@ -850,6 +860,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
             </span>
           </p>
         </div>
+        
         <tr className="page-break"></tr>
         <p className="c21">
           <span className="c14"></span>
