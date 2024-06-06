@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
-import PrintButtonApprover from "../../user-side/components/PrintButtonApprover";
 import riskform from "../../assets/riskformthumbnail.jpg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import PrintButtonAdmin from "../components/PrintButtonAdmin";
 
 interface RiskFormData {
   id: number;
@@ -45,15 +45,21 @@ const SubmissionHistoryAdmin: React.FC = () => {
     RiskFormData[]
   >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
-  const [reportToApprove, setReportToApprove] = useState<number | null>(null);
   const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
   const [revisionComment, setRevisionComment] = useState<string>("");
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [reportToVerify, setReportToVerify] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [notifications, setNotifications] = useState<string[]>([]);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
-    useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<
+    "FOR_VERIFICATION" | "VERIFIED"
+  >("FOR_VERIFICATION");
+
+  const handleDisplayChange = (display: "FOR_VERIFICATION" | "VERIFIED") => {
+    setSelectedFilter(display);
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -75,20 +81,22 @@ const SubmissionHistoryAdmin: React.FC = () => {
           }
 
           const data = await response.json();
-          const approvedReports = data.filter(
-            (report: Report) => report.status === "APPROVER_APPROVED"
+          const approvedAndVerifiedReports = data.filter(
+            (report: Report) =>
+              report.status === "APPROVER_APPROVED" ||
+              report.status === "ADMIN_VERIFIED"
           );
-          setReports(approvedReports);
-          setFilteredReports(approvedReports);
+          setReports(approvedAndVerifiedReports);
+          setFilteredReports(approvedAndVerifiedReports);
 
-          const unitPromises = approvedReports.map((report) =>
+          const unitPromises = approvedAndVerifiedReports.map((report) =>
             fetchReportUnit(report.id)
           );
           const unitResults = await Promise.all(unitPromises);
           const unitsMap: { [key: number]: string } = {};
           unitResults.forEach((result, index) => {
             if (result) {
-              unitsMap[approvedReports[index].id] = result;
+              unitsMap[approvedAndVerifiedReports[index].id] = result;
             }
           });
           setUnits(unitsMap);
@@ -141,20 +149,6 @@ const SubmissionHistoryAdmin: React.FC = () => {
         const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
         return dateA.getTime() - dateB.getTime();
       });
-    } else if (filter === "Approved") {
-      sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_APPROVED"
-      );
-    } else if (filter === "For Revision") {
-      sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_FOR_REVISION"
-      );
-    } else if (filter === "Pending") {
-      sortedReports = sortedReports.filter(
-        (report) =>
-          report.status !== "APPROVER_APPROVED" &&
-          report.status !== "APPROVER_FOR_REVISION"
-      );
     }
 
     if (startDate && endDate) {
@@ -173,12 +167,25 @@ const SubmissionHistoryAdmin: React.FC = () => {
             data.submissionDate
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
-          ) || report.id.toString().includes(searchQuery)
+          ) ||
+          report.id.toString().includes(searchQuery) ||
+          (units[report.id] &&
+            units[report.id].toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+
+    if (selectedFilter === "FOR_VERIFICATION") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_APPROVED"
+      );
+    } else if (selectedFilter === "VERIFIED") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "ADMIN_VERIFIED"
       );
     }
 
     setFilteredReports(sortedReports);
-  }, [filter, searchQuery, reports, startDate, endDate]);
+  }, [filter, searchQuery, reports, startDate, endDate, selectedFilter]);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
@@ -245,20 +252,20 @@ const SubmissionHistoryAdmin: React.FC = () => {
     }
   };
 
-  const approveReport = async () => {
-    if (reportToApprove === null) return;
+  const verifyReport = async () => {
+    if (reportToVerify === null) return;
     const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/riskforms/approve`,
+        `http://localhost:8080/api/riskforms/verify`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ reportId: reportToApprove }),
+          body: JSON.stringify({ reportId: reportToVerify }),
         }
       );
 
@@ -267,52 +274,48 @@ const SubmissionHistoryAdmin: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Approve report response:", data); // Debugging log
+      console.log("Verify report response:", data); // Debugging log
       // Update the report status in the state
       setReports((prevReports) =>
         prevReports.map((report) =>
-          report.id === reportToApprove
+          report.id === reportToVerify
             ? {
                 ...report,
-                status: "APPROVER_APPROVED",
-                approverComment: null,
-                approverApproveDate: new Date().toISOString(),
+                status: "ADMIN_VERIFIED",
               }
             : report
         )
       );
       setFilteredReports((prevReports) =>
         prevReports.map((report) =>
-          report.id === reportToApprove
+          report.id === reportToVerify
             ? {
                 ...report,
-                status: "APPROVER_APPROVED",
-                approverComment: null,
-                approverApproveDate: new Date().toISOString(),
+                status: "ADMIN_VERIFIED",
               }
             : report
         )
       );
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        `Approval email sent to user associated with report ID ${reportToApprove}`,
-      ]);
+      setSuccessMessage(
+        "Verification successful. An email notification was sent to the user."
+      );
+      setIsSuccessModalOpen(true);
     } catch (error) {
-      console.error("Error approving report:", error);
+      console.error("Error verifying report:", error);
     } finally {
-      setIsApproveModalOpen(false);
-      setReportToApprove(null);
+      setIsVerifyModalOpen(false);
+      setReportToVerify(null);
     }
   };
 
-  const confirmApproveReport = (reportId: number) => {
-    setReportToApprove(reportId);
-    setIsApproveModalOpen(true);
+  const confirmVerifyReport = (reportId: number) => {
+    setReportToVerify(reportId);
+    setIsVerifyModalOpen(true);
   };
 
-  const cancelApproveReport = () => {
-    setIsApproveModalOpen(false);
-    setReportToApprove(null);
+  const cancelVerifyReport = () => {
+    setIsVerifyModalOpen(false);
+    setReportToVerify(null);
   };
 
   const confirmMarkForRevision = (reportId: number) => {
@@ -375,10 +378,10 @@ const SubmissionHistoryAdmin: React.FC = () => {
             : report
         )
       );
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        `Revision email sent to user associated with report ID ${selectedReportId}`,
-      ]);
+      setSuccessMessage(
+        "Successfully marked for revision. An email notification was sent to the user."
+      );
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Error marking report for revision:", error);
     } finally {
@@ -394,13 +397,14 @@ const SubmissionHistoryAdmin: React.FC = () => {
       case "APPROVER_APPROVED":
         return (
           <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-400">
-            Approved
+            For Verification
           </span>
         );
-      case "APPROVER_FOR_REVISION":
+
+      case "ADMIN_VERIFIED":
         return (
-          <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
-            For Revision
+          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-400">
+            Verified
           </span>
         );
       default:
@@ -412,10 +416,6 @@ const SubmissionHistoryAdmin: React.FC = () => {
     }
   };
 
-  const toggleNotificationDropdown = () => {
-    setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
-  };
-
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen">
       <div className="flex flex-col items-right">
@@ -424,38 +424,6 @@ const SubmissionHistoryAdmin: React.FC = () => {
           <p className="text-neutral-500 text-xl mt-3">
             View all unit submissions
           </p>
-          <div className="relative">
-            {notifications.length > 0 && (
-              <div className="relative inline-block">
-                <button
-                  onClick={toggleNotificationDropdown}
-                  className="ml-4 text-sm text-green-600"
-                >
-                  Notifications ({notifications.length})
-                </button>
-                {isNotificationDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20">
-                    <div className="py-2">
-                      {notifications.length === 0 ? (
-                        <div className="px-4 py-2 text-gray-600">
-                          No notifications
-                        </div>
-                      ) : (
-                        notifications.map((notification, index) => (
-                          <div
-                            key={index}
-                            className="px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          >
-                            {notification}
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
@@ -477,26 +445,42 @@ const SubmissionHistoryAdmin: React.FC = () => {
               </button>
             )}
           >
-            <Dropdown.Item onClick={() => handleFilterChange("All")}>
-              All
-            </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Most Recent")}>
               Most Recent
             </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Oldest")}>
               Oldest
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("Approved")}>
-              Approved
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("For Revision")}>
-              For Revision
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("Pending")}>
-              Pending
-            </Dropdown.Item>
           </Dropdown>
-          <div className="ml-4 flex items-center">
+          <div
+            className="ml-2 inline-flex flex-col w-full rounded-md shadow-sm md:w-auto md:flex-row"
+            role="group"
+          >
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "FOR_VERIFICATION"
+                  ? "text-green-500 bg-green-100"
+                  : "text-green-500 bg-white"
+              } border border-gray-200 rounded-t-lg md:rounded-tr-none md:rounded-l-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("FOR_VERIFICATION")}
+            >
+              For Verification
+            </button>
+
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "VERIFIED"
+                  ? "text-blue-500 bg-blue-100"
+                  : "text-blue-500 bg-white"
+              } border border-gray-200 rounded-b-lg md:rounded-bl-none md:rounded-r-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("VERIFIED")}
+            >
+              Verified
+            </button>
+          </div>
+          <div className="ml-2 flex flex-col sm:flex-row items-center">
             <DatePicker
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
@@ -504,7 +488,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
               startDate={startDate}
               endDate={endDate}
               placeholderText="Select A.Y. start date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5 mb-2 sm:mb-0"
             />
             <span className="mx-4 text-gray-500">to</span>
             <DatePicker
@@ -515,7 +499,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
               endDate={endDate}
               minDate={startDate}
               placeholderText="Select A.Y. end date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5"
             />
           </div>
         </div>
@@ -544,7 +528,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
             type="text"
             id="table-search-users"
             className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search by ID or Date"
+            placeholder="Search by unit"
             value={searchQuery}
             onChange={handleSearchChange}
           />
@@ -571,7 +555,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
               </p>
               <div className="flex justify-between">
                 <div className="flex">
-                  <PrintButtonApprover reportId={report.id.toString()} />{" "}
+                  <PrintButtonAdmin reportId={report.id.toString()} />{" "}
                   <p
                     className="mb-2 leading-normal text-xs font-normal"
                     style={{ color: "#2d3748" }}
@@ -615,14 +599,14 @@ const SubmissionHistoryAdmin: React.FC = () => {
                   </Dropdown.Item>
                   <Dropdown.Item
                     className={
-                      report.status === "APPROVER_APPROVED"
+                      report.status === "ADMIN_VERIFIED"
                         ? "text-gray-400 cursor-not-allowed"
-                        : "text-green-600"
+                        : "text-blue-600"
                     }
-                    onClick={() => confirmApproveReport(report.id)}
-                    disabled={report.status === "APPROVER_APPROVED"}
+                    onClick={() => confirmVerifyReport(report.id)}
+                    disabled={report.status === "ADMIN_VERIFIED"}
                   >
-                    Approve
+                    Verify
                   </Dropdown.Item>
                   <Dropdown.Item
                     className="text-red-600"
@@ -640,24 +624,22 @@ const SubmissionHistoryAdmin: React.FC = () => {
         ))}
       </div>
 
-      {/* Approve Modal */}
-      {isApproveModalOpen && (
+      {/* Verify Modal */}
+      {isVerifyModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Confirm Approval</h2>
-            <p className="mb-4">
-              Are you sure you want to approve this report?
-            </p>
+            <h2 className="text-2xl font-bold mb-4">Confirm Verification</h2>
+            <p className="mb-4">Are you sure you want to verify this report?</p>
             <div className="flex justify-end">
               <button
                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                onClick={cancelApproveReport}
+                onClick={cancelVerifyReport}
               >
                 Cancel
               </button>
               <button
                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-                onClick={approveReport}
+                onClick={verifyReport}
               >
                 Confirm
               </button>
@@ -692,6 +674,24 @@ const SubmissionHistoryAdmin: React.FC = () => {
                 onClick={markReportForRevision}
               >
                 Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Success</h2>
+            <p className="mb-4">{successMessage}</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={() => setIsSuccessModalOpen(false)}
+              >
+                Close
               </button>
             </div>
           </div>
