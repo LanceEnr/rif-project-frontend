@@ -218,23 +218,6 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
           </head>
           <body>
               <div class="doc-content">${element.innerHTML}</div>
-              <div class="footer" style="margin: -3;">
-                  <p class="c6 c57" style="margin: 0; padding: 0;">
-                      <span class="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
-                  </p>
-                  <p class="c6 c102" style="margin: 0; padding: 0;">
-                      <span
-                          style="overflow: hidden; display: inline-block; margin: 0px; border: 0px solid #000000; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px); width: 47.73px; height: 45.07px;"
-                      >
-                          <img
-                              alt=""
-                              src="${image4}"
-                              style="width: 47.73px; height: 45.07px; margin-left: 5px; margin-top: 0px; transform: rotate(0rad) translateZ(0px); -webkit-transform: rotate(0rad) translateZ(0px);"
-                              title=""
-                          />
-                      </span>
-                  </p>
-              </div>
           </body>
           </html>
         `);
@@ -812,576 +795,587 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
             </span>
           </p>
         </div>
+
         <tr className="page-break"></tr>
-        <p className="c21">
-          <span className="c14"></span>
-        </p>
-        <div className="flex">
-          <div className="app-container">
+        <div style={{ pageBreakBefore: "always" }}>
+        
+          {/* <p className="c21">
+            <span className="c14"></span>
+          </p> */}
+
+          <div className="flex">
+            <div className="app-container">
+              <div className="column">
+                {/* First Column */}
+
+                {/* <p className="c21">
+                  <span className="c14"></span>
+                </p>
+                <a id="t.e093c7e7721baa52a33c27063dc75e026cd26f4c"></a>
+                <a id="t.2"></a> */}
+                
+                <table className="c37">
+                  <tr className="c34">
+                    <td className="c47 c73" colSpan={2} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c16">
+                          Strategic Directional Areas (SDA)
+                        </span>
+                      </p>
+                      <p className="c1">
+                        <span className="c42"></span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">1</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Leadership and Governance </span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">2</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Thomasian Identity</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c62">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">3</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Teaching and Learning</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">4</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Research and Innovation</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">5</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Resource Management </span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">6</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Public Presence </span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">7</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">
+                          Community Development and Advocacy{" "}
+                        </span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">8</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Student Welfare and Services</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c0" colSpan={1} rowSpan={1}>
+                      <p className="c33">
+                        <span className="c42">9</span>
+                      </p>
+                    </td>
+                    <td className="c48" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c42">Internationalization</span>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+                <a id="t.4d0c7a815873420abb7a9658d64689f7c095540e"></a>
+                <a id="t.4"></a>
+                <table className="c37">
+                  <tr className="c34">
+                    <td className="c47 c105" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c16">Severity (Sev)**</span>
+                      </p>
+                    </td>
+                    <td className="c74 c47" colSpan={1} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c16">Probability (Prob)**</span>
+                      </p>
+                      <p className="c1">
+                        <span className="c42"></span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c105" colSpan={1} rowSpan={1}>
+                      <p className="c6 c28">
+                        <span className="c42">5 &nbsp; Very Severe</span>
+                      </p>
+                    </td>
+                    <td className="c74" colSpan={1} rowSpan={1}>
+                      <p className="c6 c114">
+                        <span className="c42">5 &nbsp; Very Likely</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c105" colSpan={1} rowSpan={1}>
+                      <p className="c6 c28">
+                        <span className="c42">4 &nbsp; Severe</span>
+                      </p>
+                    </td>
+                    <td className="c74" colSpan={1} rowSpan={1}>
+                      <p className="c6 c114">
+                        <span className="c42">4 &nbsp; Likely</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c105" colSpan={1} rowSpan={1}>
+                      <p className="c6 c28">
+                        <span className="c42">3 &nbsp; Moderate</span>
+                      </p>
+                    </td>
+                    <td className="c74" colSpan={1} rowSpan={1}>
+                      <p className="c6 c114">
+                        <span className="c42">3 &nbsp; Unlikely</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c105" colSpan={1} rowSpan={1}>
+                      <p className="c6 c28">
+                        <span className="c42">2 &nbsp; Slight</span>
+                      </p>
+                    </td>
+                    <td className="c74" colSpan={1} rowSpan={1}>
+                      <p className="c6 c114">
+                        <span className="c42">2 &nbsp; Very Unlikely</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c34">
+                    <td className="c105" colSpan={1} rowSpan={1}>
+                      <p className="c6 c28">
+                        <span className="c42">1 &nbsp; Insignificant</span>
+                      </p>
+                    </td>
+                    <td className="c74" colSpan={1} rowSpan={1}>
+                      <p className="c6 c114">
+                        <span className="c42">1 &nbsp; Extreme Unlikely</span>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+                <p className="c6">
+                  <span className="c5">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    __________________________________________________________
+                  </span>
+                </p>
+                <p className="c6">
+                  <span className="c5">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **Refer to Severity and
+                    Probability Scales
+                  </span>
+                </p>
+                <a id="t.01a40e0137041aa3600e13a73354ad6e6f848251"></a>
+                <a id="t.5"></a>
+                <table className="c37">
+                  <tr className="c34">
+                    <td className="c47 c128" colSpan={3} rowSpan={1}>
+                      <p className="c6">
+                        <span className="c16">
+                          Risk Categorization (Priority Options)-Source: Adapted
+                          from BSI, 2004
+                        </span>
+                      </p>
+                      <p className="c1">
+                        <span className="c16"></span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c66">
+                    <td className="c12" colSpan={1} rowSpan={1}>
+                      <p className="c33 c41">
+                        <span className="c42">25-15</span>
+                      </p>
+                    </td>
+                    <td className="c64" colSpan={1} rowSpan={1}>
+                      <p className="c3">
+                        <span className="c42">High </span>
+                      </p>
+                      <p className="c1 c18">
+                        <span className="c42"></span>
+                      </p>
+                    </td>
+                    <td className="c52" colSpan={1} rowSpan={1}>
+                      <p className="c6 c18">
+                        <span className="c42">
+                          Unacceptable; risks that should be urgently reduced to
+                          become tolerable or
+                        </span>
+                      </p>
+                      <p className="c6 c18">
+                        <span className="c42">acceptable</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c66">
+                    <td className="c12" colSpan={1} rowSpan={1}>
+                      <p className="c33 c144">
+                        <span className="c42">14-8</span>
+                      </p>
+                    </td>
+                    <td className="c64" colSpan={1} rowSpan={1}>
+                      <p className="c3">
+                        <span className="c42">Medium </span>
+                      </p>
+                    </td>
+                    <td className="c52" colSpan={1} rowSpan={1}>
+                      <p className="c6 c18">
+                        <span className="c42">
+                          Risks that should be reduced to become tolerable or
+                          acceptable
+                        </span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr className="c132">
+                    <td className="c12" colSpan={1} rowSpan={1}>
+                      <p className="c33 c144">
+                        <span className="c42">7-1</span>
+                      </p>
+                    </td>
+                    <td className="c64" colSpan={1} rowSpan={1}>
+                      <p className="c3">
+                        <span className="c42">Low </span>
+                      </p>
+                    </td>
+                    <td className="c52" colSpan={1} rowSpan={1}>
+                      <p className="c6 c18">
+                        <span className="c42">
+                          Acceptable; risks that require minimal or no action
+                        </span>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+                <p className="c86">
+                  <span className="c5"></span>
+                </p>
+                <p className="c86">
+                  <span className="c5"></span>
+                </p>
+                <p className="c86">
+                  <span className="c5"></span>
+                </p>
+                <p className="c1">
+                  <span className="c60 c96"></span>
+                </p>
+              </div>
+            </div>
             <div className="column">
-              {/* First Column */}
-              <p className="c21">
-                <span className="c14"></span>
-              </p>
-              <a id="t.e093c7e7721baa52a33c27063dc75e026cd26f4c"></a>
-              <a id="t.2"></a>
+              {/* Second Column */}
+              <a id="t.7bece1298abb30b95fd3fdb8197d8426f5217a65"></a>
+              <a id="t.3"></a>
               <table className="c37">
+
+              <tr style={{height: "30px"}}><td>&nbsp;</td></tr>
+
                 <tr className="c34">
-                  <td className="c47 c73" colSpan={2} rowSpan={1}>
+                  <td className="c19 c47" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c16">
-                        Strategic Directional Areas (SDA)
-                      </span>
+                      <span className="c9 c61">Definition of Terms</span>
                     </p>
                     <p className="c1">
-                      <span className="c42"></span>
+                      <span className="c14"></span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">1</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Leadership and Governance </span>
+                      <span className="c9">Issue </span>
+                      <span className="c14">
+                        - Internal or external; positive or negative factors or
+                        conditions for consideration by the unit
+                      </span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">2</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Thomasian Identity</span>
+                      <span className="c9">Risk </span>
+                      <span className="c26">
+                        - Uncertainty which can lead to positive or negative
+                        result
+                      </span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c62">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">3</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Teaching and Learning</span>
+                      <span className="c9">Particulars &ndash; </span>
+                      <span className="c26">Description or details</span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">4</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Research and Innovation</span>
+                      <span className="c9">Severity </span>
+                      <span className="c26">-</span>
+                      <span className="c133">&nbsp;</span>
+                      <span className="c14">
+                        Degree or extent of damage or harm{" "}
+                      </span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">5</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Resource Management </span>
+                      <span className="c9">Probability - </span>
+                      <span className="c26">
+                        Likelihood that damage or harm will occur
+                      </span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">6</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">Public Presence </span>
+                      <span className="c9">Risk Rating</span>
+                      <span className="c14">
+                        &nbsp;- Severity (Sev) x Probability (Prob)
+                      </span>
                     </p>
                   </td>
                 </tr>
-                <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">7</span>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9">Initial Risk Level</span>
+                      <span className="c14">
+                        &nbsp;- Level of risk before action is taken to reduce it
+                      </span>
+                    </p>
+                    <p className="c6">
+                      <span className="c9">Residual Risk Level </span>
+                      <span className="c26">
+                        &ndash; Level of risk after action to reduce it has been
+                        taken
+                      </span>
                     </p>
                   </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
+                </tr>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
                     <p className="c6">
-                      <span className="c42">
-                        Community Development and Advocacy{" "}
+                      <span className="c9">Opportunity </span>
+                      <span className="c14">
+                        - Favorable condition that can arise as a result of action
+                        plan to address risk
+                      </span>
+                    </p>
+                  </td>
+                </tr>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9">Action Plan</span>
+                      <span className="c14">
+                        &nbsp;- What to do to address/handle the risk
+                      </span>
+                    </p>
+                  </td>
+                </tr>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9">Person Responsible</span>
+                      <span className="c14">
+                        -- Who implements or ensures implementation of action plan
+                      </span>
+                    </p>
+                  </td>
+                </tr>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9">Status</span>
+                      <span className="c14">
+                        &nbsp;- Whether the action plan is yet to start/pending,
+                        ongoing, near completion, or fully completed
+                      </span>
+                    </p>
+                  </td>
+                </tr>
+                <tr className="c63">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9">Date </span>
+                      <span className="c26">-</span>
+                      <span className="c9">&nbsp;</span>
+                      <span className="c26">
+                        Month/day/year of the status of the action plan, as
+                        monitored
                       </span>
                     </p>
                   </td>
                 </tr>
                 <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">8</span>
-                    </p>
-                  </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
-                    <p className="c6">
-                      <span className="c42">Student Welfare and Services</span>
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c1">
+                      <span className="c14"></span>
                     </p>
                   </td>
                 </tr>
                 <tr className="c34">
-                  <td className="c0" colSpan={1} rowSpan={1}>
-                    <p className="c33">
-                      <span className="c42">9</span>
+                  <td className="c19 c47" colSpan={1} rowSpan={1}>
+                    <p className="c6">
+                      <span className="c9 c61">Notes: </span>
+                    </p>
+                    <p className="c1">
+                      <span className="c14"></span>
                     </p>
                   </td>
-                  <td className="c48" colSpan={1} rowSpan={1}>
-                    <p className="c6">
-                      <span className="c42">Internationalization</span>
+                </tr>
+                <tr className="c127">
+                  <td className="c19" colSpan={1} rowSpan={1}>
+                    <p className="c6 c65">
+                      <span className="c14">
+                        The Risk Identification Form (RIF) covers the following
+                        under the ISO 9001:2015 Standard:
+                      </span>
+                    </p>
+                    <p className="c6 c65">
+                      <span className="c14">
+                        Clause 4: Context of the Organization
+                      </span>
+                    </p>
+                    <ul className="c75 lst-kix_list_5-0 start">
+                      <li className="c65 c76 .doc-list-bullet-0">
+                        <span className="c14">
+                          Sub-clause 4.1 Understanding the Organization and its
+                          context
+                        </span>
+                      </li>
+                      <li className="c95 c65 .doc-list-bullet-0">
+                        <span className="c14">
+                          Sub-clause 4.4 Quality Management system and its
+                          processes
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="c6 c65">
+                      <span className="c14">Clause 6: Planning</span>
+                    </p>
+                    <ul className="c75 lst-kix_list_6-0 start">
+                      <li className="c95 c65 .doc-list-bullet-0">
+                        <span className="c14">
+                          Sub-clause 6.1 Actions to address risks and
+                          opportunities
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="c6 c65">
+                      <span className="c14">
+                        Clause 9: Performance evaluation
+                      </span>
+                    </p>
+                    <ul className="c75 lst-kix_list_6-0">
+                      <li className="c65 c95 .doc-list-bullet-0">
+                        <span className="c14">
+                          Sub-clause 9.3 Management review
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="c6 c65">
+                      <span className="c14">Clause 10: Improvement</span>
+                    </p>
+                    <ul className="c75 lst-kix_list_6-0">
+                      <li className="c95 c65 .doc-list-bullet-0">
+                        <span className="c14">
+                          Sub-clause 10.2 Nonconformity and corrective action
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="c1 c65">
+                      <span className="c14"></span>
+                    </p>
+                    <p className="c6 c65">
+                      <span className="c14">&nbsp;</span>
+                    </p>
+                    <p className="c1 c65">
+                      <span className="c14"></span>
                     </p>
                   </td>
                 </tr>
               </table>
-              <a id="t.4d0c7a815873420abb7a9658d64689f7c095540e"></a>
-              <a id="t.4"></a>
-              <table className="c37">
-                <tr className="c34">
-                  <td className="c47 c105" colSpan={1} rowSpan={1}>
-                    <p className="c6">
-                      <span className="c16">Severity (Sev)**</span>
-                    </p>
-                  </td>
-                  <td className="c74 c47" colSpan={1} rowSpan={1}>
-                    <p className="c6">
-                      <span className="c16">Probability (Prob)**</span>
-                    </p>
-                    <p className="c1">
-                      <span className="c42"></span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c34">
-                  <td className="c105" colSpan={1} rowSpan={1}>
-                    <p className="c6 c28">
-                      <span className="c42">5 &nbsp; Very Severe</span>
-                    </p>
-                  </td>
-                  <td className="c74" colSpan={1} rowSpan={1}>
-                    <p className="c6 c114">
-                      <span className="c42">5 &nbsp; Very Likely</span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c34">
-                  <td className="c105" colSpan={1} rowSpan={1}>
-                    <p className="c6 c28">
-                      <span className="c42">4 &nbsp; Severe</span>
-                    </p>
-                  </td>
-                  <td className="c74" colSpan={1} rowSpan={1}>
-                    <p className="c6 c114">
-                      <span className="c42">4 &nbsp; Likely</span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c34">
-                  <td className="c105" colSpan={1} rowSpan={1}>
-                    <p className="c6 c28">
-                      <span className="c42">3 &nbsp; Moderate</span>
-                    </p>
-                  </td>
-                  <td className="c74" colSpan={1} rowSpan={1}>
-                    <p className="c6 c114">
-                      <span className="c42">3 &nbsp; Unlikely</span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c34">
-                  <td className="c105" colSpan={1} rowSpan={1}>
-                    <p className="c6 c28">
-                      <span className="c42">2 &nbsp; Slight</span>
-                    </p>
-                  </td>
-                  <td className="c74" colSpan={1} rowSpan={1}>
-                    <p className="c6 c114">
-                      <span className="c42">2 &nbsp; Very Unlikely</span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c34">
-                  <td className="c105" colSpan={1} rowSpan={1}>
-                    <p className="c6 c28">
-                      <span className="c42">1 &nbsp; Insignificant</span>
-                    </p>
-                  </td>
-                  <td className="c74" colSpan={1} rowSpan={1}>
-                    <p className="c6 c114">
-                      <span className="c42">1 &nbsp; Extreme Unlikely</span>
-                    </p>
-                  </td>
-                </tr>
-              </table>
-              <p className="c6">
-                <span className="c5">
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                  __________________________________________________________
-                </span>
-              </p>
-              <p className="c6">
-                <span className="c5">
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **Refer to Severity and
-                  Probability Scales
-                </span>
-              </p>
-              <a id="t.01a40e0137041aa3600e13a73354ad6e6f848251"></a>
-              <a id="t.5"></a>
-              <table className="c37">
-                <tr className="c34">
-                  <td className="c47 c128" colSpan={3} rowSpan={1}>
-                    <p className="c6">
-                      <span className="c16">
-                        Risk Categorization (Priority Options)-Source: Adapted
-                        from BSI, 2004
-                      </span>
-                    </p>
-                    <p className="c1">
-                      <span className="c16"></span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c66">
-                  <td className="c12" colSpan={1} rowSpan={1}>
-                    <p className="c33 c41">
-                      <span className="c42">25-15</span>
-                    </p>
-                  </td>
-                  <td className="c64" colSpan={1} rowSpan={1}>
-                    <p className="c3">
-                      <span className="c42">High </span>
-                    </p>
-                    <p className="c1 c18">
-                      <span className="c42"></span>
-                    </p>
-                  </td>
-                  <td className="c52" colSpan={1} rowSpan={1}>
-                    <p className="c6 c18">
-                      <span className="c42">
-                        Unacceptable; risks that should be urgently reduced to
-                        become tolerable or
-                      </span>
-                    </p>
-                    <p className="c6 c18">
-                      <span className="c42">acceptable</span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c66">
-                  <td className="c12" colSpan={1} rowSpan={1}>
-                    <p className="c33 c144">
-                      <span className="c42">14-8</span>
-                    </p>
-                  </td>
-                  <td className="c64" colSpan={1} rowSpan={1}>
-                    <p className="c3">
-                      <span className="c42">Medium </span>
-                    </p>
-                  </td>
-                  <td className="c52" colSpan={1} rowSpan={1}>
-                    <p className="c6 c18">
-                      <span className="c42">
-                        Risks that should be reduced to become tolerable or
-                        acceptable
-                      </span>
-                    </p>
-                  </td>
-                </tr>
-                <tr className="c132">
-                  <td className="c12" colSpan={1} rowSpan={1}>
-                    <p className="c33 c144">
-                      <span className="c42">7-1</span>
-                    </p>
-                  </td>
-                  <td className="c64" colSpan={1} rowSpan={1}>
-                    <p className="c3">
-                      <span className="c42">Low </span>
-                    </p>
-                  </td>
-                  <td className="c52" colSpan={1} rowSpan={1}>
-                    <p className="c6 c18">
-                      <span className="c42">
-                        Acceptable; risks that require minimal or no action
-                      </span>
-                    </p>
-                  </td>
-                </tr>
-              </table>
-              <p className="c86">
-                <span className="c5"></span>
-              </p>
-              <p className="c86">
-                <span className="c5"></span>
-              </p>
-              <p className="c86">
-                <span className="c5"></span>
+              <p className="c1">
+                <span className="c60 c96"></span>
               </p>
               <p className="c1">
                 <span className="c60 c96"></span>
               </p>
             </div>
           </div>
-          <div className="column">
-            {/* Second Column */}
-            <a id="t.7bece1298abb30b95fd3fdb8197d8426f5217a65"></a>
-            <a id="t.3"></a>
-            <table className="c37">
-              <tr className="c34">
-                <td className="c19 c47" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9 c61">Definition of Terms</span>
-                  </p>
-                  <p className="c1">
-                    <span className="c14"></span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Issue </span>
-                    <span className="c14">
-                      - Internal or external; positive or negative factors or
-                      conditions for consideration by the unit
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Risk </span>
-                    <span className="c26">
-                      - Uncertainty which can lead to positive or negative
-                      result
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Particulars &ndash; </span>
-                    <span className="c26">Description or details</span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Severity </span>
-                    <span className="c26">-</span>
-                    <span className="c133">&nbsp;</span>
-                    <span className="c14">
-                      Degree or extent of damage or harm{" "}
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Probability - </span>
-                    <span className="c26">
-                      Likelihood that damage or harm will occur
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Risk Rating</span>
-                    <span className="c14">
-                      &nbsp;- Severity (Sev) x Probability (Prob)
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Initial Risk Level</span>
-                    <span className="c14">
-                      &nbsp;- Level of risk before action is taken to reduce it
-                    </span>
-                  </p>
-                  <p className="c6">
-                    <span className="c9">Residual Risk Level </span>
-                    <span className="c26">
-                      &ndash; Level of risk after action to reduce it has been
-                      taken
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Opportunity </span>
-                    <span className="c14">
-                      - Favorable condition that can arise as a result of action
-                      plan to address risk
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Action Plan</span>
-                    <span className="c14">
-                      &nbsp;- What to do to address/handle the risk
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Person Responsible</span>
-                    <span className="c14">
-                      -- Who implements or ensures implementation of action plan
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Status</span>
-                    <span className="c14">
-                      &nbsp;- Whether the action plan is yet to start/pending,
-                      ongoing, near completion, or fully completed
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c63">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9">Date </span>
-                    <span className="c26">-</span>
-                    <span className="c9">&nbsp;</span>
-                    <span className="c26">
-                      Month/day/year of the status of the action plan, as
-                      monitored
-                    </span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c34">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c1">
-                    <span className="c14"></span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c34">
-                <td className="c19 c47" colSpan={1} rowSpan={1}>
-                  <p className="c6">
-                    <span className="c9 c61">Notes: </span>
-                  </p>
-                  <p className="c1">
-                    <span className="c14"></span>
-                  </p>
-                </td>
-              </tr>
-              <tr className="c127">
-                <td className="c19" colSpan={1} rowSpan={1}>
-                  <p className="c6 c65">
-                    <span className="c14">
-                      The Risk Identification Form (RIF) covers the following
-                      under the ISO 9001:2015 Standard:
-                    </span>
-                  </p>
-                  <p className="c6 c65">
-                    <span className="c14">
-                      Clause 4: Context of the Organization
-                    </span>
-                  </p>
-                  <ul className="c75 lst-kix_list_5-0 start">
-                    <li className="c65 c76 .doc-list-bullet-0">
-                      <span className="c14">
-                        Sub-clause 4.1 Understanding the Organization and its
-                        context
-                      </span>
-                    </li>
-                    <li className="c95 c65 .doc-list-bullet-0">
-                      <span className="c14">
-                        Sub-clause 4.4 Quality Management system and its
-                        processes
-                      </span>
-                    </li>
-                  </ul>
-                  <p className="c6 c65">
-                    <span className="c14">Clause 6: Planning</span>
-                  </p>
-                  <ul className="c75 lst-kix_list_6-0 start">
-                    <li className="c95 c65 .doc-list-bullet-0">
-                      <span className="c14">
-                        Sub-clause 6.1 Actions to address risks and
-                        opportunities
-                      </span>
-                    </li>
-                  </ul>
-                  <p className="c6 c65">
-                    <span className="c14">
-                      Clause 9: Performance evaluation
-                    </span>
-                  </p>
-                  <ul className="c75 lst-kix_list_6-0">
-                    <li className="c65 c95 .doc-list-bullet-0">
-                      <span className="c14">
-                        Sub-clause 9.3 Management review
-                      </span>
-                    </li>
-                  </ul>
-                  <p className="c6 c65">
-                    <span className="c14">Clause 10: Improvement</span>
-                  </p>
-                  <ul className="c75 lst-kix_list_6-0">
-                    <li className="c95 c65 .doc-list-bullet-0">
-                      <span className="c14">
-                        Sub-clause 10.2 Nonconformity and corrective action
-                      </span>
-                    </li>
-                  </ul>
-                  <p className="c1 c65">
-                    <span className="c14"></span>
-                  </p>
-                  <p className="c6 c65">
-                    <span className="c14">&nbsp;</span>
-                  </p>
-                  <p className="c1 c65">
-                    <span className="c14"></span>
-                  </p>
-                </td>
-              </tr>
-            </table>
-            <p className="c1">
-              <span className="c60 c96"></span>
-            </p>
-            <p className="c1">
-              <span className="c60 c96"></span>
-            </p>
-          </div>
         </div>
+
         <div className="footer">
           <p className="c6 c57" style={{ margin: "0", padding: "0" }}>
             <span className="c26 c111">UST: S029-00-FO54 rev05 01/10/24</span>
