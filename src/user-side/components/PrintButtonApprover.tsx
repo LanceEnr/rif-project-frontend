@@ -761,9 +761,6 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
         <p className="c1">
           <span className="c36"></span>
         </p>
-        <p className="c1">
-          <span className="c36"></span>
-        </p>
         <div style={{ whiteSpace: "nowrap" }}>
           <p className="c6 c121" style={paragraphStyle}>
             <div
@@ -772,10 +769,11 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 alignItems: "center",
                 width: "100%",
                 justifyContent: "space-between",
+                marginTop:"-40px"
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92" style={{ marginBottom: "-110px" }}>
+                <span className="c92" style={{ marginBottom: "-130px" }}>
                   Prepared by:
                 </span>
                 <img
@@ -784,7 +782,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-20px",
+                    marginBottom: "-80px",
                   }}
                 />
               </div>
@@ -792,18 +790,18 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "200px", marginBottom: "-65px" }}
+                    style={{ marginLeft: "200px", marginBottom: "-80px" }}
                   >
                     Reviewed/Approved by:
                   </span>
-                  <div className="block ">
+                  <div className="block">
                     <img
                       src={approverPhoto}
                       alt="Signature"
                       style={{
                         height: "80px",
-                        marginLeft: "10px",
-                        marginBottom: "-20px",
+                        marginLeft: "60px",
+                        marginBottom: "2px",
                       }}
                     />
                     <span className="font-bold border-b border-black">
@@ -814,9 +812,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                         {" "}
                         /{" "}
                         {approverApproveDate
-                          ? new Date(approverApproveDate)
-                              .toISOString()
-                              .split("T")[0]
+                          ? new Date(approverApproveDate).toISOString().split("T")[0]
                           : "No Date Provided"}
                       </span>
                     </span>
@@ -826,7 +822,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 <span className="c92">
                   Reviewed/Approved by: ______________________
                 </span>
-              )}
+              ) }
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
@@ -846,12 +842,11 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 </span>
               </div>
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
+              &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
             </span>
           </p>
         </div>

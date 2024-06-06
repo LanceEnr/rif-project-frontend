@@ -772,7 +772,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-20px",
+                    marginBottom: "-40px",
                   }}
                 />
               </div>
@@ -798,12 +798,11 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 </span>
               </div>
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
+              &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
             </span>
           </p>
         </div>
