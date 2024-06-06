@@ -752,12 +752,14 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 alignItems: "center",
                 width: "100%",
                 justifyContent: "space-between",
-                marginTop:"20px"
+                marginTop: "20px",
                 // marginTop:"-40px"
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92" style={{ marginBottom: "-60px" }}>  {/* marginBottom: "-130px" */}
+                <span className="c92" style={{ marginBottom: "-60px" }}>
+                  {" "}
+                  {/* marginBottom: "-130px" */}
                   Prepared by:
                 </span>
                 <img
@@ -770,36 +772,36 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   }}
                 />
               </div>
-              
-                {reportStatus === "APPROVER_APPROVED" ? (
-                  <>
-                    <span
-                      className="c92"
-                      style={{ marginLeft: "100px", marginBottom: "-55px" }} // marginBottom: "-80px"
-                    >
-                      Reviewed/Approved by:
-                    </span>
-                    
-                    <div> {/* <div className="block"> */}
-                      <img
-                        src={approverPhoto}
-                        alt="Signature"
-                        style={{
-                          height: "80px",   
-                          marginLeft: "60px",
-                          marginBottom: "-50px", // marginBottom: "-50px",
-                        }}
-                      />
-                      
-                    </div>
 
-                  </>
-                ) : (
-                  <span className="c92">
-                    Reviewed/Approved by: ______________________
+              {reportStatus === "APPROVER_APPROVED" ? (
+                <>
+                  <span
+                    className="c92"
+                    style={{ marginLeft: "100px", marginBottom: "-55px" }} // marginBottom: "-80px"
+                  >
+                    Reviewed/Approved by:
                   </span>
-                ) }
-              
+
+                  <div>
+                    {" "}
+                    {/* <div className="block"> */}
+                    <img
+                      src={approverPhoto}
+                      alt="Signature"
+                      style={{
+                        height: "80px",
+                        marginLeft: "60px",
+                        marginBottom: "-50px", // marginBottom: "-50px",
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <span className="c92" style={{ marginBottom: "-60px" }}>
+                  Reviewed/Approved by:
+                  _________________________________________
+                </span>
+              )}
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
@@ -818,42 +820,43 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                   </span>
                 </span>
               </div>
-
-              <div style={{ marginTop: "-25px", marginLeft: "638px" }}>
-                <span className="font-bold border-b border-black">
-                  {professionalTitle} {user?.firstname} {user?.lastname}
-                  {postNominalTitle ? ", " : ""}
-                  {postNominalTitle}
-                  <span className="font-normal">
-                    {" "}
-                    /{" "}
-                    {approverApproveDate
-                      ? new Date(approverApproveDate).toISOString().split("T")[0]
-                      : "No Date Provided"}
+              {reportStatus === "APPROVER_APPROVED" ? (
+                <div style={{ marginTop: "-25px", marginLeft: "638px" }}>
+                  <span className="font-bold border-b border-black">
+                    {professionalTitle} {user?.firstname} {user?.lastname}
+                    {postNominalTitle ? ", " : ""}
+                    {postNominalTitle}
+                    <span className="font-normal">
+                      {" "}
+                      /{" "}
+                      {approverApproveDate
+                        ? new Date(approverApproveDate)
+                            .toISOString()
+                            .split("T")[0]
+                        : "No Date Provided"}
+                    </span>
                   </span>
-                </span>
-              </div>
-
+                </div>
+              ) : null}
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
             </span>
           </p>
         </div>
-        
-        <tr className="page-break"></tr>
-          <div style={{ pageBreakBefore: "always" }}>
 
+        <tr className="page-break"></tr>
+        <div style={{ pageBreakBefore: "always" }}>
           <p className="c21">
             <span className="c14"></span>
           </p>
           <div className="flex">
             <div className="app-container">
               <div className="column">
-
                 {/* <p className="c21">
                   <span className="c14"></span>
                 </p>
@@ -967,7 +970,9 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                     </td>
                     <td className="c48" colSpan={1} rowSpan={1}>
                       <p className="c6">
-                        <span className="c42">Student Welfare and Services</span>
+                        <span className="c42">
+                          Student Welfare and Services
+                        </span>
                       </p>
                     </td>
                   </tr>
@@ -1175,8 +1180,9 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               <a id="t.7bece1298abb30b95fd3fdb8197d8426f5217a65"></a>
               <a id="t.3"></a>
               <table className="c37">
-
-                <tr style={{height: "30px"}}><td>&nbsp;</td></tr>
+                <tr style={{ height: "30px" }}>
+                  <td>&nbsp;</td>
+                </tr>
 
                 <tr className="c34">
                   <td className="c19 c47" colSpan={1} rowSpan={1}>
@@ -1255,7 +1261,8 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                     <p className="c6">
                       <span className="c9">Initial Risk Level</span>
                       <span className="c14">
-                        &nbsp;- Level of risk before action is taken to reduce it
+                        &nbsp;- Level of risk before action is taken to reduce
+                        it
                       </span>
                     </p>
                     <p className="c6">
@@ -1272,8 +1279,8 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                     <p className="c6">
                       <span className="c9">Opportunity </span>
                       <span className="c14">
-                        - Favorable condition that can arise as a result of action
-                        plan to address risk
+                        - Favorable condition that can arise as a result of
+                        action plan to address risk
                       </span>
                     </p>
                   </td>
@@ -1293,7 +1300,8 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                     <p className="c6">
                       <span className="c9">Person Responsible</span>
                       <span className="c14">
-                        -- Who implements or ensures implementation of action plan
+                        -- Who implements or ensures implementation of action
+                        plan
                       </span>
                     </p>
                   </td>

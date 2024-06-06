@@ -39,6 +39,7 @@ import SDAComparisonChart from "./admin/pages/SDAComparisonChart";
 import RiskComparisonChart from "./admin/pages/RiskComparisonChart";
 import ApproverDetails from "./user-side/pages/ApproverDetails";
 import SubmissionHistoryApprover from "./user-side/pages/SubmissionHistoryApprover";
+import SubmissionHistoryAdmin from "./admin/pages/SubmissionHistoryAdmin";
 
 const App: FC = () => {
   return (
@@ -79,7 +80,7 @@ const AdminLayout: FC = () => {
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="grid" element={<DocumentGrid />} />
+            <Route path="submissions" element={<SubmissionHistoryAdmin />} />
             <Route path="tracker" element={<RifTracker />} />
             <Route path="trackertable" element={<RifTrackerTable />} />
             <Route path="users" element={<Users />} />
