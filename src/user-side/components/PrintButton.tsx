@@ -762,28 +762,34 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 alignItems: "center",
                 width: "100%",
                 justifyContent: "space-between",
+                marginTop:"10px"
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92">Prepared by:</span>
+                <span className="c92" style={{ marginBottom: "-60px" }}>
+                  Prepared by:
+                </span>
                 <img
                   src={signatureImage}
                   alt="Signature"
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-40px",
+                    marginBottom: "-50px",
                   }}
                 />
               </div>
-              <span className="c92">
-                Reviewed/Approved by: ______________________
+
+              <span className="c92" style={{ marginBottom: "-60px" }}>
+                Reviewed/Approved by: _________________________________________
               </span>
+
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
+            
             <span className="c14">
-              <div style={{ marginLeft: "80px" }}>
+              <div style={{ marginLeft: "90px" }}>
                 <span className="font-bold border-b border-black">
                   {professionalTitle} {user?.firstname} {user?.lastname}
                   {postNominalTitle ? ", " : ""}
@@ -802,7 +808,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
+              &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
             </span>
           </p>
         </div>
