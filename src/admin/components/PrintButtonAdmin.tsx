@@ -798,7 +798,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
               </div>
               {reportStatus === "APPROVER_APPROVED" ||
               reportStatus === "ADMIN_VERIFIED" ? (
-                <div style={{ marginTop: "-25px", marginLeft: "638px" }}>
+                <div style={{ marginTop: "-25px", marginLeft: "610px" }}>
                   <span className="font-bold border-b border-black">
                     {professionalTitle} {userFirstname} {userLastname}
                     {postNominalTitle ? ", " : ""}

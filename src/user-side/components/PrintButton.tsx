@@ -62,9 +62,20 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
   const [signatureImage, setSignatureImage] = useState("");
   const [professionalTitle, setProfessionalTitle] = useState("");
   const [postNominalTitle, setPostNominalTitle] = useState("");
+  const [approverPhoto, setApproverPhoto] = useState("");
+  const [approverProfessionalTitle, setApproverProfessionalTitle] =
+    useState("");
+  const [approverPostNominalTitle, setApproverPostNominalTitle] = useState("");
+  const [approverFirstname, setApproverFirstname] = useState("");
+  const [approverLastname, setApproverLastname] = useState("");
+
+  const [approverApproveDate, setApproverApproveDate] = useState<string | null>(
+    null
+  );
+  const [reportStatus, setReportStatus] = useState<string>("");
 
   useEffect(() => {
-    console.log("PrintButton mounted with reportId:", reportId); // Log reportId on mount
+    console.log("PrintButton mounted with reportId:", reportId);
 
     if (!isAuthenticated || !user) {
       console.error("User is not authenticated");
@@ -87,7 +98,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
         }
         const data: Prerequisite = await response.json();
         setPrerequisite(data);
-        console.log("Fetched prerequisite:", data); // Log fetched prerequisite
+        console.log("Fetched prerequisite:", data);
       } catch (error) {
         console.error("Failed to fetch prerequisite:", error);
       }
@@ -121,21 +132,11 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
         const imageBlob = await imageResponse.blob();
         const imageObjectURL = URL.createObjectURL(imageBlob);
         setSignatureImage(imageObjectURL);
-        console.log("Fetched signature image URL:", imageObjectURL); // Log fetched signature image URL
+        console.log("Fetched signature image URL:", imageObjectURL);
       } catch (error) {
         console.error("Error fetching signature:", error);
       }
     };
-
-    fetchPrerequisite();
-    fetchSignature();
-  }, [isAuthenticated, user]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      console.error("User is not authenticated");
-      return;
-    }
 
     const fetchRiskForms = async () => {
       try {
@@ -149,7 +150,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
           }
         );
         const data = await response.json();
-        console.log("Fetched risk forms for reportId", reportId, ":", data); // Log fetched risk forms and reportId
+        console.log("Fetched risk forms for reportId", reportId, ":", data);
         if (data && Array.isArray(data.riskFormData)) {
           setRiskForms(data.riskFormData);
         } else {
@@ -162,8 +163,73 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
       }
     };
 
+    const fetchReportDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:8080/api/riskforms/reportDetails/${reportId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setReportStatus(data.report.status);
+        if (data.report.approverApproveDate) {
+          setApproverApproveDate(data.report.approverApproveDate);
+        } else {
+          setApproverApproveDate(null);
+        }
+        console.log("Fetched report details:", data);
+      } catch (error) {
+        console.error("Failed to fetch report details:", error);
+      }
+    };
+
+    const fetchApproverDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:8080/api/riskforms/approverDetails/${reportId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setApproverProfessionalTitle(data.professionalTitle);
+        setApproverPostNominalTitle(data.postNominalTitle);
+        setApproverFirstname(data.userFirstname);
+        setApproverLastname(data.userLastname);
+        if (data.approverPhoto) {
+          const byteArray = new Uint8Array(
+            atob(data.approverPhoto)
+              .split("")
+              .map((char) => char.charCodeAt(0))
+          );
+          const blob = new Blob([byteArray], { type: "image/png" });
+          setApproverPhoto(URL.createObjectURL(blob));
+        }
+        console.log("Fetched approver details:", data);
+      } catch (error) {
+        console.error("Error fetching approver details:", error);
+      }
+    };
+
+    fetchPrerequisite();
+    fetchSignature();
     fetchRiskForms();
-  }, [reportId, isAuthenticated]);
+    fetchReportDetails();
+    fetchApproverDetails();
+  }, [isAuthenticated, user, reportId]);
 
   const paragraphStyle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -763,9 +829,35 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 />
               </div>
 
-              <span className="c92" style={{ marginBottom: "-60px" }}>
-                Reviewed/Approved by: _________________________________________
-              </span>
+              {reportStatus === "APPROVER_APPROVED" ||
+              reportStatus === "ADMIN_VERIFIED" ? (
+                <>
+                  <span
+                    className="c92"
+                    style={{ marginLeft: "100px", marginBottom: "-55px" }}
+                  >
+                    Reviewed/Approved by:
+                  </span>
+
+                  <div>
+                    <img
+                      src={approverPhoto}
+                      alt="Signature"
+                      style={{
+                        height: "80px",
+                        marginRight: "60px",
+                        marginLeft: "60px",
+                        marginBottom: "-30px",
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <span className="c92" style={{ marginBottom: "-60px" }}>
+                  Reviewed/Approved by:
+                  _________________________________________
+                </span>
+              )}
             </div>
           </p>
           <p className="c6" style={{ display: "inline" }}>
@@ -784,6 +876,26 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                   </span>
                 </span>
               </div>
+              {reportStatus === "APPROVER_APPROVED" ||
+              reportStatus === "ADMIN_VERIFIED" ? (
+                <div style={{ marginTop: "-25px", marginLeft: "610px" }}>
+                  <span className="font-bold border-b border-black">
+                    {approverProfessionalTitle} {approverFirstname}{" "}
+                    {approverLastname}
+                    {approverPostNominalTitle ? ", " : ""}
+                    {approverPostNominalTitle}
+                    <span className="font-normal">
+                      {" "}
+                      /{" "}
+                      {approverApproveDate
+                        ? new Date(approverApproveDate)
+                            .toISOString()
+                            .split("T")[0]
+                        : "No Date Provided"}
+                    </span>
+                  </span>
+                </div>
+              ) : null}
               &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;Signature over Printed Name/Date &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
