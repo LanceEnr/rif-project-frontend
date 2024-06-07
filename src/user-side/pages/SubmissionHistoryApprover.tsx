@@ -41,9 +41,17 @@ const SubmissionHistoryApprover: React.FC = () => {
   const [revisionComment, setRevisionComment] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [notifications, setNotifications] = useState<string[]>([]);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
-    useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [selectedFilter, setSelectedFilter] = useState<
+    "PENDING" | "FOR_REVISION" | "APPROVED" | "VERIFIED"
+  >("PENDING");
+
+  const handleDisplayChange = (
+    display: "PENDING" | "FOR_REVISION" | "APPROVED" | "VERIFIED"
+  ) => {
+    setSelectedFilter(display);
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -65,7 +73,6 @@ const SubmissionHistoryApprover: React.FC = () => {
           }
 
           const data = await response.json();
-          console.log("Fetched reports:", data); // Debugging log
           setReports(data);
           setFilteredReports(data);
         } catch (error) {
@@ -92,20 +99,6 @@ const SubmissionHistoryApprover: React.FC = () => {
         const dateB = new Date(b.riskFormData[0]?.submissionDate || 0);
         return dateA.getTime() - dateB.getTime();
       });
-    } else if (filter === "Approved") {
-      sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_APPROVED"
-      );
-    } else if (filter === "For Revision") {
-      sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_FOR_REVISION"
-      );
-    } else if (filter === "Pending") {
-      sortedReports = sortedReports.filter(
-        (report) =>
-          report.status !== "APPROVER_APPROVED" &&
-          report.status !== "APPROVER_FOR_REVISION"
-      );
     }
 
     if (startDate && endDate) {
@@ -128,9 +121,31 @@ const SubmissionHistoryApprover: React.FC = () => {
       );
     }
 
-    console.log("Filtered reports:", sortedReports); // Debugging log
+    if (selectedFilter === "PENDING") {
+      sortedReports = sortedReports.filter(
+        (report) =>
+          ![
+            "APPROVER_APPROVED",
+            "ADMIN_VERIFIED",
+            "APPROVER_FOR_REVISION",
+          ].includes(report.status)
+      );
+    } else if (selectedFilter === "FOR_REVISION") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_FOR_REVISION"
+      );
+    } else if (selectedFilter === "APPROVED") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "APPROVER_APPROVED"
+      );
+    } else if (selectedFilter === "VERIFIED") {
+      sortedReports = sortedReports.filter(
+        (report) => report.status === "ADMIN_VERIFIED"
+      );
+    }
+
     setFilteredReports(sortedReports);
-  }, [filter, searchQuery, reports, startDate, endDate]);
+  }, [filter, searchQuery, reports, startDate, endDate, selectedFilter]);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
@@ -245,10 +260,10 @@ const SubmissionHistoryApprover: React.FC = () => {
             : report
         )
       );
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        `Approval email sent to user associated with report ID ${reportToApprove}`,
-      ]);
+      setSuccessMessage(
+        "Verification successful, an email notification was sent to user."
+      );
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Error approving report:", error);
     } finally {
@@ -327,10 +342,8 @@ const SubmissionHistoryApprover: React.FC = () => {
             : report
         )
       );
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        `Revision email sent to user associated with report ID ${selectedReportId}`,
-      ]);
+      setSuccessMessage("Email notification was sent to user.");
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Error marking report for revision:", error);
     } finally {
@@ -370,53 +383,16 @@ const SubmissionHistoryApprover: React.FC = () => {
     }
   };
 
-  const toggleNotificationDropdown = () => {
-    setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
-  };
-
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">Submissions</h2>
         <div className="flex justify-between items-center">
           <p className="text-neutral-500 text-xl mt-3">View unit submissions</p>
-          <div className="relative">
-            {notifications.length > 0 && (
-              <div className="relative inline-block">
-                <button
-                  onClick={toggleNotificationDropdown}
-                  className="ml-4 text-sm text-green-600"
-                >
-                  Notifications ({notifications.length})
-                </button>
-                {isNotificationDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20">
-                    <div className="py-2">
-                      {notifications.length === 0 ? (
-                        <div className="px-4 py-2 text-gray-600">
-                          No notifications
-                        </div>
-                      ) : (
-                        notifications.map((notification, index) => (
-                          <div
-                            key={index}
-                            className="px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          >
-                            {notification}
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4">
-        {/* Dropdown */}
         <div className="flex justify-between">
           <Dropdown
             label=""
@@ -434,26 +410,63 @@ const SubmissionHistoryApprover: React.FC = () => {
               </button>
             )}
           >
-            <Dropdown.Item onClick={() => handleFilterChange("All")}>
-              All
-            </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Most Recent")}>
               Most Recent
             </Dropdown.Item>
             <Dropdown.Item onClick={() => handleFilterChange("Oldest")}>
               Oldest
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("Approved")}>
-              Approved
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("For Revision")}>
-              For Revision
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleFilterChange("Pending")}>
-              Pending
-            </Dropdown.Item>
           </Dropdown>
-          <div className="ml-4 flex items-center">
+          <div
+            className="ml-2 inline-flex flex-col w-full rounded-md shadow-sm md:w-auto md:flex-row"
+            role="group"
+          >
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "PENDING"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-yellow-500 bg-white"
+              } border border-gray-200 rounded-t-lg md:rounded-tr-none md:rounded-l-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("PENDING")}
+            >
+              Pending
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "FOR_REVISION"
+                  ? "text-red-500 bg-red-100"
+                  : "text-red-500 bg-white"
+              } border-gray-200 border-x md:border-x-0 md:border-t md:border-b hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("FOR_REVISION")}
+            >
+              For Revision
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "APPROVED"
+                  ? "text-green-500 bg-green-100"
+                  : "text-green-500 bg-white"
+              } border-gray-200 border-x md:border-x-0 md:border-l md:border-t md:border-b hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("APPROVED")}
+            >
+              Approved
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                selectedFilter === "VERIFIED"
+                  ? "text-blue-500 bg-blue-100"
+                  : "text-blue-500 bg-white"
+              } border border-gray-200 rounded-b-lg md:rounded-bl-none md:rounded-r-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleDisplayChange("VERIFIED")}
+            >
+              Verified
+            </button>
+          </div>
+          <div className="ml-2 flex flex-col sm:flex-row items-center">
             <DatePicker
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
@@ -461,7 +474,7 @@ const SubmissionHistoryApprover: React.FC = () => {
               startDate={startDate}
               endDate={endDate}
               placeholderText="Select A.Y. start date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5 mb-2 sm:mb-0"
             />
             <span className="mx-4 text-gray-500">to</span>
             <DatePicker
@@ -472,11 +485,10 @@ const SubmissionHistoryApprover: React.FC = () => {
               endDate={endDate}
               minDate={startDate}
               placeholderText="Select A.Y. end date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5"
             />
           </div>
         </div>
-        {/* Search input */}
         <label htmlFor="table-search" className="sr-only">
           Search
         </label>
@@ -502,7 +514,7 @@ const SubmissionHistoryApprover: React.FC = () => {
             type="text"
             id="table-search-users"
             className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search by ID or Date"
+            placeholder="Search by ID"
             value={searchQuery}
             onChange={handleSearchChange}
           />
@@ -573,18 +585,25 @@ const SubmissionHistoryApprover: React.FC = () => {
                   </Dropdown.Item>
                   <Dropdown.Item
                     className={
-                      report.status === "APPROVER_APPROVED"
+                      report.status === "APPROVER_APPROVED" || "ADMIN_VERIFIED"
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-green-600"
                     }
                     onClick={() => confirmApproveReport(report.id)}
-                    disabled={report.status === "APPROVER_APPROVED"}
+                    disabled={
+                      report.status === "APPROVER_APPROVED" || "ADMIN_VERIFIED"
+                    }
                   >
                     Approve
                   </Dropdown.Item>
                   <Dropdown.Item
-                    className="text-red-600"
+                    className={
+                      report.status === "ADMIN_VERIFIED"
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-red-600"
+                    }
                     onClick={() => confirmMarkForRevision(report.id)}
+                    disabled={report.status === "ADMIN_VERIFIED"}
                   >
                     Mark for Revision
                   </Dropdown.Item>
@@ -650,6 +669,24 @@ const SubmissionHistoryApprover: React.FC = () => {
                 onClick={markReportForRevision}
               >
                 Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Success</h2>
+            <p className="mb-4">{successMessage}</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={() => setIsSuccessModalOpen(false)}
+              >
+                Close
               </button>
             </div>
           </div>
