@@ -273,6 +273,12 @@ const SubmissionHistory: React.FC = () => {
             Approved
           </span>
         );
+      case "ADMIN_VERIFIED":
+        return (
+          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-400">
+            Verified
+          </span>
+        );
       case "APPROVER_FOR_REVISION":
         return (
           <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
