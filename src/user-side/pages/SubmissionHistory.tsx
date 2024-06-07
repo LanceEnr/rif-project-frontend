@@ -528,7 +528,7 @@ const SubmissionHistory: React.FC = () => {
                       : "Attach Proof"}
                   </Dropdown.Item>
                   <Dropdown.Item as={Link} to="#">
-                    Duplicate and Edit
+                    Edit
                   </Dropdown.Item>
                   {report.status === "APPROVER_FOR_REVISION" && (
                     <Dropdown.Item
