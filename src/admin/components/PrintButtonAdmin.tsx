@@ -56,7 +56,6 @@ interface PrintButtonAdminProps {
 }
 
 const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
-  const { isAuthenticated, user } = useContext(AuthContext);
   const [riskForms, setRiskForms] = useState<RiskFormData[]>([]);
   const [prerequisite, setPrerequisite] = useState<Prerequisite | null>(null);
   const [signatureImage, setSignatureImage] = useState("");
@@ -122,17 +121,22 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
     const fetchApprover = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/api/approvers", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:8080/api/riskforms/approverDetails/${reportId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         setProfessionalTitle(data.professionalTitle);
         setPostNominalTitle(data.postNominalTitle);
+        setUserFirstname(data.userFirstname);
+        setUserLastname(data.userLastname);
         if (data.approverPhoto) {
           const byteArray = new Uint8Array(
             atob(data.approverPhoto)
@@ -142,24 +146,9 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
           const blob = new Blob([byteArray], { type: "image/png" });
           setApproverPhoto(URL.createObjectURL(blob));
         }
-
-        const imageResponse = await fetch(
-          "http://localhost:8080/api/approvers/image",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!imageResponse.ok) {
-          throw new Error(`HTTP error! Status: ${imageResponse.status}`);
-        }
-        const imageBlob = await imageResponse.blob();
-        const imageObjectURL = URL.createObjectURL(imageBlob);
-        setSignatureImage(imageObjectURL);
-        console.log("Fetched signature image URL:", imageObjectURL);
+        console.log("Fetched approver details:", data);
       } catch (error) {
-        console.error("Error fetching signature:", error);
+        console.error("Error fetching approver details:", error);
       }
     };
 
@@ -743,13 +732,10 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                 width: "100%",
                 justifyContent: "space-between",
                 marginTop: "20px",
-                // marginTop:"-40px"
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span className="c92" style={{ marginBottom: "-60px" }}>
-                  {" "}
-                  {/* marginBottom: "-130px" */}
                   Prepared by:
                 </span>
                 <img
@@ -758,23 +744,22 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                   style={{
                     height: "80px",
                     marginLeft: "10px",
-                    marginBottom: "-30px", // marginBottom: "-80px", "-110px"
+                    marginBottom: "-30px",
                   }}
                 />
               </div>
 
-              {reportStatus === "APPROVER_APPROVED" ? (
+              {reportStatus === "APPROVER_APPROVED" ||
+              reportStatus === "ADMIN_VERIFIED" ? (
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "100px", marginBottom: "-55px" }} // marginBottom: "-80px"
+                    style={{ marginLeft: "100px", marginBottom: "-55px" }}
                   >
                     Reviewed/Approved by:
                   </span>
 
                   <div>
-                    {" "}
-                    {/* <div className="block"> */}
                     <img
                       src={approverPhoto}
                       alt="Signature"
@@ -782,7 +767,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                         height: "80px",
                         marginRight: "60px",
                         marginLeft: "60px",
-                        marginBottom: "-30px", // marginBottom: "-50px",
+                        marginBottom: "-30px",
                       }}
                     />
                   </div>
@@ -811,10 +796,11 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                   </span>
                 </span>
               </div>
-              {reportStatus === "APPROVER_APPROVED" ? (
+              {reportStatus === "APPROVER_APPROVED" ||
+              reportStatus === "ADMIN_VERIFIED" ? (
                 <div style={{ marginTop: "-25px", marginLeft: "638px" }}>
                   <span className="font-bold border-b border-black">
-                    {professionalTitle} {user?.firstname} {user?.lastname}
+                    {professionalTitle} {userFirstname} {userLastname}
                     {postNominalTitle ? ", " : ""}
                     {postNominalTitle}
                     <span className="font-normal">
