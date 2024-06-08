@@ -215,7 +215,6 @@ const Esignature: React.FC = () => {
                 <option value="">Select a title</option>
                 <option value="Mr.">Mr.</option>
                 <option value="Ms.">Ms.</option>
-                <option value="Mrs.">Mrs.</option>
                 <option value="Asst. Prof.">Assistant Professor</option>
                 <option value="Assoc. Prof.">Associate Professor</option>
                 <option value="Prof.">Professor</option>
