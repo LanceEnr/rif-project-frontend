@@ -585,17 +585,20 @@ const SubmissionHistoryApprover: React.FC = () => {
                   </Dropdown.Item>
                   <Dropdown.Item
                     className={
-                      report.status === "APPROVER_APPROVED" || "ADMIN_VERIFIED"
+                      report.status === "APPROVER_APPROVED" ||
+                      report.status === "ADMIN_VERIFIED"
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-green-600"
                     }
                     onClick={() => confirmApproveReport(report.id)}
                     disabled={
-                      report.status === "APPROVER_APPROVED" || "ADMIN_VERIFIED"
+                      report.status === "APPROVER_APPROVED" ||
+                      report.status === "ADMIN_VERIFIED"
                     }
                   >
                     Approve
                   </Dropdown.Item>
+
                   <Dropdown.Item
                     className={
                       report.status === "ADMIN_VERIFIED"

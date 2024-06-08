@@ -166,7 +166,7 @@ const SubmissionHistory: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/riskforms/reportDetails/${reportId}`,
+        `http://localhost:8080/api/riskforms/report/${reportId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -193,7 +193,6 @@ const SubmissionHistory: React.FC = () => {
 
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReportId(null);
