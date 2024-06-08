@@ -26,7 +26,6 @@ const Users: React.FC = () => {
   const [approvers, setApprovers] = useState<{ [key: number]: Approver }>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
-  const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
   const [showRoleConfirmation, setShowRoleConfirmation] = useState(false);
   const [showStatusConfirmation, setShowStatusConfirmation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -100,7 +99,6 @@ const Users: React.FC = () => {
           return "User";
         case "ROLE_APPROVER":
           return "Approver";
-
         case "ROLE_ADMIN":
           return "Administrator";
         default:
@@ -136,30 +134,9 @@ const Users: React.FC = () => {
   };
 
   const handleRoleChange = (user: User, roleId: number) => {
-    const currentRoleId = user.roles[0].id;
-    if (currentRoleId === 4 && roleId !== 4) {
-      alert("Admin users cannot be downgraded.");
-      return;
-    }
-    if (roleId === 4 && currentRoleId !== 4) {
-      setSelectedUser(user);
-      setShowAdminConfirmation(true);
-    } else {
-      setSelectedUser(user);
-      setSelectedRoleId(roleId);
-      setShowRoleConfirmation(true);
-    }
-  };
-
-  const confirmAdminPromotion = () => {
-    if (selectedUser) {
-      handleSaveUser(selectedUser, 4);
-      setShowAdminConfirmation(false);
-      setSelectedUser(null);
-      alert(
-        "User has been promoted to Administrator. This action is irreversible."
-      );
-    }
+    setSelectedUser(user);
+    setSelectedRoleId(roleId);
+    setShowRoleConfirmation(true);
   };
 
   const confirmRoleChange = () => {
@@ -175,11 +152,6 @@ const Users: React.FC = () => {
     setShowRoleConfirmation(false);
     setSelectedUser(null);
     setSelectedRoleId(null);
-  };
-
-  const cancelAdminPromotion = () => {
-    setShowAdminConfirmation(false);
-    setSelectedUser(null);
   };
 
   const handleStatusChange = (user: User, isActive: boolean) => {
@@ -242,7 +214,6 @@ const Users: React.FC = () => {
             return role.name === "ROLE_USER";
           case "Approver":
             return role.name === "ROLE_APPROVER";
-
           case "Administrator":
             return role.name === "ROLE_ADMIN";
           default:
@@ -289,7 +260,6 @@ const Users: React.FC = () => {
               <Dropdown.Item onClick={() => handleRoleFilterChange("Approver")}>
                 Approver
               </Dropdown.Item>
-
               <Dropdown.Item
                 onClick={() => handleRoleFilterChange("Administrator")}
               >
@@ -390,60 +360,55 @@ const Users: React.FC = () => {
 
                   <td className="px-6 py-4">
                     <div className="flex space-x-2">
-                      {user.roles[0].name !== "ROLE_ADMIN" && (
-                        <button
-                          onClick={() => handleStatusChange(user, !user.active)}
-                          className={`inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ${
-                            user.active ? "text-red-500" : "text-green-500"
-                          }`}
-                        >
-                          {user.active ? "Deactivate" : "Activate"}
-                        </button>
-                      )}
-                      {user.roles[0].name !== "ROLE_ADMIN" && (
-                        <Dropdown
-                          label={
-                            user.roles[0].name === "ROLE_USER"
+                      <button
+                        onClick={() => handleStatusChange(user, !user.active)}
+                        className={`inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ${
+                          user.active ? "text-red-500" : "text-green-500"
+                        }`}
+                      >
+                        {user.active ? "Deactivate" : "Activate"}
+                      </button>
+                      <Dropdown
+                        label={
+                          user.roles[0].name === "ROLE_USER"
+                            ? "User"
+                            : user.roles[0].name === "ROLE_APPROVER"
+                            ? "Approver"
+                            : "Administrator"
+                        }
+                        inline
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                          <button
+                            id={`dropdown-${user.id}`}
+                            className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                            type="button"
+                          >
+                            {user.roles[0].name === "ROLE_USER"
                               ? "User"
                               : user.roles[0].name === "ROLE_APPROVER"
                               ? "Approver"
-                              : "Administrator"
-                          }
-                          inline
-                          dismissOnClick={false}
-                          renderTrigger={() => (
-                            <button
-                              id={`dropdown-${user.id}`}
-                              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
-                              type="button"
-                            >
-                              {user.roles[0].name === "ROLE_USER"
-                                ? "User"
-                                : user.roles[0].name === "ROLE_APPROVER"
-                                ? "Approver"
-                                : "Administrator"}
-                              <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
-                            </button>
-                          )}
+                              : "Administrator"}
+                            <MdKeyboardArrowDown className="ml-2 h-5 w-5" />
+                          </button>
+                        )}
+                      >
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 1)}
                         >
-                          <Dropdown.Item
-                            onClick={() => handleRoleChange(user, 1)}
-                          >
-                            User
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => handleRoleChange(user, 2)}
-                          >
-                            Approver
-                          </Dropdown.Item>
-
-                          <Dropdown.Item
-                            onClick={() => handleRoleChange(user, 4)}
-                          >
-                            Administrator
-                          </Dropdown.Item>
-                        </Dropdown>
-                      )}
+                          User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 2)}
+                        >
+                          Approver
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleRoleChange(user, 4)}
+                        >
+                          Administrator
+                        </Dropdown.Item>
+                      </Dropdown>
                     </div>
                   </td>
                 </tr>
@@ -458,32 +423,6 @@ const Users: React.FC = () => {
           </tbody>
         </table>
       </div>
-
-      {showAdminConfirmation && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Confirm Promotion</h2>
-            <p className="mb-4">
-              Promoting a user to Administrator is irreversible. Do you want to
-              proceed?
-            </p>
-            <div className="flex justify-end">
-              <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                onClick={cancelAdminPromotion}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-                onClick={confirmAdminPromotion}
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showRoleConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
