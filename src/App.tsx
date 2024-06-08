@@ -16,7 +16,6 @@ import EditUser from "./admin/pages/EditUser";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
 import RifTracker from "./admin/pages/RifTracker";
 import SideNavbar from "./admin/components/SideNavbar";
-import AddStakeholders from "./user-side/pages/AddStakeholders";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
@@ -143,7 +142,6 @@ const UserLayout: FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/addstakeholders" element={<AddStakeholders />} />
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
         <Route path="/form" element={<RiskIdentificationForm />} />

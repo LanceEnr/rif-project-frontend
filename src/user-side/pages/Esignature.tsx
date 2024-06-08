@@ -203,7 +203,8 @@ const Esignature: React.FC = () => {
                 htmlFor="professionalTitle"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Professional Title
+                Professional Title{" "}
+                <span className="italic font-normal">(optional)</span>
               </label>
               <select
                 id="professionalTitle"
@@ -215,9 +216,19 @@ const Esignature: React.FC = () => {
                 <option value="">Select a title</option>
                 <option value="Mr.">Mr.</option>
                 <option value="Ms.">Ms.</option>
-                <option value="Asst. Prof.">Assistant Professor</option>
-                <option value="Assoc. Prof.">Associate Professor</option>
-                <option value="Prof.">Professor</option>
+                <option value="Inst.">Inst.</option>
+                <option value="Senior Teacher">Senior Teacher</option>
+                <option value="Dr.">Dr.</option>
+                <option value="Atty.">Atty.</option>
+                <option value="Engr.">Engr.</option>
+                <option value="Asst. Prof.">Asst. Prof.</option>
+                <option value="Assoc. Prof.">Assoc. Prof.</option>
+                <option value="Prof.">Prof.</option>
+                <option value="Fr.">Fr.</option>
+                <option value="Rev.">Rev.</option>
+                <option value="Rev. Fr.">Rev. Fr.</option>
+                <option value="Dean">Dean</option>
+                <option value="Dir.">Dir.</option>
               </select>
             </div>
             <div>
@@ -225,7 +236,8 @@ const Esignature: React.FC = () => {
                 htmlFor="postNominalTitle"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Post-Nominal Title
+                Post-Nominal Title{" "}
+                <span className="italic font-normal">(optional)</span>
               </label>
               <input
                 type="text"
@@ -261,7 +273,7 @@ const Esignature: React.FC = () => {
               htmlFor="draw-signature"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Draw your E-signature
+              Draw your E-signature <span className="text-red-500">*</span>
             </label>
             <p
               id="helper-text-explanation"

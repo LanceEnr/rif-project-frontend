@@ -141,7 +141,9 @@ const Prerequisites: React.FC = () => {
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
-        <h2 className="font-bold text-5xl mt-5 tracking-tight">Users</h2>
+        <h2 className="font-bold text-5xl mt-5 tracking-tight">
+          Prerequisites
+        </h2>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>
       <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">
@@ -159,7 +161,9 @@ const Prerequisites: React.FC = () => {
         </div>
         <div className="col-span-8 overflow-hidden rounded-xl sm:bg-yellow-100 sm:px-8 sm:shadow-md">
           <div className="pt-4">
-            <h1 className="py-2 text-2xl font-semibold">Prerequisites</h1>
+            <h1 className="py-2 text-2xl font-semibold">
+              Set your form prerequisites here
+            </h1>
             <div className="col-span-8 sm:hidden">
               <Dropdown
                 label=""
@@ -194,7 +198,8 @@ const Prerequisites: React.FC = () => {
                     htmlFor="unit"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Administrative/Academic Unit
+                    Administrative/Academic Unit{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -212,7 +217,7 @@ const Prerequisites: React.FC = () => {
                     htmlFor="unitType"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Unit Type
+                    Unit Type <span className="text-red-500">*</span>
                   </label>
                   <fieldset className="flex max-w-md flex-row gap-4">
                     <div className="flex items-center gap-2">
@@ -223,6 +228,7 @@ const Prerequisites: React.FC = () => {
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
                         checked={unitType === "Academic"}
                         onChange={(e) => setUnitType(e.target.value)}
+                        required
                       />
                       <Label htmlFor="type-academic">Academic</Label>
                     </div>
@@ -234,6 +240,7 @@ const Prerequisites: React.FC = () => {
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
                         checked={unitType === "Administrative"}
                         onChange={(e) => setUnitType(e.target.value)}
+                        required
                       />
                       <Label htmlFor="type-administrative">
                         Administrative
@@ -248,7 +255,8 @@ const Prerequisites: React.FC = () => {
                         htmlFor="internal-stakeholder"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Internal Client/Stakeholder
+                        Internal Client/Stakeholder{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <p
                         id="floating_helper_text"
@@ -314,7 +322,8 @@ const Prerequisites: React.FC = () => {
                         htmlFor="external-stakeholder"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        External Client/Stakeholder
+                        External Client/Stakeholder{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <p
                         id="floating_helper_text"

@@ -125,6 +125,14 @@ const Navbar: React.FC = () => {
                 <>
                   <li>
                     <Link
+                      to="/prerequisites"
+                      className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                    >
+                      Prerequisites
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/form"
                       className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
                     >
@@ -139,14 +147,7 @@ const Navbar: React.FC = () => {
                       Submissions
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/prerequisites"
-                      className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-                    >
-                      Prerequisites
-                    </Link>
-                  </li>
+
                   <li>
                     <Link
                       to="/faqs"
@@ -257,6 +258,14 @@ const Navbar: React.FC = () => {
               <>
                 <li>
                   <Link
+                    to="/prerequisites"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <span className="ms-3">Prerequisites</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/form"
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
@@ -271,14 +280,7 @@ const Navbar: React.FC = () => {
                     <span className="ms-3">Submissions</span>
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/prerequisites"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <span className="ms-3">Prerequisites</span>
-                  </Link>
-                </li>
+
                 <li>
                   <Link
                     to="/faqs"
