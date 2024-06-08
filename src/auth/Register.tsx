@@ -40,8 +40,28 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!email) {
+      setError("Email is required.");
+      return;
+    }
+
     if (!email.endsWith("@ust.edu.ph")) {
       setError("Please use a university email (@ust.edu.ph).");
+      return;
+    }
+
+    if (!firstname) {
+      setError("First name is required.");
+      return;
+    }
+
+    if (!lastname) {
+      setError("Last name is required.");
+      return;
+    }
+
+    if (!password) {
+      setError("Password is required.");
       return;
     }
 
@@ -49,6 +69,11 @@ const Register = () => {
       setError(
         "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
       );
+      return;
+    }
+
+    if (!confirmPassword) {
+      setError("Confirm password is required.");
       return;
     }
 
@@ -126,7 +151,7 @@ const Register = () => {
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Email
+                      Email <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -144,7 +169,7 @@ const Register = () => {
                       htmlFor="first-name"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      First Name
+                      First Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -153,7 +178,7 @@ const Register = () => {
                       value={firstname}
                       onChange={(e) => setFirstname(e.target.value)}
                       placeholder="First Name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
                       required
                     />
                   </div>
@@ -162,7 +187,7 @@ const Register = () => {
                       htmlFor="last-name"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Last Name
+                      Last Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -171,7 +196,7 @@ const Register = () => {
                       value={lastname}
                       onChange={(e) => setLastname(e.target.value)}
                       placeholder="Last Name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
                       required
                     />
                   </div>
@@ -180,7 +205,7 @@ const Register = () => {
                       htmlFor="password"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Password
+                      Password <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -209,7 +234,7 @@ const Register = () => {
                       htmlFor="confirm-password"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Confirm password
+                      Confirm password <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
