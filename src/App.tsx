@@ -11,7 +11,6 @@ import Faqs from "./user-side/pages/Faqs";
 import Contact from "./user-side/pages/Contact";
 import Navbar from "./user-side/components/Navbar";
 import Footer from "./user-side/components/Footer";
-import DocumentGrid from "./admin/pages/DocumentGrid";
 import Users from "./admin/pages/Users";
 import EditUser from "./admin/pages/EditUser";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
@@ -26,7 +25,6 @@ import MicroAnalytics from "./admin/pages/MicroAnalytics";
 import MacroAnalytics from "./admin/pages/MacroAnalytics";
 import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
-import DisplayForm from "./user-side/pages/DisplayForm";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import ResetPassword from "./auth/ResetPassword";
@@ -149,8 +147,8 @@ const UserLayout: FC = () => {
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
         <Route path="/form" element={<RiskIdentificationForm />} />
+        <Route path="/form/:reportId" element={<RiskIdentificationForm />} />
         <Route path="/submissions" element={<SubmissionHistory />} />
-        <Route path="/displayform" element={<DisplayForm />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

@@ -7,6 +7,8 @@ import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Opportunity {
   description: string;
@@ -64,6 +66,8 @@ const RiskIdentificationForm: React.FC = () => {
     userEmail: "", // Initialize with empty string
   };
 
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
@@ -74,6 +78,13 @@ const RiskIdentificationForm: React.FC = () => {
   const [rowsData, setRowsData] = useState<FormData[]>([]);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
   const [tags, setTags] = useState<string[]>([]); // State to hold the tags
+  const { reportId } = useParams<{ reportId: string }>();
+
+  useEffect(() => {
+    if (reportId) {
+      fetchReportData(parseInt(reportId));
+    }
+  }, [reportId]);
 
   useEffect(() => {
     updateRiskLevel(riskRating);
@@ -85,10 +96,81 @@ const RiskIdentificationForm: React.FC = () => {
       const decodedToken: any = jwtDecode(token);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        userEmail: decodedToken.email,
+        userEmail: decodedToken.email || prevFormData.userEmail,
       }));
     }
   }, []);
+
+  const fetchReportData = async (reportId: number) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/reportDetails/${reportId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched data:", data); // Debugging line
+      if (
+        data &&
+        data.report &&
+        data.report.riskFormData &&
+        data.report.riskFormData.length > 0
+      ) {
+        populateFormData(data);
+      } else {
+        console.warn("No riskFormData found in the response");
+        setFormData(initialState); // Reset form if no data is found
+      }
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+      setFormData(initialState); // Reset form if there's an error
+    }
+  };
+
+  const populateFormData = (data: any) => {
+    const riskFormData =
+      data.report && data.report.riskFormData ? data.report.riskFormData : [];
+
+    setRowsData(
+      riskFormData.map((item: any) => ({
+        sdaNumber: item.sdaNumber || 0,
+        uploadRIF: item.uploadRIF || null,
+        issueParticulars: item.issueParticulars || "",
+        issueType: item.issueType || "",
+        riskParticulars: item.riskParticulars || [{ description: "" }],
+        riskSEV: item.riskSEV || 0,
+        riskPROB: item.riskPROB || 0,
+        riskLevel: item.riskLevel || "",
+        riskType: item.riskType || "",
+        opportunities: item.opportunities || [{ description: "" }],
+        actionPlans: item.actionPlans || [{ description: "" }],
+        date: item.date || "",
+        submissionDate: item.submissionDate || "",
+        responsiblePersonNames: item.responsiblePersonNames || [],
+        riskRating: item.riskRating || 0,
+        status: item.status || "",
+        userEmail: data.user?.email || "",
+      }))
+    );
+
+    if (riskFormData.length > 0) {
+      setActiveRowIndex(0);
+      setFormData(riskFormData[0]);
+      setTags(riskFormData[0].responsiblePersonNames || []);
+    } else {
+      setTags([]);
+    }
+  };
 
   const getRiskLevel = (rating: number): string => {
     if (rating >= 1 && rating <= 7) {
@@ -119,7 +201,7 @@ const RiskIdentificationForm: React.FC = () => {
   const handleSubmitFinal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      let dataToSubmit = rowsData.map((data) =>
+      let dataToSubmit = rowsData.map((data, index) =>
         prepareData({
           ...data,
           responsiblePersonNames: data.responsiblePersonNames,
@@ -127,21 +209,22 @@ const RiskIdentificationForm: React.FC = () => {
         })
       );
 
-      if (
-        activeRowIndex === null &&
-        Object.keys(formData).some(
-          (key) =>
-            formData[key as keyof FormData] !==
-            initialState[key as keyof FormData]
-        )
-      ) {
+      if (activeRowIndex !== null) {
         const preparedFormData = prepareData({
           ...formData,
           date: date,
           responsiblePersonNames: tags,
           userEmail: formData.userEmail, // Include userEmail
         });
-        dataToSubmit = [...dataToSubmit, preparedFormData];
+        dataToSubmit[activeRowIndex] = preparedFormData; // Correctly update the existing row
+      } else {
+        const preparedFormData = prepareData({
+          ...formData,
+          date: date,
+          responsiblePersonNames: tags,
+          userEmail: formData.userEmail, // Include userEmail
+        });
+        dataToSubmit.push(preparedFormData); // Add new row if no active row index
       }
 
       await submitData(dataToSubmit);
@@ -153,19 +236,19 @@ const RiskIdentificationForm: React.FC = () => {
 
   const submitData = async (data: FormData[]) => {
     const token = localStorage.getItem("token");
+    const url = reportId
+      ? `http://localhost:8080/api/riskforms/updateRiskFormData?reportId=${reportId}`
+      : "http://localhost:8080/api/riskforms/submit";
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/api/riskforms/submit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include token in the headers
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include token in the headers
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) throw new Error("Failed to submit report");
 
@@ -216,6 +299,11 @@ const RiskIdentificationForm: React.FC = () => {
             return row;
           });
           setRowsData(updatedRowsData);
+        } else {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            responsiblePersonNames: updatedTags,
+          }));
         }
       }
       event.currentTarget.value = ""; // Clear input after adding tag
@@ -252,6 +340,7 @@ const RiskIdentificationForm: React.FC = () => {
     responsiblePersonNames: data.responsiblePersonNames, // This is now directly passed
 
     submissionDate: new Date().toISOString().split("T")[0], // Add the current date as submissionDate
+    userEmail: data.userEmail || formData.userEmail, // Ensure userEmail is included
   });
 
   const handleAddRiskParticular = () => {
@@ -468,18 +557,15 @@ const RiskIdentificationForm: React.FC = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
-    // Convert numeric fields to numbers; keep others as strings.
     const isNumericField = [
       "riskSEV",
       "riskPROB",
       "sdaNumber",
       "riskRating",
     ].includes(name);
-    let newValue: string | number = isNumericField ? Number(value) : value; // Ensures numeric fields are always numbers.
+    let newValue: string | number = isNumericField ? Number(value) : value;
 
     if (activeRowIndex !== null) {
-      // Update specific row in rowsData and recalculate the riskRating for that row if necessary
       const updatedRowsData = rowsData.map((rowData, index) => {
         if (index === activeRowIndex) {
           const updatedRow = { ...rowData, [name]: newValue };
@@ -491,13 +577,11 @@ const RiskIdentificationForm: React.FC = () => {
         return rowData;
       });
       setRowsData(updatedRowsData);
-      // Additionally, update the riskRating in the UI if SEV or PROB of the active row is changed
       if (name === "riskSEV" || name === "riskPROB") {
         const updatedRow = updatedRowsData[activeRowIndex];
         setRiskRating(updatedRow.riskRating);
       }
     } else {
-      // Update formData for new input and recalculate riskRating if necessary
       const updatedFormData = { ...formData, [name]: newValue };
       if (name === "riskSEV" || name === "riskPROB") {
         updatedFormData.riskRating =
@@ -507,13 +591,11 @@ const RiskIdentificationForm: React.FC = () => {
       setFormData(updatedFormData);
     }
 
-    // Handle error states
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: newValue.toString().trim() ? "" : "This field is required",
     }));
 
-    // Clear global error if form is now valid
     if (error && validateForm()) {
       setError(null);
     }
@@ -621,16 +703,16 @@ const RiskIdentificationForm: React.FC = () => {
         responsiblePersonNames: [...tags], // Ensure tags are included
       };
 
-      const newData =
-        activeRowIndex !== null
-          ? [
-              ...rowsData.slice(0, activeRowIndex),
-              newFormData,
-              ...rowsData.slice(activeRowIndex + 1),
-            ]
-          : [...rowsData, newFormData];
+      if (activeRowIndex !== null) {
+        const updatedRowsData = rowsData.map((data, index) =>
+          index === activeRowIndex ? newFormData : data
+        );
+        setRowsData(updatedRowsData);
+        setActiveRowIndex(null); // Reset the active row index after updating
+      } else {
+        setRowsData([...rowsData, newFormData]);
+      }
 
-      setRowsData(newData);
       resetForm();
       setDate("");
       setError(null);
@@ -656,6 +738,10 @@ const RiskIdentificationForm: React.FC = () => {
     setError(null);
     setErrors({});
     setTags([]);
+    if (reportId) {
+      // Redirect to the appropriate page or clear the reportId to avoid refetching
+      navigate("/submissions"); // Or any other appropriate page
+    }
   };
 
   const selectRow = (index: number) => {
@@ -675,6 +761,7 @@ const RiskIdentificationForm: React.FC = () => {
       riskParticulars: selectedRow.riskParticulars.map((riskParticular) => ({
         ...riskParticular,
       })),
+      responsiblePersonNames: selectedRow.responsiblePersonNames || [], // Ensure this line is included
     });
 
     setError(null); // Resetting the error state when a row is selected
@@ -728,19 +815,19 @@ const RiskIdentificationForm: React.FC = () => {
                 <form onSubmit={handleSubmitFinal} method="post">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     {/* <div className="md:col-span-3">
-                      <label
-                        htmlFor="file_input"
-                        className="block mb-2 text-sm font-medium text-gray-900"
-                      >
-                        Upload RIF (Optional)
-                      </label>
-                      <input
-                        type="file"
-                        name="uploadRIF"
-                        onChange={handleFileChange}
-                        accept=".pdf"
-                      />
-                    </div> */}
+                        <label
+                          htmlFor="file_input"
+                          className="block mb-2 text-sm font-medium text-gray-900"
+                        >
+                          Upload RIF (Optional)
+                        </label>
+                        <input
+                          type="file"
+                          name="uploadRIF"
+                          onChange={handleFileChange}
+                          accept=".pdf"
+                        />
+                      </div> */}
                     <div className="md:col-span-5">
                       <label
                         htmlFor="sdaNumber"

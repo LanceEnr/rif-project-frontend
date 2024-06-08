@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
@@ -31,6 +31,7 @@ const SubmissionHistory: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [selectedReportId, setSelectedReportId] = useState<number | null>(null);
   const [selectedRiskFormData, setSelectedRiskFormData] = useState<
     RiskFormData[]
@@ -41,6 +42,13 @@ const SubmissionHistory: React.FC = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
   const MAX_CHARS = 500;
+
+  const navigate = useNavigate();
+
+  const handleEdit = (report: Report) => {
+    setSelectedReport(report);
+    navigate(`/form/${report.id}`);
+  };
 
   const [selectedFilter, setSelectedFilter] = useState<
     "PENDING" | "FOR_REVISION" | "APPROVED" | "VERIFIED"
@@ -158,7 +166,7 @@ const SubmissionHistory: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/riskforms/report/${reportId}`,
+        `http://localhost:8080/api/riskforms/reportDetails/${reportId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -527,7 +535,7 @@ const SubmissionHistory: React.FC = () => {
                       ? "View Proof"
                       : "Attach Proof"}
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="#">
+                  <Dropdown.Item onClick={() => handleEdit(report)}>
                     Edit
                   </Dropdown.Item>
                   {report.status === "APPROVER_FOR_REVISION" && (
