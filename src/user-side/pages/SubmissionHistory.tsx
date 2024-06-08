@@ -535,9 +535,20 @@ const SubmissionHistory: React.FC = () => {
                       ? "View Proof"
                       : "Attach Proof"}
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleEdit(report)}>
+                  <Dropdown.Item
+                    className={
+                      report.status === "ADMIN_VERIFIED"
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }
+                    onClick={() =>
+                      report.status !== "ADMIN_VERIFIED" && handleEdit(report)
+                    }
+                    disabled={report.status === "ADMIN_VERIFIED"}
+                  >
                     Edit
                   </Dropdown.Item>
+
                   {report.status === "APPROVER_FOR_REVISION" && (
                     <Dropdown.Item
                       onClick={() => openCommentModal(report.approverComment!)}
