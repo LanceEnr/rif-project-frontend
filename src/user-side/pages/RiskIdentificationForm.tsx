@@ -5,7 +5,7 @@ import { FaCircle } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashCan } from "react-icons/fa6";
 import AuthContext from "../../auth/AuthContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -952,7 +952,8 @@ const RiskIdentificationForm: React.FC = () => {
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <label className="block text-sm font-medium mb-2 text-gray-900">
-                              Particulars <span className="text-red-500">*</span>
+                              Particulars{" "}
+                              <span className="text-red-500">*</span>
                             </label>
                             <p className="my-2 text-xs text-gray-500">
                               Use the "Add" button to include more entries.
@@ -1045,7 +1046,8 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="probability"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Probability (PROB) <span className="text-red-500">*</span>
+                        Probability (PROB){" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <select
                         id="riskPROB"
@@ -1202,7 +1204,8 @@ const RiskIdentificationForm: React.FC = () => {
                               htmlFor="number-input"
                               className="block text-sm font-medium mb-2 text-gray-900"
                             >
-                              Opportunities <span className="text-red-500">*</span>
+                              Opportunities{" "}
+                              <span className="text-red-500">*</span>
                             </label>
                             <p
                               id="floating_helper_text"
@@ -1282,7 +1285,8 @@ const RiskIdentificationForm: React.FC = () => {
                               htmlFor="number-input"
                               className="block text-sm font-medium mb-2 text-gray-900"
                             >
-                              Action Plan <span className="text-red-500">*</span>
+                              Action Plan{" "}
+                              <span className="text-red-500">*</span>
                             </label>
                             <p
                               id="floating_helper_text"
@@ -1344,7 +1348,8 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="datepicker"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Target Completion Date <span className="text-red-500">*</span>
+                        Target Completion Date{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <div className="relative max-w-sm">
                         <input
@@ -1371,7 +1376,8 @@ const RiskIdentificationForm: React.FC = () => {
                         htmlFor="responsiblePersonNames"
                         className="block mb-2 text-sm font-medium text-gray-900"
                       >
-                        Person(s) Responsible <span className="text-red-500">*</span>
+                        Person(s) Responsible{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
