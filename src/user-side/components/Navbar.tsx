@@ -21,24 +21,20 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const token = localStorage.getItem("token");
-      fetch("http://localhost:8080/api/notifications", { // Ensure the correct URL
+      fetch("http://localhost:8080/api/notifications", {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
         .then((res) => {
-          console.log("Response status:", res.status);
-          console.log("Response headers:", res.headers);
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
           return res.text();
         })
         .then((text) => {
-          console.log("Raw response text:", text); // Log raw response
           try {
             const data = JSON.parse(text);
-            console.log("Parsed notifications data:", data);
             setNotifications(data);
           } catch (error) {
             console.error("Error parsing JSON:", error, "Text received:", text);
