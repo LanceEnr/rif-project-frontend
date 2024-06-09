@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,10 +6,47 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import AuthContext from "../../auth/AuthContext";
 import yellowalert from "../../assets/yellowalert.png";
 
+interface Notification {
+  id: number;
+  message: string;
+  timestamp: string;
+}
+
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, role, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+      fetch("http://localhost:8080/api/notifications", { // Ensure the correct URL
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((res) => {
+          console.log("Response status:", res.status);
+          console.log("Response headers:", res.headers);
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.text();
+        })
+        .then((text) => {
+          console.log("Raw response text:", text); // Log raw response
+          try {
+            const data = JSON.parse(text);
+            console.log("Parsed notifications data:", data);
+            setNotifications(data);
+          } catch (error) {
+            console.error("Error parsing JSON:", error, "Text received:", text);
+          }
+        })
+        .catch((err) => console.error("Error fetching notifications:", err));
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     logout();
@@ -25,7 +62,6 @@ const Navbar: React.FC = () => {
 
   const displayRole = roleMapping[role] || "Unknown Role";
 
-  // If the role is "ROLE_ADMIN", do not render this navbar
   if (role === "ROLE_ADMIN") {
     return null;
   }
@@ -39,6 +75,11 @@ const Navbar: React.FC = () => {
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   };
 
   return (
@@ -61,10 +102,35 @@ const Navbar: React.FC = () => {
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             {isAuthenticated && user && (
               <>
-                <FontAwesomeIcon
-                  icon={faBell}
-                  className="text-white w-5 h-5 cursor-pointer mr-3"
-                />
+                <Dropdown
+                  label={
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      className="text-white w-5 h-5 cursor-pointer mr-3"
+                    />
+                  }
+                  arrowIcon={false}
+                  inline
+                >
+                  <Dropdown.Header>
+                    <span className="block text-sm text-yellow-500 uppercase">
+                      Notifications
+                    </span>
+                  </Dropdown.Header>
+                  {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                      <Dropdown.Item key={notification.id}>
+                        <div>{notification.message}</div>
+                        <div className="text-xs text-gray-400">
+                          {formatDate(notification.timestamp)}
+                        </div>
+                      </Dropdown.Item>
+                    ))
+                  ) : (
+                    <Dropdown.Item>No notifications</Dropdown.Item>
+                  )}
+                </Dropdown>
+
                 <Dropdown
                   label={
                     <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
