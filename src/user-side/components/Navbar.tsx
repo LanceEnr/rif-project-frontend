@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import AuthContext from "../../auth/AuthContext";
 import yellowalert from "../../assets/yellowalert.png";
 
@@ -58,26 +60,32 @@ const Navbar: React.FC = () => {
 
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             {isAuthenticated && user && (
-              <Dropdown
-                label={
-                  <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
-                    {getUserInitials()}
-                  </div>
-                }
-                arrowIcon={false}
-                inline
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm text-yellow-500 uppercase">
-                    {displayRole}
-                  </span>
-                  <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user.email}
-                  </span>
-                </Dropdown.Header>
-                <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
-              </Dropdown>
+              <>
+                <FontAwesomeIcon
+                  icon={faBell}
+                  className="text-white w-5 h-5 cursor-pointer mr-3"
+                />
+                <Dropdown
+                  label={
+                    <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
+                      {getUserInitials()}
+                    </div>
+                  }
+                  arrowIcon={false}
+                  inline
+                >
+                  <Dropdown.Header>
+                    <span className="block text-sm text-yellow-500 uppercase">
+                      {displayRole}
+                    </span>
+                    <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
+                    <span className="block truncate text-sm font-medium">
+                      {user.email}
+                    </span>
+                  </Dropdown.Header>
+                  <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+                </Dropdown>
+              </>
             )}
 
             <button
