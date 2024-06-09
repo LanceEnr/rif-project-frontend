@@ -113,18 +113,20 @@ const Navbar: React.FC = () => {
                       Notifications
                     </span>
                   </Dropdown.Header>
-                  {notifications.length > 0 ? (
-                    notifications.map((notification) => (
-                      <Dropdown.Item key={notification.id}>
-                        <div>{notification.message}</div>
-                        <div className="text-xs text-gray-400">
-                          {formatDate(notification.timestamp)}
-                        </div>
-                      </Dropdown.Item>
-                    ))
-                  ) : (
-                    <Dropdown.Item>No notifications</Dropdown.Item>
-                  )}
+                  <div className="max-h-60 overflow-y-auto"> {/* Add a max height and overflow for the notifications */}
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => (
+                        <Dropdown.Item key={notification.id}>
+                          <div>{notification.message}</div>
+                          <div className="text-xs text-gray-400">
+                            {formatDate(notification.timestamp)}
+                          </div>
+                        </Dropdown.Item>
+                      ))
+                    ) : (
+                      <Dropdown.Item>No notifications</Dropdown.Item>
+                    )}
+                  </div>
                 </Dropdown>
 
                 <Dropdown
