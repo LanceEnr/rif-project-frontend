@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
@@ -6,6 +6,14 @@ import yellowalert from "../../assets/yellowalert.png";
 import { MdDashboard } from "react-icons/md";
 import { IoDocumentsSharp } from "react-icons/io5";
 import { IoPieChartSharp } from "react-icons/io5";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+
+interface Notification {
+  id: number;
+  message: string;
+  timestamp: string;
+}
 
 const SideNavbar: React.FC = () => {
   const { isAuthenticated, user, displayRole, logout } =
@@ -14,6 +22,33 @@ const SideNavbar: React.FC = () => {
   const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] =
     useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+      fetch("http://localhost:8080/api/notifications", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.text();
+        })
+        .then((text) => {
+          try {
+            const data = JSON.parse(text);
+            setNotifications(data);
+          } catch (error) {
+            console.error("Error parsing JSON:", error, "Text received:", text);
+          }
+        })
+        .catch((err) => console.error("Error fetching notifications:", err));
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     logout();
@@ -33,6 +68,11 @@ const SideNavbar: React.FC = () => {
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   };
 
   return (
@@ -79,28 +119,63 @@ const SideNavbar: React.FC = () => {
             <div className="flex items-center">
               <div className="flex items-center ms-3">
                 {isAuthenticated && user ? (
-                  <Dropdown
-                    label={
-                      <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
-                        {getUserInitials()}
+                  <>
+                    <Dropdown
+                      label={
+                        <FontAwesomeIcon
+                          icon={faBell}
+                          className="text-white w-5 h-5 cursor-pointer mr-3"
+                        />
+                      }
+                      arrowIcon={false}
+                      inline
+                    >
+                      <Dropdown.Header>
+                        <span className="block text-sm text-yellow-500 uppercase">
+                          Notifications
+                        </span>
+                      </Dropdown.Header>
+                      <div
+                        className="overflow-y-auto"
+                        style={{ maxHeight: "200px" }}
+                      >
+                        {notifications.length > 0 ? (
+                          notifications.map((notification) => (
+                            <Dropdown.Item key={notification.id}>
+                              <div>{notification.message}</div>
+                              <div className="text-xs text-gray-400">
+                                {formatDate(notification.timestamp)}
+                              </div>
+                            </Dropdown.Item>
+                          ))
+                        ) : (
+                          <Dropdown.Item>No notifications</Dropdown.Item>
+                        )}
                       </div>
-                    }
-                    arrowIcon={false}
-                    inline
-                  >
-                    <Dropdown.Header>
-                      <span className="block text-sm text-yellow-500 uppercase">
-                        {displayRole}
-                      </span>
-                      <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-                      <span className="block truncate text-sm font-medium">
-                        {user.email}
-                      </span>
-                    </Dropdown.Header>
-                    <Dropdown.Item onClick={handleLogout}>
-                      Sign out
-                    </Dropdown.Item>
-                  </Dropdown>
+                    </Dropdown>
+                    <Dropdown
+                      label={
+                        <div className="flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full">
+                          {getUserInitials()}
+                        </div>
+                      }
+                      arrowIcon={false}
+                      inline
+                    >
+                      <Dropdown.Header>
+                        <span className="block text-sm text-yellow-500 uppercase">
+                          {displayRole}
+                        </span>
+                        <span className="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
+                        <span className="block truncate text-sm font-medium">
+                          {user.email}
+                        </span>
+                      </Dropdown.Header>
+                      <Dropdown.Item onClick={handleLogout}>
+                        Sign out
+                      </Dropdown.Item>
+                    </Dropdown>
+                  </>
                 ) : (
                   <Dropdown
                     label={

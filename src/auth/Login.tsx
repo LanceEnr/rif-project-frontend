@@ -100,30 +100,23 @@ const Login = () => {
 
   const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    setShowForgotPassword(false); // Close the popup immediately
 
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/auth/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: resetEmail }),
-        }
-      );
+      try {
+          const response = await fetch("http://localhost:8080/api/auth/forgot-password", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: resetEmail }),
+          });
 
-      if (response.ok) {
-        setError("");
-        setShowForgotPassword(false); // Close the popup after successful email sent
-        setEmailSentMessage("Password reset email sent successfully.");
-      } else {
-        setError("Failed to send password reset email.");
+          setError(""); // Clear any previous errors
+          setEmailSentMessage("Password reset email sent successfully.");
+      } catch (error) {
+          console.error("Forgot password error:", error);
       }
-    } catch (error) {
-      setError("An error occurred while sending password reset email.");
-      console.error("Forgot password error:", error);
-    }
   };
 
   return (
