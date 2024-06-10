@@ -770,7 +770,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "100px", marginBottom: "-55px" }} // marginBottom: "-80px"
+                    style={{ marginLeft: "130px", marginBottom: "-55px" }} // marginBottom: "-80px"
                   >
                     Reviewed/Approved by:
                   </span>
@@ -816,7 +816,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               </div>
               {reportStatus === "APPROVER_APPROVED" ||
               reportStatus === "ADMIN_VERIFIED" ? (
-                <div style={{ marginTop: "-25px", marginLeft: "610px" }}>
+                <div style={{ marginTop: "-25px", marginLeft: "630px" }}>
                   <span className="font-bold border-b border-black">
                     {professionalTitle} {user?.firstname} {user?.lastname}
                     {postNominalTitle ? ", " : ""}

@@ -73,6 +73,8 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
     null
   );
   const [reportStatus, setReportStatus] = useState<string>("");
+  const [approverFirstname, setApproverFirstname] = useState("");
+  const [approverLastname, setApproverLastname] = useState("");
 
   useEffect(() => {
     console.log("PrintButtonAdmin mounted with reportId:", reportId);
@@ -135,8 +137,8 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
         const data = await response.json();
         setProfessionalTitle(data.professionalTitle);
         setPostNominalTitle(data.postNominalTitle);
-        setUserFirstname(data.userFirstname);
-        setUserLastname(data.userLastname);
+        setApproverFirstname(data.userFirstname);
+        setApproverLastname(data.userLastname);
         if (data.approverPhoto) {
           const byteArray = new Uint8Array(
             atob(data.approverPhoto)
@@ -754,7 +756,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "100px", marginBottom: "-55px" }}
+                    style={{ marginLeft: "130px", marginBottom: "-55px" }}
                   >
                     Reviewed/Approved by:
                   </span>
@@ -798,9 +800,9 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
               </div>
               {reportStatus === "APPROVER_APPROVED" ||
               reportStatus === "ADMIN_VERIFIED" ? (
-                <div style={{ marginTop: "-25px", marginLeft: "610px" }}>
+                <div style={{ marginTop: "-25px", marginLeft: "630px" }}>
                   <span className="font-bold border-b border-black">
-                    {professionalTitle} {userFirstname} {userLastname}
+                    {professionalTitle} {approverFirstname} {approverLastname}
                     {postNominalTitle ? ", " : ""}
                     {postNominalTitle}
                     <span className="font-normal">
