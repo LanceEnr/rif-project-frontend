@@ -4,8 +4,7 @@ import { Dropdown } from "flowbite-react";
 import AuthContext from "../../auth/AuthContext";
 import yellowalert from "../../assets/yellowalert.png";
 import { MdDashboard } from "react-icons/md";
-import { IoDocumentsSharp } from "react-icons/io5";
-import { IoPieChartSharp } from "react-icons/io5";
+import { IoDocumentsSharp, IoPieChartSharp } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,16 +12,16 @@ interface Notification {
   id: number;
   message: string;
   timestamp: string;
+  isRead: boolean;
 }
 
 const SideNavbar: React.FC = () => {
-  const { isAuthenticated, user, displayRole, logout } =
-    useContext(AuthContext);
+  const { isAuthenticated, user, displayRole, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] =
-    useState(false);
+  const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -36,23 +35,59 @@ const SideNavbar: React.FC = () => {
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
-          return res.text();
+          return res.json();
         })
-        .then((text) => {
-          try {
-            const data = JSON.parse(text);
-            setNotifications(data);
-          } catch (error) {
-            console.error("Error parsing JSON:", error, "Text received:", text);
-          }
+        .then((data) => {
+          setNotifications(data);
         })
         .catch((err) => console.error("Error fetching notifications:", err));
+
+      fetch("http://localhost:8080/api/notifications/unread-count", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((count) => {
+          setUnreadCount(count);
+        })
+        .catch((err) => console.error("Error fetching unread notifications count:", err));
     }
   }, [isAuthenticated]);
 
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const markNotificationAsRead = (id: number) => {
+    const token = localStorage.getItem("token");
+    fetch(`http://localhost:8080/api/notifications/mark-as-read/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.text();
+      })
+      .then(() => {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification.id === id ? { ...notification, isRead: true } : notification
+          )
+        );
+        setUnreadCount((prevCount) => prevCount - 1);
+      })
+      .catch((err) => console.error("Error marking notification as read:", err));
   };
 
   const getUserInitials = () => {
@@ -122,10 +157,17 @@ const SideNavbar: React.FC = () => {
                   <>
                     <Dropdown
                       label={
-                        <FontAwesomeIcon
-                          icon={faBell}
-                          className="text-white w-5 h-5 cursor-pointer mr-3"
-                        />
+                        <div className="relative">
+                          <FontAwesomeIcon
+                            icon={faBell}
+                            className="text-white w-5 h-5 cursor-pointer mr-3"
+                          />
+                          {unreadCount > 0 && (
+                            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                              {unreadCount}
+                            </span>
+                          )}
+                        </div>
                       }
                       arrowIcon={false}
                       inline
@@ -141,7 +183,11 @@ const SideNavbar: React.FC = () => {
                       >
                         {notifications.length > 0 ? (
                           notifications.map((notification) => (
-                            <Dropdown.Item key={notification.id}>
+                            <Dropdown.Item
+                              key={notification.id}
+                              onClick={() => markNotificationAsRead(notification.id)}
+                              className={!notification.isRead ? "bg-yellow-100" : ""}
+                            >
                               <div>{notification.message}</div>
                               <div className="text-xs text-gray-400">
                                 {formatDate(notification.timestamp)}
@@ -420,7 +466,7 @@ const SideNavbar: React.FC = () => {
                   Risk Data Visualization
                 </span>
                 <svg
-                  className="w-2 h-2"
+                  className="w-3 h-3"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
