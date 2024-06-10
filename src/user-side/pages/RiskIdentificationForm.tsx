@@ -137,35 +137,25 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const populateFormData = (data: any) => {
-    const riskFormData =
-      data.report && data.report.riskFormData ? data.report.riskFormData : [];
+    const riskFormData = data.report.riskFormData
+      ? data.report.riskFormData
+      : [];
 
     setRowsData(
       riskFormData.map((item: any) => ({
-        sdaNumber: item.sdaNumber || 0,
-        uploadRIF: item.uploadRIF || null,
-        issueParticulars: item.issueParticulars || "",
-        issueType: item.issueType || "",
-        riskParticulars: item.riskParticulars || [{ description: "" }],
-        riskSEV: item.riskSEV || 0,
-        riskPROB: item.riskPROB || 0,
-        riskLevel: item.riskLevel || "",
-        riskType: item.riskType || "",
-        opportunities: item.opportunities || [{ description: "" }],
-        actionPlans: item.actionPlans || [{ description: "" }],
-        date: item.date || "",
-        submissionDate: item.submissionDate || "",
-        responsiblePersonNames: item.responsiblePersonNames || [],
-        riskRating: item.riskRating || 0,
-        status: item.status || "",
-        userEmail: data.user?.email || "",
+        ...item,
+        responsiblePersonNames: item.responsiblePersons.map(
+          (person: any) => person.name
+        ),
       }))
     );
 
     if (riskFormData.length > 0) {
       setActiveRowIndex(0);
       setFormData(riskFormData[0]);
-      setTags(riskFormData[0].responsiblePersonNames || []);
+      setTags(
+        riskFormData[0].responsiblePersons.map((person: any) => person.name)
+      );
     } else {
       setTags([]);
     }
@@ -204,7 +194,7 @@ const RiskIdentificationForm: React.FC = () => {
         prepareData({
           ...data,
           responsiblePersonNames: data.responsiblePersonNames,
-          userEmail: formData.userEmail, // Include userEmail in each row's data
+          userEmail: formData.userEmail,
         })
       );
 
@@ -213,23 +203,51 @@ const RiskIdentificationForm: React.FC = () => {
           ...formData,
           date: date,
           responsiblePersonNames: tags,
-          userEmail: formData.userEmail, // Include userEmail
+          userEmail: formData.userEmail,
         });
-        dataToSubmit[activeRowIndex] = preparedFormData; // Correctly update the existing row
+        dataToSubmit[activeRowIndex] = preparedFormData;
       } else {
         const preparedFormData = prepareData({
           ...formData,
           date: date,
           responsiblePersonNames: tags,
-          userEmail: formData.userEmail, // Include userEmail
+          userEmail: formData.userEmail,
         });
-        dataToSubmit.push(preparedFormData); // Add new row if no active row index
+        dataToSubmit.push(preparedFormData);
       }
 
-      await submitData(dataToSubmit);
+      if (reportId) {
+        await updateData(reportId, dataToSubmit);
+      } else {
+        await submitData(dataToSubmit);
+      }
       resetFormState();
     } else {
       setError("Please fill out the form correctly before submitting.");
+    }
+  };
+
+  const updateData = async (reportId: string, data: FormData[]) => {
+    const token = localStorage.getItem("token");
+    const url = `http://localhost:8080/api/riskforms/updateRiskFormData?reportId=${reportId}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error("Failed to update report");
+
+      alert("Form updated successfully!");
+      resetFormState();
+    } catch (error) {
+      console.error("Error updating report:", error);
+      setError("Failed to update report. Please try again later.");
     }
   };
 
@@ -760,10 +778,10 @@ const RiskIdentificationForm: React.FC = () => {
       riskParticulars: selectedRow.riskParticulars.map((riskParticular) => ({
         ...riskParticular,
       })),
-      responsiblePersonNames: selectedRow.responsiblePersonNames || [], // Ensure this line is included
+      responsiblePersonNames: selectedRow.responsiblePersonNames || [],
     });
 
-    setError(null); // Resetting the error state when a row is selected
+    setError(null);
   };
 
   return (
@@ -1455,21 +1473,21 @@ const RiskIdentificationForm: React.FC = () => {
                         </button>
                       </div>
                       <div className="inline-flex items-end">
-                        <button
-                          type="submit"
-                          disabled={
-                            rowsData.length === 0 &&
-                            !Object.values(formData).some((value) => value)
-                          } // Disable if rowsData is empty and current form data is not filled
-                          className={`inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md ${
-                            rowsData.length === 0 &&
-                            !Object.values(formData).some((value) => value)
-                              ? "bg-gray-500"
-                              : "bg-yellow-500 hover:bg-yellow-600"
-                          }`}
-                        >
-                          Submit
-                        </button>
+                        {reportId ? (
+                          <button
+                            type="submit"
+                            className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md bg-yellow-500 hover:bg-yellow-600"
+                          >
+                            Save and Submit
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white border border-transparent rounded-md bg-yellow-500 hover:bg-yellow-600"
+                          >
+                            Submit
+                          </button>
+                        )}
                       </div>
                     </div>
                     {error && (
