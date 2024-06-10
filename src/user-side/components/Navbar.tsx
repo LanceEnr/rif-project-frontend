@@ -228,14 +228,14 @@ const Navbar: React.FC = () => {
                       FAQs
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/contact"
                       className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
                     >
                       Contact
                     </Link>
-                  </li>
+                  </li> */}
                 </>
               )}
               {isAuthenticated && role === "ROLE_APPROVER" && (
@@ -264,14 +264,14 @@ const Navbar: React.FC = () => {
                       FAQs
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="contact"
                       className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
                     >
                       Contact
                     </Link>
-                  </li>
+                  </li> */}
                 </>
               )}
             </ul>
@@ -397,14 +397,14 @@ const Navbar: React.FC = () => {
                     <span className="ms-3">FAQs</span>
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     to="contact"
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <span className="ms-3">Contact</span>
                   </Link>
-                </li>
+                </li> */}
               </>
             )}
           </ul>

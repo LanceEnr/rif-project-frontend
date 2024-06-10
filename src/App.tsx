@@ -8,7 +8,7 @@ import {
 import AuthContext, { AuthProvider } from "./auth/AuthContext";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
-import Contact from "./user-side/pages/Contact";
+// import Contact from "./user-side/pages/Contact";
 import Navbar from "./user-side/components/Navbar";
 import Footer from "./user-side/components/Footer";
 import Users from "./admin/pages/Users";
@@ -116,7 +116,7 @@ const ApproverLayout: FC = () => {
         />
 
         <Route path="faqs" element={<Faqs />} />
-        <Route path="contact" element={<Contact />} />
+        {/* <Route path="contact" element={<Contact />} /> */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
@@ -141,7 +141,7 @@ const UserLayout: FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/faqs" element={<Faqs />} />
-        <Route path="/contact" element={<Contact />} />
+        {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
         <Route path="/form" element={<RiskIdentificationForm />} />
