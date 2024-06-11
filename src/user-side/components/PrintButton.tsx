@@ -834,7 +834,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "100px", marginBottom: "-55px" }}
+                    style={{ marginLeft: "130px", marginBottom: "-55px" }}
                   >
                     Reviewed/Approved by:
                   </span>
@@ -878,7 +878,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               </div>
               {reportStatus === "APPROVER_APPROVED" ||
               reportStatus === "ADMIN_VERIFIED" ? (
-                <div style={{ marginTop: "-25px", marginLeft: "610px" }}>
+                <div style={{ marginTop: "-25px", marginLeft: "630px" }}>
                   <span className="font-bold border-b border-black">
                     {approverProfessionalTitle} {approverFirstname}{" "}
                     {approverLastname}
@@ -902,8 +902,7 @@ const PrintButton: React.FC<PrintButtonProps> = ({ reportId }) => {
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature
-              over Printed Name/Date
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
             </span>
           </p>
         </div>

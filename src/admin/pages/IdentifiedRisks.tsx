@@ -181,7 +181,7 @@ const IdentifiedRisks: React.FC = () => {
               <th scope="col" className="px-6 py-3 w-3/12">
                 Risks
               </th>
-              {/* <th scope="col" className="px-6 py-3 w-1/12">
+              <th scope="col" className="px-6 py-3 w-1/12">
                 <div className="flex items-center">
                   Risk Rating
                   <button onClick={() => setSortRiskRatingAsc((prev) => !prev)}>
@@ -196,7 +196,7 @@ const IdentifiedRisks: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-              </th> */}
+              </th>
               <th scope="col" className="px-6 py-3 w-1/12">
                 <div className="flex items-center">
                   Risk Level
@@ -253,9 +253,9 @@ const IdentifiedRisks: React.FC = () => {
                       )}
                     </ul>
                   </td>
-                  {/* <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
+                  <td className="px-6 py-4 text-gray-900 break-words whitespace-normal">
                     {item.riskRating}
-                  </td> */}
+                  </td>
                   <td className="px-6 py-4 font-medium break-words whitespace-normal">
                     {getRiskLevelBadge(item.riskLevel)}
                   </td>

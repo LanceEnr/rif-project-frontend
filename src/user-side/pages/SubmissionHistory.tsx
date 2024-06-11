@@ -40,6 +40,8 @@ const SubmissionHistory: React.FC = () => {
   const [selectedComment, setSelectedComment] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
   const MAX_CHARS = 500;
 
@@ -318,6 +320,44 @@ const SubmissionHistory: React.FC = () => {
     }
   };
 
+  const handleDuplicate = (reportId: number) => {
+    setSelectedReportId(reportId);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDuplicate = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/duplicate/${selectedReportId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const newReport = await response.json();
+      setReports((prevReports) => [...prevReports, newReport]);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      console.error("Error duplicating report:", error);
+    } finally {
+      setIsConfirmModalOpen(false);
+    }
+  };
+
+  const cancelDuplicate = () => {
+    setIsConfirmModalOpen(false);
+    setSelectedReportId(null);
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex flex-col items-right">
@@ -534,19 +574,21 @@ const SubmissionHistory: React.FC = () => {
                       ? "View Proof"
                       : "Attach Proof"}
                   </Dropdown.Item>
-                  <Dropdown.Item
-                    className={
-                      report.status === "ADMIN_VERIFIED"
-                        ? "text-gray-400 cursor-not-allowed"
-                        : ""
-                    }
-                    onClick={() =>
-                      report.status !== "ADMIN_VERIFIED" && handleEdit(report)
-                    }
-                    disabled={report.status === "ADMIN_VERIFIED"}
-                  >
-                    Edit
-                  </Dropdown.Item>
+                  {report.status !== "ADMIN_VERIFIED" &&
+                    report.status !== "APPROVER_APPROVED" && (
+                      <Dropdown.Item
+                        className=""
+                        onClick={() => handleEdit(report)}
+                      >
+                        Edit
+                      </Dropdown.Item>
+                    )}
+
+                  {report.status === "ADMIN_VERIFIED" && (
+                    <Dropdown.Item onClick={() => handleDuplicate(report.id)}>
+                      Duplicate
+                    </Dropdown.Item>
+                  )}
 
                   {report.status === "APPROVER_FOR_REVISION" && (
                     <Dropdown.Item
@@ -721,11 +763,57 @@ const SubmissionHistory: React.FC = () => {
                   name="comment"
                   rows={4}
                   className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
-                  placeholder="Approver's Comment"
+                  placeholder="Reviewer's Comment"
                   value={selectedComment || ""}
                   readOnly
                 ></textarea>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isConfirmModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Confirm Duplicate</h2>
+            <p className="mb-4">
+              Are you sure you want to duplicate this report?
+            </p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                onClick={cancelDuplicate}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={confirmDuplicate}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">
+              Report duplicated successfully
+            </h2>
+            <p className="mb-4">
+              You can find the duplicated report under 'Pending'
+            </p>
+            <div className="flex justify-end">
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                onClick={() => setIsSuccessModalOpen(false)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
