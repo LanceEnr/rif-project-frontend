@@ -16,9 +16,11 @@ interface Notification {
 }
 
 const SideNavbar: React.FC = () => {
-  const { isAuthenticated, user, displayRole, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, displayRole, logout } =
+    useContext(AuthContext);
   const navigate = useNavigate();
-  const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] = useState(false);
+  const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] =
+    useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -28,8 +30,8 @@ const SideNavbar: React.FC = () => {
       const token = localStorage.getItem("token");
       fetch("http://localhost:8080/api/notifications", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then((res) => {
           if (!res.ok) {
@@ -44,8 +46,8 @@ const SideNavbar: React.FC = () => {
 
       fetch("http://localhost:8080/api/notifications/unread-count", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then((res) => {
           if (!res.ok) {
@@ -56,7 +58,9 @@ const SideNavbar: React.FC = () => {
         .then((count) => {
           setUnreadCount(count);
         })
-        .catch((err) => console.error("Error fetching unread notifications count:", err));
+        .catch((err) =>
+          console.error("Error fetching unread notifications count:", err)
+        );
     }
   }, [isAuthenticated]);
 
@@ -70,8 +74,8 @@ const SideNavbar: React.FC = () => {
     fetch(`http://localhost:8080/api/notifications/mark-as-read/${id}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) {
@@ -82,12 +86,16 @@ const SideNavbar: React.FC = () => {
       .then(() => {
         setNotifications((prevNotifications) =>
           prevNotifications.map((notification) =>
-            notification.id === id ? { ...notification, isRead: true } : notification
+            notification.id === id
+              ? { ...notification, isRead: true }
+              : notification
           )
         );
         setUnreadCount((prevCount) => prevCount - 1);
       })
-      .catch((err) => console.error("Error marking notification as read:", err));
+      .catch((err) =>
+        console.error("Error marking notification as read:", err)
+      );
   };
 
   const getUserInitials = () => {
@@ -185,8 +193,12 @@ const SideNavbar: React.FC = () => {
                           notifications.map((notification) => (
                             <Dropdown.Item
                               key={notification.id}
-                              onClick={() => markNotificationAsRead(notification.id)}
-                              className={!notification.isRead ? "bg-yellow-100" : ""}
+                              onClick={() =>
+                                markNotificationAsRead(notification.id)
+                              }
+                              className={
+                                !notification.isRead ? "bg-yellow-100" : ""
+                              }
                             >
                               <div>{notification.message}</div>
                               <div className="text-xs text-gray-400">
@@ -260,11 +272,13 @@ const SideNavbar: React.FC = () => {
             <ul className="space-y-2 font-medium">
               <li>
                 <Link
-                  to="/admin"
+                  to="submissions"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <MdDashboard className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" />
-                  <span className="ms-3">Dashboard</span>
+                  <IoDocumentsSharp className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Submissions
+                  </span>
                 </Link>
               </li>
 
@@ -285,17 +299,7 @@ const SideNavbar: React.FC = () => {
                   <span className="flex-1 ms-3 whitespace-nowrap">Users</span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="submissions"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <IoDocumentsSharp className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Submissions
-                  </span>
-                </Link>
-              </li>
+
               <li>
                 <button
                   type="button"
@@ -418,11 +422,13 @@ const SideNavbar: React.FC = () => {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to="/admin"
+                to="submissions"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <MdDashboard className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="ms-3">Dashboard</span>
+                <IoDocumentsSharp className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Submissions
+                </span>
               </Link>
             </li>
             <li>
@@ -442,17 +448,7 @@ const SideNavbar: React.FC = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Users</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to="submissions"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <IoDocumentsSharp className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="flex-1 ms-3 whitespace-nowrap">
-                  Submissions
-                </span>
-              </Link>
-            </li>
+
             <li>
               <button
                 type="button"

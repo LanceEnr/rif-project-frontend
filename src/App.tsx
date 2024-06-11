@@ -76,7 +76,7 @@ const AdminLayout: FC = () => {
       <div className="p-4 sm:ml-64">
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg mt-14">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<SubmissionHistoryAdmin />} />
             <Route path="submissions" element={<SubmissionHistoryAdmin />} />
             <Route path="tracker" element={<RifTracker />} />
             <Route path="trackertable" element={<RifTrackerTable />} />
