@@ -811,6 +811,9 @@ const RiskIdentificationForm: React.FC = () => {
           <div className="mt-4 mb-10">
             <div className="grid gap-4 mb-4 sm:grid-cols-1">
               <div className="lg:col-span-2">
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Fields marked with <span className="text-red-500">*</span> are required.
+                </p>
                 <form onSubmit={handleSubmitFinal} method="post">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     {/* <div className="md:col-span-3">

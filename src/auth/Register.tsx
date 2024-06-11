@@ -142,6 +142,9 @@ const Register = () => {
                 <h1 className="text-l font-bold leading-tight tracking-tight md:text-2xl">
                   Create an account
                 </h1>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Fields marked with <span className="text-red-500">*</span> are required.
+                </p>
                 <form
                   className="space-y-4 md:space-y-6"
                   onSubmit={handleSubmit}
