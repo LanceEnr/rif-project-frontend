@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import yellowalert from "../assets/yellowalert.png";
 
 const ResetPassword = () => {
@@ -7,11 +9,36 @@ const ResetPassword = () => {
   const token = searchParams.get("token");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const isPasswordValid = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{6,})/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!newPassword) {
+      setError("Password is required.");
+      return;
+    }
+
+    if (!isPasswordValid(newPassword)) {
+      setError(
+        "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
+      );
+      return;
+    }
+
+    if (!confirmPassword) {
+      setError("Confirm password is required.");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -72,18 +99,29 @@ const ResetPassword = () => {
                     >
                       New Password
                     </label>
-                    <input
-                      type="password"
-                      name="newPassword"
-                      id="newPassword"
-                      value={newPassword}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setNewPassword(e.target.value)
-                      }
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                      placeholder="New Password"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="newPassword"
+                        id="newPassword"
+                        value={newPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setNewPassword(e.target.value)
+                        }
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        placeholder="New Password"
+                        required
+                      />
+                      <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={showPassword ? faEye : faEyeSlash}
+                          style={{ color: "black" }}
+                        />
+                      </span>
+                    </div>
                   </div>
                   <div>
                     <label
@@ -92,18 +130,31 @@ const ResetPassword = () => {
                     >
                       Confirm Password
                     </label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      id="confirmPassword"
-                      value={confirmPassword}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setConfirmPassword(e.target.value)
-                      }
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                      placeholder="Confirm Password"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setConfirmPassword(e.target.value)
+                        }
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        placeholder="Confirm Password"
+                        required
+                      />
+                      <span
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={showConfirmPassword ? faEye : faEyeSlash}
+                          style={{ color: "black" }}
+                        />
+                      </span>
+                    </div>
                   </div>
                   <button
                     type="submit"
