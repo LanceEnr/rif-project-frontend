@@ -161,8 +161,8 @@ const RiskComparisonChart: React.FC = () => {
           Risk Comparison (Initial vs Residual)
         </h2>
         <button
+          className="bg-yellow-500 hover:bg-yellow-600 mt-8 text-white font-bold py-2 px-4 rounded"
           onClick={handleDownloadImage}
-          className="mt-5 bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md"
         >
           Download Chart
         </button>
