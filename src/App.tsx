@@ -135,8 +135,12 @@ const ApproverLayout: FC = () => {
 };
 
 const UserLayout: FC = () => {
-  const { role, isAuthenticated, isPrerequisiteComplete, isEsignatureComplete } =
-    useContext(AuthContext);
+  const {
+    role,
+    isAuthenticated,
+    isPrerequisiteComplete,
+    isEsignatureComplete,
+  } = useContext(AuthContext);
 
   if (role === "ROLE_ADMIN") {
     return <Navigate to="/admin" />;
