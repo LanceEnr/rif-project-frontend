@@ -110,9 +110,9 @@ const RiskComparisonChart: React.FC = () => {
                 initialHighRiskData,
               ],
               backgroundColor: [
-                "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
-                "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
-                "rgba(255, 69, 0, 0.6)", // Red for High Risk
+                "rgba(255,227,139,0.6)",
+                "rgba(252,168,32,0.6)",
+                "rgba(255,0,0,0.6)",
               ],
             },
           ],
@@ -128,9 +128,9 @@ const RiskComparisonChart: React.FC = () => {
                 residualHighRiskData,
               ],
               backgroundColor: [
-                "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
-                "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
-                "rgba(255, 69, 0, 0.6)", // Red for High Risk
+                "rgba(255,227,139,0.6)",
+                "rgba(252,168,32,0.6)",
+                "rgba(255,0,0,0.6)",
               ],
             },
           ],
