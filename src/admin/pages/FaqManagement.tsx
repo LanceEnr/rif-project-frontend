@@ -228,7 +228,7 @@ const FaqManagement: React.FC = () => {
 
       {showFaqForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white w-full max-w-3xl  p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">
               {faqForm.id ? "Edit FAQ" : "Add FAQ"}
             </h2>
@@ -264,6 +264,7 @@ const FaqManagement: React.FC = () => {
                   Answer
                 </label>
                 <textarea
+                  rows={4}
                   id="answer"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={faqForm.answer || ""}
