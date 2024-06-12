@@ -128,7 +128,8 @@ const ApproverLayout: FC = () => {
 };
 
 const UserLayout: FC = () => {
-  const { role } = useContext(AuthContext);
+  const { role, isAuthenticated, isPrerequisiteComplete, isEsignatureComplete } =
+    useContext(AuthContext);
 
   if (role === "ROLE_ADMIN") {
     return <Navigate to="/admin" />;
@@ -147,9 +148,36 @@ const UserLayout: FC = () => {
         {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
-        <Route path="/form" element={<RiskIdentificationForm />} />
-        <Route path="/form/:reportId" element={<RiskIdentificationForm />} />
-        <Route path="/submissions" element={<SubmissionHistory />} />
+        <Route
+          path="/form"
+          element={
+            isPrerequisiteComplete && isEsignatureComplete ? (
+              <RiskIdentificationForm />
+            ) : (
+              <NotFoundPage />
+            )
+          }
+        />
+        <Route
+          path="/form/:reportId"
+          element={
+            isPrerequisiteComplete && isEsignatureComplete ? (
+              <RiskIdentificationForm />
+            ) : (
+              <NotFoundPage />
+            )
+          }
+        />
+        <Route
+          path="/submissions"
+          element={
+            isPrerequisiteComplete && isEsignatureComplete ? (
+              <SubmissionHistory />
+            ) : (
+              <NotFoundPage />
+            )
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
