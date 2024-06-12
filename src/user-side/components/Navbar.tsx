@@ -19,43 +19,96 @@ const Navbar: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
+  const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
       const token = localStorage.getItem("token");
-      fetch("http://localhost:8080/api/notifications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setNotifications(data);
-        })
-        .catch((err) => console.error("Error fetching notifications:", err));
 
-      fetch("http://localhost:8080/api/notifications/unread-count", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
+      const fetchNotifications = async () => {
+        try {
+          const res = await fetch("http://localhost:8080/api/notifications", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
-          return res.json();
-        })
-        .then((count) => {
+          const data = await res.json();
+          setNotifications(data);
+        } catch (err) {
+          console.error("Error fetching notifications:", err);
+        }
+      };
+
+      const fetchUnreadCount = async () => {
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/notifications/unread-count",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          const count = await res.json();
           setUnreadCount(count);
-        })
-        .catch((err) =>
-          console.error("Error fetching unread notifications count:", err)
-        );
+        } catch (err) {
+          console.error("Error fetching unread notifications count:", err);
+        }
+      };
+
+      const fetchPrerequisiteStatus = async () => {
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/prerequisites/status",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (res.ok) {
+            const data = await res.json();
+            setIsPrerequisiteComplete(data);
+          } else {
+            console.error("Failed to fetch prerequisite status");
+          }
+        } catch (err) {
+          console.error("Error fetching prerequisite status:", err);
+        }
+      };
+
+      const fetchEsignatureStatus = async () => {
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/esignatures/status",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (res.ok) {
+            const data = await res.json();
+            setIsEsignatureComplete(data);
+          } else {
+            console.error("Failed to fetch e-signature status");
+          }
+        } catch (err) {
+          console.error("Error fetching e-signature status:", err);
+        }
+      };
+
+      fetchNotifications();
+      fetchUnreadCount();
+      fetchPrerequisiteStatus();
+      fetchEsignatureStatus();
     }
   }, [isAuthenticated]);
 
@@ -64,33 +117,31 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
-  const markNotificationAsRead = (id: number) => {
+  const markNotificationAsRead = async (id: number) => {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:8080/api/notifications/mark-as-read/${id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/notifications/mark-as-read/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-        return res.text();
-      })
-      .then(() => {
-        setNotifications((prevNotifications) =>
-          prevNotifications.map((notification) =>
-            notification.id === id
-              ? { ...notification, isRead: true }
-              : notification
-          )
-        );
-        setUnreadCount((prevCount) => prevCount - 1);
-      })
-      .catch((err) =>
-        console.error("Error marking notification as read:", err)
       );
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      await res.text();
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.id === id ? { ...notification, isRead: true } : notification
+        )
+      );
+      setUnreadCount((prevCount) => prevCount - 1);
+    } catch (err) {
+      console.error("Error marking notification as read:", err);
+    }
   };
 
   const roleMapping: { [key: string]: string } = {
@@ -120,6 +171,10 @@ const Navbar: React.FC = () => {
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
+  };
+
+  const handleDisabledClick = () => {
+    alert("Please complete the prerequisites and e-signature first.");
   };
 
   return (
@@ -267,22 +322,39 @@ const Navbar: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/form"
-                      className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-                    >
-                      Form
-                    </Link>
+                    {isPrerequisiteComplete && isEsignatureComplete ? (
+                      <Link
+                        to="/form"
+                        className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                      >
+                        Form
+                      </Link>
+                    ) : (
+                      <span
+                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        onClick={handleDisabledClick}
+                      >
+                        Form
+                      </span>
+                    )}
                   </li>
                   <li>
-                    <Link
-                      to="/submissions"
-                      className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-                    >
-                      Submissions
-                    </Link>
+                    {isPrerequisiteComplete && isEsignatureComplete ? (
+                      <Link
+                        to="/submissions"
+                        className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                      >
+                        Submissions
+                      </Link>
+                    ) : (
+                      <span
+                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        onClick={handleDisabledClick}
+                      >
+                        Submissions
+                      </span>
+                    )}
                   </li>
-
                   <li>
                     <Link
                       to="/faqs"
@@ -384,22 +456,39 @@ const Navbar: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/form"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <span className="ms-3">Form</span>
-                  </Link>
+                  {isPrerequisiteComplete && isEsignatureComplete ? (
+                    <Link
+                      to="/form"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    >
+                      <span className="ms-3">Form</span>
+                    </Link>
+                  ) : (
+                    <span
+                      className="flex items-center p-2 text-gray-400 rounded-lg cursor-not-allowed"
+                      onClick={handleDisabledClick}
+                    >
+                      <span className="ms-3">Form</span>
+                    </span>
+                  )}
                 </li>
                 <li>
-                  <Link
-                    to="/submissions"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <span className="ms-3">Submissions</span>
-                  </Link>
+                  {isPrerequisiteComplete && isEsignatureComplete ? (
+                    <Link
+                      to="/submissions"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    >
+                      <span className="ms-3">Submissions</span>
+                    </Link>
+                  ) : (
+                    <span
+                      className="flex items-center p-2 text-gray-400 rounded-lg cursor-not-allowed"
+                      onClick={handleDisabledClick}
+                    >
+                      <span className="ms-3">Submissions</span>
+                    </span>
+                  )}
                 </li>
-
                 <li>
                   <Link
                     to="/faqs"
