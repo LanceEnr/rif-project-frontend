@@ -79,7 +79,7 @@ const Login = () => {
         } else if (userRole === "ROLE_ADMIN") {
           navigate("/admin");
         } else if (userRole === "ROLE_APPROVER") {
-          navigate("/approver");
+          navigate("/approver/approverdetails"); // Updated URL
         } else if (userRole === "ROLE_USER") {
           navigate("/");
         }

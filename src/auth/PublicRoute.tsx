@@ -19,6 +19,8 @@ const PublicRoute: FC<PublicRouteProps> = ({ children }) => {
     }
     if (role === "ROLE_ADMIN") {
       return <Navigate to="/admin" />;
+    } else if (role === "ROLE_APPROVER") {
+      return <Navigate to="/approver/approverdetails" />; // Updated URL
     } else if (role === "ROLE_USER") {
       return <Navigate to="/" />;
     }
