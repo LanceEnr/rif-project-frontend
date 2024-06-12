@@ -9,6 +9,7 @@ interface AuthContextProps {
   isNewUser: boolean;
   isPrerequisiteComplete: boolean;
   isEsignatureComplete: boolean;
+  isApproverDetailsComplete: boolean;
   user: { firstname: string; lastname: string; email: string } | null;
   login: (token: string) => void;
   logout: () => void;
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextProps>({
   isNewUser: false,
   isPrerequisiteComplete: false,
   isEsignatureComplete: false,
+  isApproverDetailsComplete: false,
   user: null,
   login: () => {},
   logout: () => {},
@@ -35,6 +37,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isNewUser, setIsNewUser] = useState(false);
   const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
   const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
+  const [isApproverDetailsComplete, setIsApproverDetailsComplete] = useState(false);
   const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
 
   const roleMapping: { [key: string]: string } = {
@@ -75,20 +78,25 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const fetchStatuses = async (token: string) => {
     try {
-      const [prerequisiteRes, esignatureRes] = await Promise.all([
+      const [prerequisiteRes, esignatureRes, approverRes] = await Promise.all([
         fetch("http://localhost:8080/api/prerequisites/status", {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch("http://localhost:8080/api/esignatures/status", {
           headers: { Authorization: `Bearer ${token}` },
         }),
+        fetch("http://localhost:8080/api/approvers/status", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
-      if (prerequisiteRes.ok && esignatureRes.ok) {
+      if (prerequisiteRes.ok && esignatureRes.ok && approverRes.ok) {
         const isPrerequisiteComplete = await prerequisiteRes.json();
         const isEsignatureComplete = await esignatureRes.json();
+        const isApproverDetailsComplete = await approverRes.json();
         setIsPrerequisiteComplete(isPrerequisiteComplete);
         setIsEsignatureComplete(isEsignatureComplete);
+        setIsApproverDetailsComplete(isApproverDetailsComplete);
       } else {
         console.error("Failed to fetch statuses");
       }
@@ -122,6 +130,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setIsNewUser(false);
     setIsPrerequisiteComplete(false);
     setIsEsignatureComplete(false);
+    setIsApproverDetailsComplete(false);
     setUser(null);
   };
 
@@ -135,6 +144,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         isNewUser,
         isPrerequisiteComplete,
         isEsignatureComplete,
+        isApproverDetailsComplete,
         user,
         login,
         logout,

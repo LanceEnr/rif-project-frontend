@@ -107,6 +107,8 @@ const AdminLayout: FC = () => {
 };
 
 const ApproverLayout: FC = () => {
+  const { isApproverDetailsComplete } = useContext(AuthContext);
+
   return (
     <ProtectedRoute allowedRoles={["ROLE_APPROVER"]}>
       <Navbar />
@@ -115,9 +117,14 @@ const ApproverLayout: FC = () => {
         <Route path="approverdetails" element={<ApproverDetails />} />
         <Route
           path="submissionhistoryapprover"
-          element={<SubmissionHistoryApprover />}
+          element={
+            isApproverDetailsComplete ? (
+              <SubmissionHistoryApprover />
+            ) : (
+              <NotFoundPage />
+            )
+          }
         />
-
         <Route path="faqs" element={<Faqs />} />
         {/* <Route path="contact" element={<Contact />} /> */}
         <Route path="*" element={<NotFoundPage />} />
