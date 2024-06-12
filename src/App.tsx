@@ -39,6 +39,7 @@ import SubmissionHistoryApprover from "./user-side/pages/SubmissionHistoryApprov
 import SubmissionHistoryAdmin from "./admin/pages/SubmissionHistoryAdmin";
 import MainUnits from "./admin/pages/Units";
 import FaqManagement from "./admin/pages/FaqManagement";
+import TextContentManagement from "./admin/pages/TextContentManagement";
 
 const App: FC = () => {
   return (
@@ -91,6 +92,10 @@ const AdminLayout: FC = () => {
             <Route path="submissionrate" element={<SubmissionRateTable />} />
             <Route path="identifiedrisks" element={<IdentifiedRisks />} />
             <Route path="faqmanagement" element={<FaqManagement />} />
+            <Route
+              path="textcontentmanagement"
+              element={<TextContentManagement />}
+            />
 
             <Route
               path="identifiedriskshistorical"

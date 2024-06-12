@@ -342,6 +342,26 @@ const SideNavbar: React.FC = () => {
                   </span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="textcontentmanagement"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                >
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    height="1em"
+                    width="1em"
+                  >
+                    <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm-1 4v2h-5V7h5zm-5 4h5v2h-5v-2zM4 19V5h7v14H4z" />
+                  </svg>
+
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Manage Home Content
+                  </span>
+                </Link>
+              </li>
 
               <li>
                 <button
@@ -527,6 +547,25 @@ const SideNavbar: React.FC = () => {
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Manage FAQs
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="textcontentmanagement"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  height="1em"
+                  width="1em"
+                >
+                  <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm-1 4v2h-5V7h5zm-5 4h5v2h-5v-2zM4 19V5h7v14H4z" />
+                </svg>
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Manage Home Content
                 </span>
               </Link>
             </li>

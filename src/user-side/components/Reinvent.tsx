@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import history from "../../assets/history.png";
 import form from "../../assets/form.png";
 
 const Reinvent: React.FC = () => {
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/ReinventSection",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setContent(data.content);
+      } catch (error) {
+        console.error("Error fetching text content:", error);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
   return (
     <>
       <section className="bg-yellow-100 dark:bg-gray-900">
@@ -11,15 +40,7 @@ const Reinvent: React.FC = () => {
             <h2 className="mb-4 text-4xl font-extrabold text-gray-900 ">
               A robust and efficient tool for risk management
             </h2>
-            <p className="mb-4">
-              By streamlining the process of risk identification and tracking,
-              the system will help ensure that all potential risks are properly
-              identified, assessed, and mitigated.
-            </p>
-            <p>
-              This will ultimately contribute to the overall risk management
-              strategy of the university.
-            </p>
+            <p className="mb-4">{content}</p>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-8">
             <img

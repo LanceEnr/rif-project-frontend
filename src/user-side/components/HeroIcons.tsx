@@ -1,9 +1,88 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaUsersCog } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 
 const HeroIcons: React.FC = () => {
+  const [content1, setContent1] = useState("");
+  const [content2, setContent2] = useState("");
+  const [content3, setContent3] = useState("");
+
+  useEffect(() => {
+    const fetchContent1 = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroIconsSection1",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setContent1(data.content);
+      } catch (error) {
+        console.error("Error fetching text content 1:", error);
+      }
+    };
+
+    const fetchContent2 = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroIconsSection2",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setContent2(data.content);
+      } catch (error) {
+        console.error("Error fetching text content 2:", error);
+      }
+    };
+
+    const fetchContent3 = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroIconsSection3",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setContent3(data.content);
+      } catch (error) {
+        console.error("Error fetching text content 3:", error);
+      }
+    };
+
+    fetchContent1();
+    fetchContent2();
+    fetchContent3();
+  }, []);
+
   return (
     <>
       <section className="bg-gray-50 ">
@@ -11,7 +90,7 @@ const HeroIcons: React.FC = () => {
           <h2 className="mb-8 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 lg:mb-16 dark:text-white md:text-4xl">
             What do we have to offer?{" "}
           </h2>
-          <div className="flex  flex-wrap -mx-4">
+          <div className="flex flex-wrap -mx-4">
             <div className="w-full md:w-1/3 px-4 mb-8">
               <div className="group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
                 <span className="absolute top-10 z-0 h-20 w-20 rounded-full bg-yellow-500 transition-all duration-300 group-hover:scale-[10]"></span>
@@ -23,7 +102,7 @@ const HeroIcons: React.FC = () => {
                     <h3 className="text-xl font-bold ">
                       Comprehensive Risk Monitoring
                     </h3>
-                    <p>Streamlining risk identification and tracking.</p>
+                    <p>{content1}</p>
                   </div>
                 </div>
               </div>
@@ -39,10 +118,7 @@ const HeroIcons: React.FC = () => {
                     <h3 className="text-xl font-bold ">
                       Admin and User Functions
                     </h3>
-                    <p>
-                      Tailored features for admins and users for enhanced risk
-                      management.
-                    </p>
+                    <p>{content2}</p>
                   </div>
                 </div>
               </div>
@@ -58,10 +134,7 @@ const HeroIcons: React.FC = () => {
                     <h3 className="text-xl font-bold ">
                       Efficient and User-Friendly
                     </h3>
-                    <p>
-                      Combining efficiency with user-friendly features for a
-                      seamless experience.
-                    </p>
+                    <p>{content3}</p>
                   </div>
                 </div>
               </div>

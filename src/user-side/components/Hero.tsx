@@ -1,6 +1,85 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Hero: React.FC = () => {
+  const [content, setContent] = useState("");
+  const [header, setHeader] = useState("");
+  const [header2, setHeader2] = useState("");
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroSection",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setContent(data.content);
+      } catch (error) {
+        console.error("Error fetching text content:", error);
+      }
+    };
+
+    const fetchHeader = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroHeader",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setHeader(data.content);
+      } catch (error) {
+        console.error("Error fetching text header:", error);
+      }
+    };
+
+    const fetchHeader2 = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/textcontent/HeroHeader2",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setHeader2(data.content);
+      } catch (error) {
+        console.error("Error fetching text header:", error);
+      }
+    };
+
+    fetchContent();
+    fetchHeader();
+    fetchHeader2();
+  }, []);
+
   return (
     <>
       <section className="relative bg-cover object-center bg-fixed bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/7b/400_Year_old_Beauty.jpg')] bg-blend-multiply">
@@ -8,12 +87,10 @@ const Hero: React.FC = () => {
         <div className="relative">
           <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none  text-white md:text-5xl lg:text-6xl">
-              Welcome to <span className="text-yellow-400 ">YellowAlert</span>
+              {header} <span className="text-yellow-400">{header2}</span>
             </h1>
             <p className="mb-8 text-lg font-normal text-white lg:text-xl sm:px-16 lg:px-48">
-              a comprehensive risk monitoring platform, designed to streamline
-              the process of risk identification and tracking within the
-              University of Santo Tomas.
+              {content}
             </p>
             <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
               <a
