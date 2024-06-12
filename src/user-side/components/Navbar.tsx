@@ -21,6 +21,7 @@ const Navbar: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
   const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
+  const [isApproverDetailsComplete, setIsApproverDetailsComplete] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -105,10 +106,32 @@ const Navbar: React.FC = () => {
         }
       };
 
+      const fetchApproverDetailsStatus = async () => {
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/approvers/status",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (res.ok) {
+            const data = await res.json();
+            setIsApproverDetailsComplete(data);
+          } else {
+            console.error("Failed to fetch approver details status");
+          }
+        } catch (err) {
+          console.error("Error fetching approver details status:", err);
+        }
+      };
+
       fetchNotifications();
       fetchUnreadCount();
       fetchPrerequisiteStatus();
       fetchEsignatureStatus();
+      fetchApproverDetailsStatus();
     }
   }, [isAuthenticated]);
 
@@ -175,6 +198,10 @@ const Navbar: React.FC = () => {
 
   const handleDisabledClick = () => {
     alert("Please complete the prerequisites and e-signature first.");
+  };
+
+  const handleApproverDisabledClick = () => {
+    alert("Please complete the approver details first.");
   };
 
   return (
@@ -376,12 +403,21 @@ const Navbar: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="submissionhistoryapprover"
-                      className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
-                    >
-                      Submissions
-                    </Link>
+                    {isApproverDetailsComplete ? (
+                      <Link
+                        to="submissionhistoryapprover"
+                        className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
+                      >
+                        Submissions
+                      </Link>
+                    ) : (
+                      <span
+                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        onClick={handleApproverDisabledClick}
+                      >
+                        Submissions
+                      </span>
+                    )}
                   </li>
                   <li>
                     <Link
@@ -518,12 +554,21 @@ const Navbar: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="submissionhistoryapprover"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <span className="ms-3">Submissions</span>
-                  </Link>
+                  {isApproverDetailsComplete ? (
+                    <Link
+                      to="submissionhistoryapprover"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    >
+                      <span className="ms-3">Submissions</span>
+                    </Link>
+                  ) : (
+                    <span
+                      className="flex items-center p-2 text-gray-400 rounded-lg cursor-not-allowed"
+                      onClick={handleApproverDisabledClick}
+                    >
+                      <span className="ms-3">Submissions</span>
+                    </span>
+                  )}
                 </li>
                 <li>
                   <Link
