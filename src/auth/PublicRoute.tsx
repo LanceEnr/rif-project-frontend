@@ -7,13 +7,16 @@ interface PublicRouteProps {
 }
 
 const PublicRoute: FC<PublicRouteProps> = ({ children }) => {
-  const { isAuthenticated, role, loading } = useContext(AuthContext);
+  const { isAuthenticated, role, isNewUser, loading } = useContext(AuthContext);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (isAuthenticated) {
+    if (isNewUser) {
+      return <Navigate to="/prerequisites" />;
+    }
     if (role === "ROLE_ADMIN") {
       return <Navigate to="/admin" />;
     } else if (role === "ROLE_USER") {

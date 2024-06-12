@@ -6,6 +6,7 @@ interface AuthContextProps {
   role: string;
   displayRole: string;
   loading: boolean;
+  isNewUser: boolean;
   user: { firstname: string; lastname: string; email: string } | null;
   login: (token: string) => void;
   logout: () => void;
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextProps>({
   role: "",
   displayRole: "",
   loading: true,
+  isNewUser: false,
   user: null,
   login: () => {},
   logout: () => {},
@@ -26,6 +28,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState("");
   const [displayRole, setDisplayRole] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
 
   const roleMapping: { [key: string]: string } = {
@@ -41,9 +44,11 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       try {
         const decodedToken = jwtDecode(token) as any;
         const userRole = decodedToken?.roles?.[0];
+        const userIsNew = decodedToken?.isNewUser || false; // Assuming token contains this info
         if (userRole && new Date(decodedToken.exp * 1000) > new Date()) {
           setIsAuthenticated(true);
           setRole(userRole);
+          setIsNewUser(userIsNew);
           setDisplayRole(roleMapping[userRole] || userRole);
           setUser({
             firstname: decodedToken.firstname,
@@ -65,8 +70,10 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.setItem("token", token);
     const decodedToken = jwtDecode(token) as any;
     const userRole = decodedToken?.roles?.[0];
+    const userIsNew = decodedToken?.isNewUser || false; // Assuming token contains this info
     setIsAuthenticated(true);
     setRole(userRole);
+    setIsNewUser(userIsNew);
     setDisplayRole(roleMapping[userRole] || userRole);
     setUser({
       firstname: decodedToken.firstname,
@@ -80,11 +87,12 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setIsAuthenticated(false);
     setRole("");
     setDisplayRole("");
+    setIsNewUser(false);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, displayRole, loading, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, role, displayRole, loading, isNewUser, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

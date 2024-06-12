@@ -10,6 +10,7 @@ import yellowalert from "../assets/yellowalert.png";
 
 interface JwtPayload {
   roles: string[];
+  isNewUser: boolean;
   [key: string]: any;
 }
 
@@ -72,7 +73,10 @@ const Login = () => {
         const decodedToken = jwtDecode<JwtPayload>(token);
         login(token);
         const userRole = decodedToken.roles?.[0];
-        if (userRole === "ROLE_ADMIN") {
+        const isNewUser = decodedToken.isNewUser; // Check if the user is new
+        if (isNewUser) {
+          navigate("/prerequisites");
+        } else if (userRole === "ROLE_ADMIN") {
           navigate("/admin");
         } else if (userRole === "ROLE_APPROVER") {
           navigate("/approver");
