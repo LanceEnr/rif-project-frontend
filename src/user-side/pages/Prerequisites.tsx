@@ -2,9 +2,10 @@ import React, { useState, useEffect, FormEvent, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import { FaTrashAlt } from "react-icons/fa";
-import { Dropdown, Radio, Label } from "flowbite-react";
+import { Radio, Label } from "flowbite-react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import AuthContext from "../../auth/AuthContext";
+import { Dropdown } from "flowbite-react";
 
 interface Stakeholder {
   name: string;
@@ -12,9 +13,15 @@ interface Stakeholder {
 
 interface Prerequisite {
   unit: string;
-  unitType: string; // Added unitType
+  unitType: string;
   internalStakeholders: Stakeholder[];
   externalStakeholders: Stakeholder[];
+}
+
+interface MainUnit {
+  id: number;
+  mainUnit: string;
+  mainUnitType: "ACADEMIC" | "ADMINISTRATIVE";
 }
 
 const Prerequisites: React.FC = () => {
@@ -26,7 +33,35 @@ const Prerequisites: React.FC = () => {
     "",
   ]);
   const [unit, setUnit] = useState("");
-  const [unitType, setUnitType] = useState(""); // Added unitType
+  const [unitType, setUnitType] = useState("");
+  const [mainUnits, setMainUnits] = useState<MainUnit[]>([]);
+  const [filteredUnits, setFilteredUnits] = useState<MainUnit[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const fetchMainUnits = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/main-units", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setMainUnits(data);
+        setFilteredUnits(data);
+      } catch (error) {
+        console.error("Failed to fetch main units", error);
+      }
+    };
+
+    fetchMainUnits();
+  }, []);
 
   useEffect(() => {
     const fetchPrerequisites = async () => {
@@ -42,7 +77,8 @@ const Prerequisites: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setUnit(data.unit || "");
-          setUnitType(data.unitType || ""); // Set unitType
+          setSearchQuery(data.unit || ""); // Set the unit to searchQuery to display it
+          setUnitType(data.unitType || "");
           setInternalStakeholders(
             data.internalStakeholders.length > 0
               ? data.internalStakeholders.map((s: Stakeholder) => s.name)
@@ -97,7 +133,6 @@ const Prerequisites: React.FC = () => {
     }
 
     if (!unitType.trim()) {
-      // Validate unitType
       alert("Please select the Unit Type.");
       return;
     }
@@ -105,7 +140,7 @@ const Prerequisites: React.FC = () => {
     const url = "http://localhost:8080/api/prerequisites";
     const data = {
       unit: trimmedUnit,
-      unitType, // Include unitType in the data
+      unitType,
       internalStakeholders: internalStakeholders.map((name) => ({ name })),
       externalStakeholders: externalStakeholders.map((name) => ({ name })),
     };
@@ -136,6 +171,23 @@ const Prerequisites: React.FC = () => {
         alert("An unexpected error occurred");
       }
     }
+  };
+
+  const handleUnitSelect = (selectedUnit: MainUnit) => {
+    setUnit(selectedUnit.mainUnit);
+    setUnitType(selectedUnit.mainUnitType);
+    setSearchQuery(selectedUnit.mainUnit); // Automatically populate the search field
+    setShowDropdown(false); // Hide the dropdown after selecting a unit
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    const filtered = mainUnits.filter((unit) =>
+      unit.mainUnit.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUnits(filtered);
+    setShowDropdown(true); // Show the dropdown only when the user is searching
   };
 
   return (
@@ -201,16 +253,28 @@ const Prerequisites: React.FC = () => {
                     Administrative/Academic Unit{" "}
                     <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    name="unit"
-                    id="unit"
-                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
-                    placeholder="e.g. College of Education"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
+                      placeholder="Search unit"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                    />
+                    {searchQuery && showDropdown && (
+                      <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-auto">
+                        {filteredUnits.map((unit) => (
+                          <div
+                            key={unit.id}
+                            className="px-4 py-2 cursor-pointer hover:bg-yellow-100"
+                            onClick={() => handleUnitSelect(unit)}
+                          >
+                            {unit.mainUnit}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label
@@ -226,9 +290,8 @@ const Prerequisites: React.FC = () => {
                         name="unitType"
                         value="Academic"
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
-                        checked={unitType === "Academic"}
-                        onChange={(e) => setUnitType(e.target.value)}
-                        required
+                        checked={unitType === "ACADEMIC"}
+                        readOnly
                       />
                       <Label htmlFor="type-academic">Academic</Label>
                     </div>
@@ -238,9 +301,8 @@ const Prerequisites: React.FC = () => {
                         name="unitType"
                         value="Administrative"
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
-                        checked={unitType === "Administrative"}
-                        onChange={(e) => setUnitType(e.target.value)}
-                        required
+                        checked={unitType === "ADMINISTRATIVE"}
+                        readOnly
                       />
                       <Label htmlFor="type-administrative">
                         Administrative
@@ -308,7 +370,7 @@ const Prerequisites: React.FC = () => {
                             ? "text-gray-500 cursor-not-allowed"
                             : "text-red-500 hover:text-red-600"
                         }`}
-                        disabled={index === 0} // Disable removing the first input field
+                        disabled={index === 0}
                       >
                         <FaTrashAlt />
                       </button>
@@ -375,7 +437,7 @@ const Prerequisites: React.FC = () => {
                             ? "text-gray-500 cursor-not-allowed"
                             : "text-red-500 hover:text-red-600"
                         }`}
-                        disabled={index === 0} // Disable removing the first input field
+                        disabled={index === 0}
                       >
                         <FaTrashAlt />
                       </button>
