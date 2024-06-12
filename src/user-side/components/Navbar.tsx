@@ -21,7 +21,8 @@ const Navbar: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
   const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
-  const [isApproverDetailsComplete, setIsApproverDetailsComplete] = useState(false);
+  const [isApproverDetailsComplete, setIsApproverDetailsComplete] =
+    useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -158,7 +159,9 @@ const Navbar: React.FC = () => {
       await res.text();
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
-          notification.id === id ? { ...notification, isRead: true } : notification
+          notification.id === id
+            ? { ...notification, isRead: true }
+            : notification
         )
       );
       setUnreadCount((prevCount) => prevCount - 1);
@@ -358,7 +361,7 @@ const Navbar: React.FC = () => {
                       </Link>
                     ) : (
                       <span
-                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        className="block py-2 px-3 text-gray-400 cursor-not-allowed md:p-0"
                         onClick={handleDisabledClick}
                       >
                         Form
@@ -375,7 +378,7 @@ const Navbar: React.FC = () => {
                       </Link>
                     ) : (
                       <span
-                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        className="block py-2 px-3 text-gray-400 cursor-not-allowed md:p-0"
                         onClick={handleDisabledClick}
                       >
                         Submissions
@@ -412,7 +415,7 @@ const Navbar: React.FC = () => {
                       </Link>
                     ) : (
                       <span
-                        className="block py-2 px-3 text-gray-400 cursor-not-allowed"
+                        className="block py-2 md:p-0 px-3 text-gray-400 cursor-not-allowed"
                         onClick={handleApproverDisabledClick}
                       >
                         Submissions
