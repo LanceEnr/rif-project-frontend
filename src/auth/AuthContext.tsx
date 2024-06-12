@@ -7,6 +7,9 @@ interface AuthContextProps {
   displayRole: string;
   loading: boolean;
   isNewUser: boolean;
+  isPrerequisiteComplete: boolean;
+  isEsignatureComplete: boolean;
+  isApproverDetailsComplete: boolean;
   user: { firstname: string; lastname: string; email: string } | null;
   login: (token: string) => void;
   logout: () => void;
@@ -18,6 +21,9 @@ const AuthContext = createContext<AuthContextProps>({
   displayRole: "",
   loading: true,
   isNewUser: false,
+  isPrerequisiteComplete: false,
+  isEsignatureComplete: false,
+  isApproverDetailsComplete: false,
   user: null,
   login: () => {},
   logout: () => {},
@@ -29,6 +35,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [displayRole, setDisplayRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
+  const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
+  const [isApproverDetailsComplete, setIsApproverDetailsComplete] = useState(false);
   const [user, setUser] = useState<{ firstname: string; lastname: string; email: string } | null>(null);
 
   const roleMapping: { [key: string]: string } = {
@@ -55,6 +64,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
             lastname: decodedToken.lastname,
             email: decodedToken.sub,
           });
+          fetchStatuses(token);
         } else {
           localStorage.removeItem("token");
         }
@@ -65,6 +75,35 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
     setLoading(false);
   }, []);
+
+  const fetchStatuses = async (token: string) => {
+    try {
+      const [prerequisiteRes, esignatureRes, approverRes] = await Promise.all([
+        fetch("http://localhost:8080/api/prerequisites/status", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("http://localhost:8080/api/esignatures/status", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("http://localhost:8080/api/approvers/status", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      if (prerequisiteRes.ok && esignatureRes.ok && approverRes.ok) {
+        const isPrerequisiteComplete = await prerequisiteRes.json();
+        const isEsignatureComplete = await esignatureRes.json();
+        const isApproverDetailsComplete = await approverRes.json();
+        setIsPrerequisiteComplete(isPrerequisiteComplete);
+        setIsEsignatureComplete(isEsignatureComplete);
+        setIsApproverDetailsComplete(isApproverDetailsComplete);
+      } else {
+        console.error("Failed to fetch statuses");
+      }
+    } catch (error) {
+      console.error("Error fetching statuses:", error);
+    }
+  };
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
@@ -80,6 +119,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       lastname: decodedToken.lastname,
       email: decodedToken.sub,
     });
+    fetchStatuses(token);
   };
 
   const logout = () => {
@@ -88,11 +128,28 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setRole("");
     setDisplayRole("");
     setIsNewUser(false);
+    setIsPrerequisiteComplete(false);
+    setIsEsignatureComplete(false);
+    setIsApproverDetailsComplete(false);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, displayRole, loading, isNewUser, user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        role,
+        displayRole,
+        loading,
+        isNewUser,
+        isPrerequisiteComplete,
+        isEsignatureComplete,
+        isApproverDetailsComplete,
+        user,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
