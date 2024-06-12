@@ -25,6 +25,7 @@ interface Report {
 interface ReportDetails {
   report: Report;
   prerequisite: Prerequisite;
+  unitType: string;
 }
 
 interface Prerequisite {
@@ -37,6 +38,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [units, setUnits] = useState<{ [key: number]: string }>({});
+  const [unitTypes, setUnitTypes] = useState<{ [key: number]: string }>({});
   const [filter, setFilter] = useState<string>("Most Recent");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -56,6 +58,9 @@ const SubmissionHistoryAdmin: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<
     "FOR_VERIFICATION" | "VERIFIED"
   >("FOR_VERIFICATION");
+  const [unitTypeFilter, setUnitTypeFilter] = useState<
+    "Academic" | "Administrative" | "All"
+  >("All");
 
   const handleDisplayChange = (display: "FOR_VERIFICATION" | "VERIFIED") => {
     setSelectedFilter(display);
@@ -90,16 +95,20 @@ const SubmissionHistoryAdmin: React.FC = () => {
           setFilteredReports(approvedAndVerifiedReports);
 
           const unitPromises = approvedAndVerifiedReports.map((report) =>
-            fetchReportUnit(report.id)
+            fetchReportDetails(report.id)
           );
           const unitResults = await Promise.all(unitPromises);
           const unitsMap: { [key: number]: string } = {};
+          const unitTypesMap: { [key: number]: string } = {};
           unitResults.forEach((result, index) => {
             if (result) {
-              unitsMap[approvedAndVerifiedReports[index].id] = result;
+              unitsMap[approvedAndVerifiedReports[index].id] = result.unit;
+              unitTypesMap[approvedAndVerifiedReports[index].id] =
+                result.unitType;
             }
           });
           setUnits(unitsMap);
+          setUnitTypes(unitTypesMap);
         } catch (error) {
           console.error("Error fetching reports:", error);
         }
@@ -109,7 +118,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
     fetchReports();
   }, [isAuthenticated, user]);
 
-  const fetchReportUnit = async (reportId: number) => {
+  const fetchReportDetails = async (reportId: number) => {
     const token = localStorage.getItem("token");
 
     try {
@@ -127,9 +136,12 @@ const SubmissionHistoryAdmin: React.FC = () => {
       }
 
       const data: ReportDetails = await response.json();
-      return data.prerequisite.unit;
+      return {
+        unit: data.prerequisite.unit,
+        unitType: data.unitType,
+      };
     } catch (error) {
-      console.error("Error fetching report unit:", error);
+      console.error("Error fetching report details:", error);
       return null;
     }
   };
@@ -184,8 +196,23 @@ const SubmissionHistoryAdmin: React.FC = () => {
       );
     }
 
+    if (unitTypeFilter !== "All") {
+      sortedReports = sortedReports.filter(
+        (report) => unitTypes[report.id] === unitTypeFilter
+      );
+    }
+
     setFilteredReports(sortedReports);
-  }, [filter, searchQuery, reports, startDate, endDate, selectedFilter]);
+  }, [
+    filter,
+    searchQuery,
+    reports,
+    startDate,
+    endDate,
+    selectedFilter,
+    unitTypeFilter,
+    unitTypes,
+  ]);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
@@ -479,7 +506,41 @@ const SubmissionHistoryAdmin: React.FC = () => {
             >
               Verified
             </button>
+            <button
+              type="button"
+              className={`px-4 ml-2 py-2 text-sm font-medium ${
+                unitTypeFilter === "Academic"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => setUnitTypeFilter("Academic")}
+            >
+              Academic
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                unitTypeFilter === "Administrative"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border-t border-b border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => setUnitTypeFilter("Administrative")}
+            >
+              Administrative
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                unitTypeFilter === "All"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => setUnitTypeFilter("All")}
+            >
+              All
+            </button>
           </div>
+
           <div className="ml-2 flex flex-col sm:flex-row items-center">
             <DatePicker
               selected={startDate}
@@ -503,6 +564,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
             />
           </div>
         </div>
+
         <label htmlFor="table-search" className="sr-only">
           Search
         </label>
