@@ -322,6 +322,29 @@ const SideNavbar: React.FC = () => {
                   <span className="flex-1 ms-3 whitespace-nowrap">Units</span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="faqmanagement"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                >
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    height="1em"
+                    width="1em"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M0 16h8V0H0v16zM5 2h2v2H5V2zm0 4h2v2H5V6zm0 4h2v2H5v-2zM1 2h2v2H1V2zm0 4h2v2H1V6zm0 4h2v2H1v-2zm8-5h7v1H9zm0 11h2v-4h3v4h2V7H9z"
+                    />
+                  </svg>
+
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Manage FAQs
+                  </span>
+                </Link>
+              </li>
 
               <li>
                 <button
@@ -489,6 +512,28 @@ const SideNavbar: React.FC = () => {
                   />
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">Units</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="faqmanagement"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  height="1em"
+                  width="1em"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M0 16h8V0H0v16zM5 2h2v2H5V2zm0 4h2v2H5V6zm0 4h2v2H5v-2zM1 2h2v2H1V2zm0 4h2v2H1V6zm0 4h2v2H1v-2zm8-5h7v1H9zm0 11h2v-4h3v4h2V7H9z"
+                  />
+                </svg>
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Manage FAQs
+                </span>
               </Link>
             </li>
 

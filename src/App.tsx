@@ -38,6 +38,7 @@ import ApproverDetails from "./user-side/pages/ApproverDetails";
 import SubmissionHistoryApprover from "./user-side/pages/SubmissionHistoryApprover";
 import SubmissionHistoryAdmin from "./admin/pages/SubmissionHistoryAdmin";
 import MainUnits from "./admin/pages/Units";
+import FaqManagement from "./admin/pages/FaqManagement";
 
 const App: FC = () => {
   return (
@@ -89,6 +90,8 @@ const AdminLayout: FC = () => {
             <Route path="macroanalytics" element={<MacroAnalytics />} />
             <Route path="submissionrate" element={<SubmissionRateTable />} />
             <Route path="identifiedrisks" element={<IdentifiedRisks />} />
+            <Route path="faqmanagement" element={<FaqManagement />} />
+
             <Route
               path="identifiedriskshistorical"
               element={<IdentifiedRisksHistorical />}
