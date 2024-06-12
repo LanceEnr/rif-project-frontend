@@ -12,6 +12,7 @@ interface RiskFormDataGroupedDTO {
   issueParticulars: string;
   riskParticularDescriptions: string[];
   unit: string;
+  unitType: string;
   submissionDate: string;
   riskRating: number;
   riskLevel: string;
@@ -34,6 +35,8 @@ const IdentifiedRisks: React.FC = () => {
   const [selectedSdaNumber, setSelectedSdaNumber] = useState<number | null>(
     null
   );
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("");
+  const [selectedUnit, setSelectedUnit] = useState<string>("");
   const [filteredData, setFilteredData] = useState<RiskFormDataGroupedDTO[]>(
     []
   );
@@ -88,6 +91,14 @@ const IdentifiedRisks: React.FC = () => {
         (item) => item.sdaNumber === selectedSdaNumber
       );
     }
+    if (selectedRiskLevel !== "") {
+      filtered = filtered.filter(
+        (item) => item.riskLevel === selectedRiskLevel
+      );
+    }
+    if (selectedUnit !== "") {
+      filtered = filtered.filter((item) => item.unit === selectedUnit);
+    }
     if (startDate && endDate) {
       filtered = filtered.filter(
         (item) =>
@@ -119,6 +130,8 @@ const IdentifiedRisks: React.FC = () => {
     setFilteredData(filtered);
   }, [
     selectedSdaNumber,
+    selectedRiskLevel,
+    selectedUnit,
     startDate,
     endDate,
     sortUnitAsc,
@@ -131,19 +144,19 @@ const IdentifiedRisks: React.FC = () => {
     switch (riskLevel) {
       case "L":
         return (
-          <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400">
+          <span className="bg-yellow-300 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-400">
             Low
           </span>
         );
       case "M":
         return (
-          <span className="bg-orange-100 text-orange-600 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-orange-500">
+          <span className="bg-orange-300 text-orange-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-orange-600">
             Medium
           </span>
         );
       case "H":
         return (
-          <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-red-400">
+          <span className="bg-red-300 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-red-600">
             High
           </span>
         );
@@ -334,10 +347,50 @@ const IdentifiedRisks: React.FC = () => {
             ))}
           </select>
         </div>
+        <div>
+          <label
+            htmlFor="riskLevelSelect"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select Risk Level:
+          </label>
+          <select
+            id="riskLevelSelect"
+            value={selectedRiskLevel}
+            onChange={(e) => setSelectedRiskLevel(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+          >
+            <option value="">All</option>
+            <option value="L">Low</option>
+            <option value="M">Medium</option>
+            <option value="H">High</option>
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="unitSelect"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select Unit:
+          </label>
+          <select
+            id="unitSelect"
+            value={selectedUnit}
+            onChange={(e) => setSelectedUnit(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+          >
+            <option value="">All</option>
+            {Array.from(new Set(data.map((item) => item.unit))).map((unit) => (
+              <option key={unit} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-column items-center justify-between space-y-4 pb-4">
           <div>
             <label
-              htmlFor="sdaSelect"
+              htmlFor="dateRange"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Set Academic Year:

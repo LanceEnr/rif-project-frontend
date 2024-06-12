@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import {
   Chart as ChartJS,
@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import html2canvas from "html2canvas";
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +32,7 @@ const RiskComparisonChart: React.FC = () => {
   const [data, setData] = useState<PrerequisiteDataDTO[]>([]);
   const [selectedUnitType, setSelectedUnitType] = useState<string>("Academic");
   const token = localStorage.getItem("token");
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +89,6 @@ const RiskComparisonChart: React.FC = () => {
     });
 
     const chartsData = years.reverse().map((year) => {
-      const labels = ["Initial", "Residual"];
       const initialLowRiskData = groupedData[year].Initial.L;
       const initialMediumRiskData = groupedData[year].Initial.M;
       const initialHighRiskData = groupedData[year].Initial.H;
@@ -98,23 +99,39 @@ const RiskComparisonChart: React.FC = () => {
 
       return {
         year,
-        data: {
-          labels,
+        initialData: {
+          labels: ["Low", "Medium", "High"],
           datasets: [
             {
-              label: "Low Risk",
-              data: [initialLowRiskData, residualLowRiskData],
-              backgroundColor: "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
+              label: "Initial Risks",
+              data: [
+                initialLowRiskData,
+                initialMediumRiskData,
+                initialHighRiskData,
+              ],
+              backgroundColor: [
+                "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
+                "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
+                "rgba(255, 69, 0, 0.6)", // Red for High Risk
+              ],
             },
+          ],
+        },
+        residualData: {
+          labels: ["Low", "Medium", "High"],
+          datasets: [
             {
-              label: "Medium Risk",
-              data: [initialMediumRiskData, residualMediumRiskData],
-              backgroundColor: "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
-            },
-            {
-              label: "High Risk",
-              data: [initialHighRiskData, residualHighRiskData],
-              backgroundColor: "rgba(255, 69, 0, 0.6)", // Red for High Risk
+              label: "Residual Risks",
+              data: [
+                residualLowRiskData,
+                residualMediumRiskData,
+                residualHighRiskData,
+              ],
+              backgroundColor: [
+                "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
+                "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
+                "rgba(255, 69, 0, 0.6)", // Red for High Risk
+              ],
             },
           ],
         },
@@ -126,15 +143,32 @@ const RiskComparisonChart: React.FC = () => {
 
   const chartData = processData();
 
+  const handleDownloadImage = () => {
+    if (chartRef.current) {
+      html2canvas(chartRef.current).then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "chart.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  };
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
-      <div className="flex flex-col items-right">
+      <div className="flex justify-between items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Risk Comparison (Initial vs Residual)
         </h2>
-
-        <hr className="h-px my-8 border-yellow-500 border-2" />
+        <button
+          onClick={handleDownloadImage}
+          className="mt-5 bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md"
+        >
+          Download Chart
+        </button>
       </div>
+
+      <hr className="h-px my-8 border-yellow-500 border-2" />
 
       <div className="flex justify-between mb-8">
         <div>
@@ -156,12 +190,21 @@ const RiskComparisonChart: React.FC = () => {
         </div>
       </div>
 
-      <div id="print-section" className="overflow-x-auto">
+      <div ref={chartRef} id="print-section" className="overflow-x-auto">
         <h3 className="text-2xl font-bold mb-4">{selectedUnitType}</h3>
         {chartData.map((chart) => (
           <div key={chart.year} className="mb-8">
             <h3 className="text-xl font-bold mb-4">{`${chart.year}`}</h3>
-            <Chart type="bar" data={chart.data} />
+            <div className="flex justify-around">
+              <div>
+                <h4 className="font-bold mb-2">Initial Risks</h4>
+                <Chart type="bar" data={chart.initialData} />
+              </div>
+              <div>
+                <h4 className="font-bold mb-2">Residual Risks</h4>
+                <Chart type="bar" data={chart.residualData} />
+              </div>
+            </div>
           </div>
         ))}
       </div>

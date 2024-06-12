@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import {
   Chart as ChartJS,
@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import html2canvas from "html2canvas";
 
 ChartJS.register(
   CategoryScale,
@@ -23,16 +24,20 @@ ChartJS.register(
 );
 
 interface PrerequisiteDataDTO {
+  unit: string;
   unitType: string;
   sdaNumber: number;
   riskLevel: string;
   submissionDate: string;
+  riskType: string;
 }
 
 const SDAComparisonChart: React.FC = () => {
   const [data, setData] = useState<PrerequisiteDataDTO[]>([]);
   const [selectedUnitType, setSelectedUnitType] = useState<string>("Academic");
+  const [selectedUnit, setSelectedUnit] = useState<string>("All");
   const token = localStorage.getItem("token");
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +80,9 @@ const SDAComparisonChart: React.FC = () => {
 
   const processData = () => {
     const filteredData = data.filter(
-      (item) => item.unitType === selectedUnitType
+      (item) =>
+        (selectedUnitType === "All" || item.unitType === selectedUnitType) &&
+        (selectedUnit === "All" || item.unit === selectedUnit)
     );
 
     const currentYear = new Date().getFullYear();
@@ -135,17 +142,49 @@ const SDAComparisonChart: React.FC = () => {
 
   const chartData = processData();
 
+  const handleDownloadImage = () => {
+    if (chartRef.current) {
+      html2canvas(chartRef.current).then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "chart.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  };
+
+  const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedUnit = e.target.value;
+    setSelectedUnit(selectedUnit);
+    if (selectedUnit === "All") {
+      setSelectedUnitType("All");
+    } else {
+      const unitType = data.find(
+        (item) => item.unit === selectedUnit
+      )?.unitType;
+      if (unitType) {
+        setSelectedUnitType(unitType);
+      }
+    }
+  };
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
-      <div className="flex flex-col items-right">
+      <div className="flex justify-between items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Identified Risks per SDA Summary (Historical)
         </h2>
-
-        <hr className="h-px my-8 border-yellow-500 border-2" />
+        <button
+          className="bg-yellow-500 hover:bg-yellow-600 mt-8 text-white font-bold py-2 px-4 rounded"
+          onClick={handleDownloadImage}
+        >
+          Download Chart
+        </button>
       </div>
 
-      <div className="flex justify-between mb-8">
+      <hr className="h-px my-8 border-yellow-500 border-2" />
+
+      <div className="flex  mb-8">
         <div>
           <label
             htmlFor="unitTypeSelect"
@@ -158,14 +197,37 @@ const SDAComparisonChart: React.FC = () => {
             value={selectedUnitType}
             onChange={(e) => setSelectedUnitType(e.target.value)}
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+            disabled={selectedUnit !== "All"}
           >
+            <option value="All">All</option>
             <option value="Academic">Academic</option>
             <option value="Administrative">Administrative</option>
           </select>
         </div>
+        <div className="ml-4">
+          <label
+            htmlFor="unitSelect"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select Unit:
+          </label>
+          <select
+            id="unitSelect"
+            value={selectedUnit}
+            onChange={handleUnitChange}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+          >
+            <option value="All">All</option>
+            {Array.from(new Set(data.map((item) => item.unit))).map((unit) => (
+              <option key={unit} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div id="print-section" className="overflow-x-auto">
+      <div ref={chartRef} id="print-section" className="overflow-x-auto">
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">{`${selectedUnitType} Units`}</h3>
           <Chart type="bar" data={chartData} />

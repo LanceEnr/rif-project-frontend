@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import {
   Chart as ChartJS,
@@ -12,6 +12,8 @@ import {
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import html2canvas from "html2canvas";
 
 ChartJS.register(
   CategoryScale,
@@ -21,13 +23,16 @@ ChartJS.register(
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 interface PrerequisiteDataDTO {
+  unit: string;
   unitType: string;
   riskLevel: string;
   submissionDate: string;
+  riskType: string;
 }
 
 const IdentifiedRisksHistorical: React.FC = () => {
@@ -35,7 +40,11 @@ const IdentifiedRisksHistorical: React.FC = () => {
   const [selectedSdaNumber, setSelectedSdaNumber] = useState<number | null>(
     null
   );
+  const [selectedSdaText, setSelectedSdaText] = useState<string>("");
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("");
+  const [selectedUnit, setSelectedUnit] = useState<string>("");
   const token = localStorage.getItem("token");
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +76,13 @@ const IdentifiedRisksHistorical: React.FC = () => {
   }, [selectedSdaNumber, token]);
 
   const processData = (unitType: string) => {
-    const filteredData = data.filter((item) => item.unitType === unitType);
+    const filteredData = data.filter((item) => {
+      return (
+        item.unitType === unitType &&
+        (selectedRiskLevel === "" || item.riskLevel === selectedRiskLevel) &&
+        (selectedUnit === "" || item.unit === selectedUnit)
+      );
+    });
 
     const groupedData = filteredData.reduce(
       (
@@ -98,43 +113,67 @@ const IdentifiedRisksHistorical: React.FC = () => {
           type: "bar" as const,
           label: "Low Risk",
           data: lowRiskData,
-          backgroundColor: "rgba(144, 238, 144, 0.6)", // Light Green for Low Risk
+          backgroundColor: "rgba(255,227,139,0.6)",
+          borderWidth: 1,
+          datalabels: {
+            anchor: "end",
+            align: "top",
+          },
         },
         {
           type: "bar" as const,
           label: "Medium Risk",
           data: mediumRiskData,
-          backgroundColor: "rgba(255, 165, 0, 0.6)", // Orange for Medium Risk
+          backgroundColor: "rgba(252,168,32,0.6)",
+          borderWidth: 1,
+          datalabels: {
+            anchor: "end",
+            align: "top",
+          },
         },
         {
           type: "bar" as const,
           label: "High Risk",
           data: highRiskData,
-          backgroundColor: "rgba(255, 69, 0, 0.6)", // Red for High Risk
+          backgroundColor: "rgba(255,0,0,0.6)",
+          borderWidth: 1,
+          datalabels: {
+            anchor: "end",
+            align: "top",
+          },
         },
         {
           type: "line" as const,
           label: "Low Risk Trend",
           data: lowRiskData,
-          borderColor: "rgba(144, 238, 144, 1)",
+          borderColor: "rgba(255,227,139,255)",
           borderWidth: 2,
           fill: false,
+          datalabels: {
+            display: false,
+          },
         },
         {
           type: "line" as const,
           label: "Medium Risk Trend",
           data: mediumRiskData,
-          borderColor: "rgba(255, 165, 0, 1)",
+          borderColor: "rgba(252,168,32,255)",
           borderWidth: 2,
           fill: false,
+          datalabels: {
+            display: false,
+          },
         },
         {
           type: "line" as const,
           label: "High Risk Trend",
           data: highRiskData,
-          borderColor: "rgba(255, 69, 0, 1)",
+          borderColor: "rgba(255,0,0,255)",
           borderWidth: 2,
           fill: false,
+          datalabels: {
+            display: false,
+          },
         },
       ],
     };
@@ -143,17 +182,73 @@ const IdentifiedRisksHistorical: React.FC = () => {
   const academicChartData = processData("Academic");
   const administrativeChartData = processData("Administrative");
 
+  const handleDownloadImage = () => {
+    if (chartRef.current) {
+      const chartElement = chartRef.current;
+      html2canvas(chartElement).then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "chart.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  };
+
+  const handleSdaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = Number(e.target.value);
+    setSelectedSdaNumber(selectedValue);
+    const selectedText = e.target.options[e.target.selectedIndex].text;
+    setSelectedSdaText(selectedText);
+  };
+
+  const handleRiskLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedRiskLevel(e.target.value);
+  };
+
+  const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedUnit(e.target.value);
+  };
+
+  const options = {
+    plugins: {
+      datalabels: {
+        display: true,
+        color: "black",
+        align: "end",
+        anchor: "end",
+      },
+    },
+    scales: {
+      x: {
+        stacked: false,
+      },
+      y: {
+        stacked: false,
+      },
+    },
+  };
+
+  const selectedUnitType = data.find(
+    (item) => item.unit === selectedUnit
+  )?.unitType;
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
-      <div className="flex flex-col items-right">
+      <div className="flex justify-between items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Identified Risks per SDA (Historical)
         </h2>
-
-        <hr className="h-px my-8 border-yellow-500 border-2" />
+        <button
+          className="bg-yellow-500 hover:bg-yellow-600 mt-8 text-white font-bold py-2 px-4 rounded"
+          onClick={handleDownloadImage}
+        >
+          Download Chart
+        </button>
       </div>
 
-      <div className="flex justify-between mb-8">
+      <hr className="h-px my-8 border-yellow-500 border-2" />
+
+      <div className="flex mb-8">
         <div>
           <label
             htmlFor="sdaSelect"
@@ -164,7 +259,7 @@ const IdentifiedRisksHistorical: React.FC = () => {
           <select
             id="sdaSelect"
             value={selectedSdaNumber ?? ""}
-            onChange={(e) => setSelectedSdaNumber(Number(e.target.value))}
+            onChange={handleSdaChange}
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
           >
             <option value="" disabled>
@@ -181,17 +276,65 @@ const IdentifiedRisksHistorical: React.FC = () => {
             <option value={9}>Internationalization</option>
           </select>
         </div>
+        <div className="ml-4">
+          <label
+            htmlFor="riskLevelSelect"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select Risk Level:
+          </label>
+          <select
+            id="riskLevelSelect"
+            value={selectedRiskLevel}
+            onChange={handleRiskLevelChange}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+          >
+            <option value="">All</option>
+            <option value="L">Low</option>
+            <option value="M">Medium</option>
+            <option value="H">High</option>
+          </select>
+        </div>
+        <div className="ml-4">
+          <label
+            htmlFor="unitSelect"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select Unit:
+          </label>
+          <select
+            id="unitSelect"
+            value={selectedUnit}
+            onChange={handleUnitChange}
+            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+          >
+            <option value="">All</option>
+            {Array.from(new Set(data.map((item) => item.unit))).map((unit) => (
+              <option key={unit} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Academic Units</h3>
-          <Chart type="bar" data={academicChartData} />
-        </div>
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Administrative Units</h3>
-          <Chart type="bar" data={administrativeChartData} />
-        </div>
+      <div ref={chartRef} className="overflow-x-auto">
+        {(!selectedUnit || selectedUnitType === "Academic") && (
+          <div className="mb-8">
+            <h3 className="text-xl font-bold mb-4">Academic Units</h3>
+            <Chart type="bar" data={academicChartData} options={options} />
+          </div>
+        )}
+        {(!selectedUnit || selectedUnitType === "Administrative") && (
+          <div className="mb-8">
+            <h3 className="text-xl font-bold mb-4">Administrative Units</h3>
+            <Chart
+              type="bar"
+              data={administrativeChartData}
+              options={options}
+            />
+          </div>
+        )}
 
         <table className="hidden w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-yellow-100">
