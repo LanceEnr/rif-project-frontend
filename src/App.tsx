@@ -37,6 +37,7 @@ import RiskComparisonChart from "./admin/pages/RiskComparisonChart";
 import ApproverDetails from "./user-side/pages/ApproverDetails";
 import SubmissionHistoryApprover from "./user-side/pages/SubmissionHistoryApprover";
 import SubmissionHistoryAdmin from "./admin/pages/SubmissionHistoryAdmin";
+import MainUnits from "./admin/pages/Units";
 
 const App: FC = () => {
   return (
@@ -81,6 +82,8 @@ const AdminLayout: FC = () => {
             <Route path="tracker" element={<RifTracker />} />
             <Route path="trackertable" element={<RifTrackerTable />} />
             <Route path="users" element={<Users />} />
+            <Route path="units" element={<MainUnits />} />
+
             <Route path="editUser" element={<EditUser />} />
             <Route path="microanalytics" element={<MicroAnalytics />} />
             <Route path="macroanalytics" element={<MacroAnalytics />} />
