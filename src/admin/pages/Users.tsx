@@ -30,7 +30,11 @@ const Users: React.FC = () => {
   const [showStatusConfirmation, setShowStatusConfirmation] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
-  const [statusAction, setStatusAction] = useState<"activate" | "deactivate" | null>(null);
+  const [statusAction, setStatusAction] = useState<
+    "activate" | "deactivate" | null
+  >(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -223,6 +227,12 @@ const Users: React.FC = () => {
     return fullName.includes(searchQuery.toLowerCase()) && roleMatch;
   });
 
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
@@ -319,8 +329,8 @@ const Users: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
+            {currentUsers.length > 0 ? (
+              currentUsers.map((user) => (
                 <tr
                   key={user.id}
                   className="bg-white border-b hover:bg-gray-100"
@@ -422,6 +432,26 @@ const Users: React.FC = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center mt-4">
+          <nav>
+            <ul className="inline-flex items-center -space-x-px">
+              {Array.from({
+                length: Math.ceil(filteredUsers.length / itemsPerPage),
+              }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ${
+                      currentPage === index + 1 ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </div>
 
       {showRoleConfirmation && (
@@ -453,10 +483,13 @@ const Users: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">
-              Confirm {statusAction === "activate" ? "Activation" : "Deactivation"}
+              Confirm{" "}
+              {statusAction === "activate" ? "Activation" : "Deactivation"}
             </h2>
             <p className="mb-4">
-              Are you sure you want to {statusAction === "activate" ? "activate" : "deactivate"} this user?
+              Are you sure you want to{" "}
+              {statusAction === "activate" ? "activate" : "deactivate"} this
+              user?
             </p>
             <div className="flex justify-end">
               <button

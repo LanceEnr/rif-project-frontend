@@ -18,6 +18,8 @@ const MainUnits: React.FC = () => {
   const [unitToDelete, setUnitToDelete] = useState<MainUnit | null>(null);
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [unitToSave, setUnitToSave] = useState<Partial<MainUnit>>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -127,6 +129,10 @@ const MainUnits: React.FC = () => {
     );
   });
 
+  const indexOfLastUnit = currentPage * itemsPerPage;
+  const indexOfFirstUnit = indexOfLastUnit - itemsPerPage;
+  const currentUnits = filteredUnits.slice(indexOfFirstUnit, indexOfLastUnit);
+
   const handleAddUnit = () => {
     setUnitForm({});
     setShowUnitForm(true);
@@ -136,6 +142,8 @@ const MainUnits: React.FC = () => {
     setUnitForm({});
     setShowUnitForm(false);
   };
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="w-screen-xl px-4 min-h-screen">
@@ -230,8 +238,8 @@ const MainUnits: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUnits.length > 0 ? (
-              filteredUnits.map((unit) => (
+            {currentUnits.length > 0 ? (
+              currentUnits.map((unit) => (
                 <tr
                   key={unit.id}
                   className="bg-white border-b hover:bg-gray-100"
@@ -267,6 +275,26 @@ const MainUnits: React.FC = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center mt-4">
+          <nav>
+            <ul className="inline-flex items-center -space-x-px">
+              {Array.from({
+                length: Math.ceil(filteredUnits.length / itemsPerPage),
+              }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ${
+                      currentPage === index + 1 ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </div>
 
       {showUnitForm && (

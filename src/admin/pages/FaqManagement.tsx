@@ -15,6 +15,8 @@ const FaqManagement: React.FC = () => {
   const [faqToDelete, setFaqToDelete] = useState<FAQ | null>(null);
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [faqToSave, setFaqToSave] = useState<Partial<FAQ>>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -114,6 +116,12 @@ const FaqManagement: React.FC = () => {
     faq.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const indexOfLastFaq = currentPage * itemsPerPage;
+  const indexOfFirstFaq = indexOfLastFaq - itemsPerPage;
+  const currentFaqs = filteredFaqs.slice(indexOfFirstFaq, indexOfLastFaq);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   const handleAddFaq = () => {
     setFaqForm({});
     setShowFaqForm(true);
@@ -187,8 +195,8 @@ const FaqManagement: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredFaqs.length > 0 ? (
-              filteredFaqs.map((faq) => (
+            {currentFaqs.length > 0 ? (
+              currentFaqs.map((faq) => (
                 <tr
                   key={faq.id}
                   className="bg-white border-b hover:bg-gray-100"
@@ -224,11 +232,31 @@ const FaqManagement: React.FC = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center mt-4">
+          <nav>
+            <ul className="inline-flex items-center -space-x-px">
+              {Array.from({
+                length: Math.ceil(filteredFaqs.length / itemsPerPage),
+              }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ${
+                      currentPage === index + 1 ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </div>
 
       {showFaqForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white w-full max-w-3xl  p-6 rounded-lg shadow-lg">
+          <div className="bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">
               {faqForm.id ? "Edit FAQ" : "Add FAQ"}
             </h2>
