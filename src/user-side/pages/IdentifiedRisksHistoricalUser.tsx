@@ -76,35 +76,6 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
     fetchData();
   }, [token]);
 
-  useEffect(() => {
-    const fetchDataBySda = async () => {
-      if (selectedSdaNumber !== null) {
-        try {
-          const response = await fetch(
-            `http://localhost:8080/api/riskforms/dataBySdaNumber/${selectedSdaNumber}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const result: PrerequisiteDataDTO[] = await response.json();
-          setData(result);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      }
-    };
-
-    fetchDataBySda();
-  }, [selectedSdaNumber, token]);
-
   const processData = () => {
     const filteredData = data.filter((item) => {
       return selectedRiskLevel === "" || item.riskLevel === selectedRiskLevel;
