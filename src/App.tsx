@@ -41,6 +41,7 @@ import MainUnits from "./admin/pages/Units";
 import FaqManagement from "./admin/pages/FaqManagement";
 import TextContentManagement from "./admin/pages/TextContentManagement";
 import IdentifiedRisksHistoricalUser from "./user-side/pages/IdentifiedRisksHistoricalUser";
+import IdentifiedRisksHistoricalApprover from "./user-side/pages/IdentifiedRisksHistoricalApprover";
 
 const App: FC = () => {
   return (
@@ -134,6 +135,12 @@ const ApproverLayout: FC = () => {
             )
           }
         />
+
+        <Route
+          path="identifiedriskshistoricalapprover"
+          element={<IdentifiedRisksHistoricalApprover />}
+        />
+
         <Route path="faqs" element={<Faqs />} />
         {/* <Route path="contact" element={<Contact />} /> */}
         <Route path="*" element={<NotFoundPage />} />

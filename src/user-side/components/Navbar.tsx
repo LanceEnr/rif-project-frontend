@@ -471,6 +471,45 @@ const Navbar: React.FC = () => {
                     )}
                   </li>
                   <li>
+                    {isApproverDetailsComplete ? (
+                      <Dropdown
+                        label={
+                          <span className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0 flex items-center">
+                            Risk Data Visualization
+                            <RiArrowDropDownLine className="h-6 w-6 text-white" />
+                          </span>
+                        }
+                        arrowIcon={false}
+                        inline
+                      >
+                        <Dropdown.Item>
+                          <Link
+                            to="identifiedriskshistoricalapprover"
+                            className="text-gray-700 block px-2 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Identified Risks per SDA
+                          </Link>
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          <Link
+                            to="/identified-risks-per-sda-summary"
+                            className="text-gray-700 block px-2 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Identified Risks per SDA Summary
+                          </Link>
+                        </Dropdown.Item>
+                      </Dropdown>
+                    ) : (
+                      <span
+                        className="block py-2 px-3 text-gray-400 rounded cursor-not-allowed flex items-center md:p-0"
+                        onClick={handleDisabledClick}
+                      >
+                        Risk Data Visualization
+                        <RiArrowDropDownLine className="h-6 w-6 text-gray-400" />
+                      </span>
+                    )}
+                  </li>
+                  <li>
                     <Link
                       to="faqs"
                       className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0"
