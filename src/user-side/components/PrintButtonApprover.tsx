@@ -749,7 +749,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92" style={{ marginBottom: "-60px" }}>
+                <span className="c92" style={{ marginBottom: "-20px" }}>
                   {" "}
                   {/* marginBottom: "-130px" */}
                   Prepared by:
@@ -770,7 +770,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "130px", marginBottom: "-55px" }} // marginBottom: "-80px"
+                    style={{ marginLeft: "130px", marginBottom: "-15px" }} // marginBottom: "-80px"
                   >
                     Reviewed/Approved by:
                   </span>
@@ -838,8 +838,7 @@ const PrintButtonApprover: React.FC<PrintButtonApproverProps> = ({
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
-              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
             </span>
           </p>
         </div>

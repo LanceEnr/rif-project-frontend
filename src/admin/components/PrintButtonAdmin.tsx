@@ -737,7 +737,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span className="c92" style={{ marginBottom: "-60px" }}>
+                <span className="c92" style={{ marginBottom: "-20px" }}>
                   Prepared by:
                 </span>
                 <img
@@ -756,7 +756,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
                 <>
                   <span
                     className="c92"
-                    style={{ marginLeft: "130px", marginBottom: "-55px" }}
+                    style={{ marginLeft: "130px", marginBottom: "-15px" }}
                   >
                     Reviewed/Approved by:
                   </span>
@@ -822,8 +822,7 @@ const PrintButtonAdmin: React.FC<PrintButtonAdminProps> = ({ reportId }) => {
               &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
               &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
-              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;Signature over Printed Name/Date
+              &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Signature over Printed Name/Date
             </span>
           </p>
         </div>
