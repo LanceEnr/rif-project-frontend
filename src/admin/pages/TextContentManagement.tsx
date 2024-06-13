@@ -150,19 +150,17 @@ const TextContentManagement: React.FC = () => {
   return (
     <div className="w-screen-xl px-4 min-h-screen">
       <div className="flex flex-col items-right">
-        <h2 className="font-bold text-5xl mt-5 tracking-tight">
-          Home Content Management
-        </h2>
+        <h2 className="font-bold text-5xl mt-5 tracking-tight">Home Content</h2>
         <div className="flex justify-between items-center">
           <p className="text-neutral-500 text-xl mt-3">
             Manage text content for the homepage
           </p>
-          <button
+          {/* <button
             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleAddTextContent}
           >
             Add Text Content
-          </button>
+          </button> */}
         </div>
         <hr className="h-px my-8 border-yellow-500 border-2" />
       </div>

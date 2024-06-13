@@ -150,7 +150,7 @@ const MainUnits: React.FC = () => {
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight"> Units</h2>
         <div className="flex justify-between items-center">
-          <p className="text-neutral-500 text-xl mt-3">For unit management</p>
+          <p className="text-neutral-500 text-xl mt-3">Add or edit units</p>
           <button
             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleAddUnit}

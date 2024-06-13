@@ -137,7 +137,7 @@ const FaqManagement: React.FC = () => {
       <div className="flex flex-col items-right">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">FAQs</h2>
         <div className="flex justify-between items-center">
-          <p className="text-neutral-500 text-xl mt-3">For FAQ management</p>
+          <p className="text-neutral-500 text-xl mt-3">Add or edit FAQs</p>
           <button
             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleAddFaq}
