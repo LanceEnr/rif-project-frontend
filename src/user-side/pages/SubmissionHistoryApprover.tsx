@@ -128,11 +128,14 @@ const SubmissionHistoryApprover: React.FC = () => {
             "APPROVER_APPROVED",
             "ADMIN_VERIFIED",
             "APPROVER_FOR_REVISION",
+            "ADMIN_FOR_REVISION",
           ].includes(report.status)
       );
     } else if (selectedFilter === "FOR_REVISION") {
       sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_FOR_REVISION"
+        (report) =>
+          report.status === "APPROVER_FOR_REVISION" ||
+          report.status === "ADMIN_FOR_REVISION"
       );
     } else if (selectedFilter === "APPROVED") {
       sortedReports = sortedReports.filter(
@@ -369,6 +372,7 @@ const SubmissionHistoryApprover: React.FC = () => {
           </span>
         );
       case "APPROVER_FOR_REVISION":
+      case "ADMIN_FOR_REVISION":
         return (
           <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
             For Revision
@@ -601,12 +605,18 @@ const SubmissionHistoryApprover: React.FC = () => {
 
                   <Dropdown.Item
                     className={
-                      report.status === "ADMIN_VERIFIED"
+                      report.status === "ADMIN_VERIFIED" ||
+                      report.status === "APPROVER_FOR_REVISION" ||
+                      report.status === "ADMIN_FOR_REVISION"
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-red-600"
                     }
                     onClick={() => confirmMarkForRevision(report.id)}
-                    disabled={report.status === "ADMIN_VERIFIED"}
+                    disabled={
+                      report.status === "ADMIN_VERIFIED" ||
+                      report.status === "APPROVER_FOR_REVISION" ||
+                      report.status === "ADMIN_FOR_REVISION"
+                    }
                   >
                     Mark for Revision
                   </Dropdown.Item>

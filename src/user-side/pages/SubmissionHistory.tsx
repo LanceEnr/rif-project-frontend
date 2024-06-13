@@ -22,6 +22,7 @@ interface Report {
   riskFormData: RiskFormData[];
   status: string;
   approverComment: string | null;
+  adminComment: string | null;
 }
 
 const SubmissionHistory: React.FC = () => {
@@ -134,12 +135,15 @@ const SubmissionHistory: React.FC = () => {
       sortedReports = sortedReports.filter(
         (report) =>
           report.status !== "APPROVER_APPROVED" &&
+          report.status !== "ADMIN_FOR_REVISION" &&
           report.status !== "APPROVER_FOR_REVISION" &&
           report.status !== "ADMIN_VERIFIED"
       );
     } else if (selectedFilter === "FOR_REVISION") {
       sortedReports = sortedReports.filter(
-        (report) => report.status === "APPROVER_FOR_REVISION"
+        (report) =>
+          report.status === "APPROVER_FOR_REVISION" ||
+          report.status === "ADMIN_FOR_REVISION"
       );
     } else if (selectedFilter === "APPROVED") {
       sortedReports = sortedReports.filter(
@@ -195,6 +199,7 @@ const SubmissionHistory: React.FC = () => {
 
     setIsModalOpen(true);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReportId(null);
@@ -209,6 +214,30 @@ const SubmissionHistory: React.FC = () => {
   const closeCommentModal = () => {
     setIsCommentModalOpen(false);
     setSelectedComment(null);
+  };
+
+  const fetchAdminComment = async (reportId: number) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/admin-comment/${reportId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      openCommentModal(data.adminComment);
+    } catch (error) {
+      console.error("Error fetching admin comment:", error);
+    }
   };
 
   const handleProofChange = (index: number, file: File | null) => {
@@ -306,6 +335,7 @@ const SubmissionHistory: React.FC = () => {
           </span>
         );
       case "APPROVER_FOR_REVISION":
+      case "ADMIN_FOR_REVISION":
         return (
           <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">
             For Revision
@@ -590,11 +620,17 @@ const SubmissionHistory: React.FC = () => {
                     </Dropdown.Item>
                   )}
 
+                  {report.status === "ADMIN_FOR_REVISION" && (
+                    <Dropdown.Item onClick={() => fetchAdminComment(report.id)}>
+                      View Admin Comment
+                    </Dropdown.Item>
+                  )}
+
                   {report.status === "APPROVER_FOR_REVISION" && (
                     <Dropdown.Item
                       onClick={() => openCommentModal(report.approverComment!)}
                     >
-                      View Comment
+                      View Approver Comment
                     </Dropdown.Item>
                   )}
                 </Dropdown>
@@ -733,7 +769,7 @@ const SubmissionHistory: React.FC = () => {
             <div className="relative bg-white rounded-lg shadow">
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Approver's Comment
+                  {selectedComment ? "Admin Comment" : "Approver's Comment"}
                 </h3>
                 <button
                   type="button"

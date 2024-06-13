@@ -18,7 +18,7 @@ interface Report {
   id: number;
   riskFormData: RiskFormData[];
   status: string;
-  approverComment: string | null;
+  adminComment: string | null;
   approverApproveDate: string | null;
 }
 
@@ -30,6 +30,12 @@ interface ReportDetails {
 
 interface Prerequisite {
   unit: string;
+}
+
+interface RevisionCommentHistory {
+  id: number;
+  comment: string;
+  timestamp: string;
 }
 
 const MAX_CHARS = 500;
@@ -61,6 +67,11 @@ const SubmissionHistoryAdmin: React.FC = () => {
   const [unitTypeFilter, setUnitTypeFilter] = useState<
     "Academic" | "Administrative" | "All"
   >("All");
+  const [revisionHistory, setRevisionHistory] = useState<
+    RevisionCommentHistory[]
+  >([]);
+  const [isRevisionHistoryModalOpen, setIsRevisionHistoryModalOpen] =
+    useState(false);
 
   const handleDisplayChange = (display: "FOR_VERIFICATION" | "VERIFIED") => {
     setSelectedFilter(display);
@@ -362,7 +373,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/riskforms/for-revision`,
+        `http://localhost:8080/api/riskforms/admin-for-revision`,
         {
           method: "POST",
           headers: {
@@ -389,7 +400,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
             ? {
                 ...report,
                 status: "APPROVER_FOR_REVISION",
-                approverComment: revisionComment,
+                adminComment: revisionComment, // Use adminComment instead of approverComment
               }
             : report
         )
@@ -400,7 +411,7 @@ const SubmissionHistoryAdmin: React.FC = () => {
             ? {
                 ...report,
                 status: "APPROVER_FOR_REVISION",
-                approverComment: revisionComment,
+                adminComment: revisionComment, // Use adminComment instead of approverComment
               }
             : report
         )
@@ -415,6 +426,31 @@ const SubmissionHistoryAdmin: React.FC = () => {
       setIsRevisionModalOpen(false);
       setRevisionComment("");
       setSelectedReportId(null);
+    }
+  };
+
+  const viewRevisionHistory = async (reportId: number) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/riskforms/revision-comments/${reportId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setRevisionHistory(data);
+      setIsRevisionHistoryModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching revision history:", error);
     }
   };
 
@@ -659,6 +695,10 @@ const SubmissionHistoryAdmin: React.FC = () => {
                   >
                     View Proof
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={() => viewRevisionHistory(report.id)}>
+                    View revision comment history
+                  </Dropdown.Item>
+
                   <Dropdown.Item
                     className={
                       report.status === "ADMIN_VERIFIED"
@@ -834,6 +874,41 @@ const SubmissionHistoryAdmin: React.FC = () => {
                     ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Revision History Modal */}
+      {/* Revision History Modal */}
+      {isRevisionHistoryModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">
+              Revision Comment History
+            </h2>
+            <div className="overflow-y-auto max-h-96">
+              {revisionHistory.length > 0 ? (
+                revisionHistory.map((comment, index) => (
+                  <div key={index} className="mb-4">
+                    <p>{comment.comment}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(comment.timestamp).toLocaleString()}
+                    </p>
+                    <hr className="mt-2" />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No revision comments available.</p>
+              )}
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                onClick={() => setIsRevisionHistoryModalOpen(false)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
