@@ -40,6 +40,7 @@ import SubmissionHistoryAdmin from "./admin/pages/SubmissionHistoryAdmin";
 import MainUnits from "./admin/pages/Units";
 import FaqManagement from "./admin/pages/FaqManagement";
 import TextContentManagement from "./admin/pages/TextContentManagement";
+import IdentifiedRisksHistoricalUser from "./user-side/pages/IdentifiedRisksHistoricalUser";
 
 const App: FC = () => {
   return (
@@ -167,6 +168,11 @@ const UserLayout: FC = () => {
         {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/prerequisites" element={<Prerequisites />} />
         <Route path="/esignature" element={<Esignature />} />
+        <Route
+          path="/identifiedriskshistoricaluser"
+          element={<IdentifiedRisksHistoricalUser />}
+        />
+
         <Route
           path="/form"
           element={

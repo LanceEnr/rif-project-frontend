@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RiArrowDropDownLine } from "react-icons/ri";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import AuthContext from "../../auth/AuthContext";
 import yellowalert from "../../assets/yellowalert.png";
@@ -22,6 +23,8 @@ const Navbar: React.FC = () => {
   const [isPrerequisiteComplete, setIsPrerequisiteComplete] = useState(false);
   const [isEsignatureComplete, setIsEsignatureComplete] = useState(false);
   const [isApproverDetailsComplete, setIsApproverDetailsComplete] =
+    useState(false);
+  const [isRiskDataVisualizationOpen, setIsRiskDataVisualizationOpen] =
     useState(false);
 
   useEffect(() => {
@@ -194,6 +197,10 @@ const Navbar: React.FC = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
+  const toggleRiskDataVisualization = () => {
+    setIsRiskDataVisualizationOpen(!isRiskDataVisualizationOpen);
+  };
+
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
@@ -351,6 +358,7 @@ const Navbar: React.FC = () => {
                       Prerequisites
                     </Link>
                   </li>
+
                   <li>
                     {isPrerequisiteComplete && isEsignatureComplete ? (
                       <Link
@@ -385,6 +393,46 @@ const Navbar: React.FC = () => {
                       </span>
                     )}
                   </li>
+                  <li>
+                    {isPrerequisiteComplete && isEsignatureComplete ? (
+                      <Dropdown
+                        label={
+                          <span className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-500 md:p-0 flex items-center">
+                            Risk Data Visualization
+                            <RiArrowDropDownLine className="h-6 w-6 text-white" />
+                          </span>
+                        }
+                        arrowIcon={false}
+                        inline
+                      >
+                        <Dropdown.Item>
+                          <Link
+                            to="/identifiedriskshistoricaluser"
+                            className="text-gray-700 block px-2 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Identified Risks per SDA
+                          </Link>
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          <Link
+                            to="/identified-risks-per-sda-summary"
+                            className="text-gray-700 block px-2 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Identified Risks per SDA Summary
+                          </Link>
+                        </Dropdown.Item>
+                      </Dropdown>
+                    ) : (
+                      <span
+                        className="block py-2 px-3 text-gray-400 rounded cursor-not-allowed flex items-center md:p-0"
+                        onClick={handleDisabledClick}
+                      >
+                        Risk Data Visualization
+                        <RiArrowDropDownLine className="h-6 w-6 text-gray-400" />
+                      </span>
+                    )}
+                  </li>
+
                   <li>
                     <Link
                       to="/faqs"
@@ -494,6 +542,7 @@ const Navbar: React.FC = () => {
                     <span className="ms-3">Prerequisites</span>
                   </Link>
                 </li>
+
                 <li>
                   {isPrerequisiteComplete && isEsignatureComplete ? (
                     <Link
@@ -529,19 +578,107 @@ const Navbar: React.FC = () => {
                   )}
                 </li>
                 <li>
+                  {isPrerequisiteComplete && isEsignatureComplete ? (
+                    <button
+                      type="button"
+                      className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      aria-controls="dropdown-example"
+                      data-collapse-toggle="dropdown-example"
+                      onClick={toggleRiskDataVisualization}
+                    >
+                      <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                        Risk Data Visualization
+                      </span>
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 4 4 4-4"
+                        />
+                      </svg>
+                    </button>
+                  ) : (
+                    <span
+                      className="flex items-center w-full p-2 text-base text-gray-400 transition duration-75 rounded-lg cursor-not-allowed"
+                      onClick={handleDisabledClick}
+                    >
+                      <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                        Risk Data Visualization
+                      </span>
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 4 4 4-4"
+                        />
+                      </svg>
+                    </span>
+                  )}
+                  <ul
+                    id="dropdown-example"
+                    className={`py-2 space-y-2 ${
+                      isRiskDataVisualizationOpen ? "block" : "hidden"
+                    }`}
+                  >
+                    <li>
+                      {isPrerequisiteComplete && isEsignatureComplete ? (
+                        <Link
+                          to="/identifiedriskshistoricaluser"
+                          className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >
+                          Identified Risks per SDA
+                        </Link>
+                      ) : (
+                        <span
+                          className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 cursor-not-allowed"
+                          onClick={handleDisabledClick}
+                        >
+                          Identified Risks per SDA
+                        </span>
+                      )}
+                    </li>
+                    <li>
+                      {isPrerequisiteComplete && isEsignatureComplete ? (
+                        <Link
+                          to="/identified-risks-per-sda-summary"
+                          className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >
+                          Identified Risks per SDA Summary
+                        </Link>
+                      ) : (
+                        <span
+                          className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 cursor-not-allowed"
+                          onClick={handleDisabledClick}
+                        >
+                          Identified Risks per SDA Summary
+                        </span>
+                      )}
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
                   <Link
                     to="/faqs"
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <span className="ms-3">FAQs</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/contact"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <span className="ms-3">Contact</span>
                   </Link>
                 </li>
               </>
