@@ -43,6 +43,7 @@ import TextContentManagement from "./admin/pages/TextContentManagement";
 import IdentifiedRisksHistoricalUser from "./user-side/pages/IdentifiedRisksHistoricalUser";
 import IdentifiedRisksHistoricalApprover from "./user-side/pages/IdentifiedRisksHistoricalApprover";
 import SDAComparisonChartUser from "./user-side/pages/SDAComparisonChartUser";
+import SDAComparisonChartApprover from "./user-side/pages/SDAComparisonChartApprover";
 
 const App: FC = () => {
   return (
@@ -140,6 +141,10 @@ const ApproverLayout: FC = () => {
         <Route
           path="identifiedriskshistoricalapprover"
           element={<IdentifiedRisksHistoricalApprover />}
+        />
+        <Route
+          path="sdacomparisonchartapprover"
+          element={<SDAComparisonChartApprover />}
         />
 
         <Route path="faqs" element={<Faqs />} />

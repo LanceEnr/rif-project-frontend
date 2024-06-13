@@ -492,7 +492,7 @@ const Navbar: React.FC = () => {
                         </Dropdown.Item>
                         <Dropdown.Item>
                           <Link
-                            to="/sdacomparisonchartapprover"
+                            to="sdacomparisonchartapprover"
                             className="text-gray-700 block px-2 py-2 text-sm hover:bg-gray-100"
                           >
                             Identified Risks per SDA Summary
