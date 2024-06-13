@@ -48,15 +48,18 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/api/riskforms/dataByUserUnit`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
+        const url = new URL(
+          "http://localhost:8080/api/riskforms/dataByUserUnit"
         );
+        if (selectedSdaNumber !== null) {
+          url.searchParams.append("sdaNumber", selectedSdaNumber.toString());
+        }
+        const response = await fetch(url.toString(), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -74,7 +77,7 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, selectedSdaNumber]);
 
   const processData = () => {
     const filteredData = data.filter((item) => {
@@ -219,7 +222,7 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4  min-h-screen my-24">
+    <div className="max-w-screen-xl mx-auto px-4 min-h-screen my-24">
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-5xl mt-5 tracking-tight">
           Identified Risks (Historical)
