@@ -42,6 +42,7 @@ import FaqManagement from "./admin/pages/FaqManagement";
 import TextContentManagement from "./admin/pages/TextContentManagement";
 import IdentifiedRisksHistoricalUser from "./user-side/pages/IdentifiedRisksHistoricalUser";
 import IdentifiedRisksHistoricalApprover from "./user-side/pages/IdentifiedRisksHistoricalApprover";
+import SDAComparisonChartUser from "./user-side/pages/SDAComparisonChartUser";
 
 const App: FC = () => {
   return (
@@ -178,6 +179,10 @@ const UserLayout: FC = () => {
         <Route
           path="/identifiedriskshistoricaluser"
           element={<IdentifiedRisksHistoricalUser />}
+        />
+        <Route
+          path="/sdacomparisonchartuser"
+          element={<SDAComparisonChartUser />}
         />
 
         <Route
