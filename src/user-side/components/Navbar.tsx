@@ -502,7 +502,7 @@ const Navbar: React.FC = () => {
                     ) : (
                       <span
                         className="block py-2 px-3 text-gray-400 rounded cursor-not-allowed flex items-center md:p-0"
-                        onClick={handleDisabledClick}
+                        onClick={handleApproverDisabledClick}
                       >
                         Risk Data Visualization
                         <RiArrowDropDownLine className="h-6 w-6 text-gray-400" />

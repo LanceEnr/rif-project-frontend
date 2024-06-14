@@ -11,6 +11,8 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import html2canvas from "html2canvas";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +33,10 @@ interface PrerequisiteDataDTO {
 const RiskComparisonChart: React.FC = () => {
   const [data, setData] = useState<PrerequisiteDataDTO[]>([]);
   const [selectedUnitType, setSelectedUnitType] = useState<string>("Academic");
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 5))
+  );
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const token = localStorage.getItem("token");
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -52,23 +58,28 @@ const RiskComparisonChart: React.FC = () => {
         }
 
         const result: PrerequisiteDataDTO[] = await response.json();
-        setData(result);
+        const filteredResult = result.filter((item) => {
+          const submissionDate = new Date(item.submissionDate);
+          return submissionDate >= startDate && submissionDate <= endDate;
+        });
+        setData(filteredResult);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, [token, startDate, endDate]);
 
   const processData = () => {
     const filteredData = data.filter(
       (item) => item.unitType === selectedUnitType
     );
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 5 }, (_, i) =>
-      (currentYear - i).toString()
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
+    const years = Array.from({ length: endYear - startYear + 1 }, (_, i) =>
+      (startYear + i).toString()
     );
 
     const groupedData = years.reduce((acc, year) => {
@@ -187,6 +198,40 @@ const RiskComparisonChart: React.FC = () => {
             <option value="Academic">Academic</option>
             <option value="Administrative">Administrative</option>
           </select>
+        </div>
+        <div className="ml-4 flex flex-column items-center justify-between space-y-4 pb-4">
+          <div>
+            <label
+              htmlFor="dateRange"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Set Date Range:
+            </label>
+            <div className="flex flex-column items-center">
+              <div className="flex items-center">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Select start date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <span className="mx-4 text-gray-500">to</span>
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Select end date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

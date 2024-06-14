@@ -35,6 +35,7 @@ const Users: React.FC = () => {
   >(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [statusFilter, setStatusFilter] = useState<string>("Active");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -208,6 +209,10 @@ const Users: React.FC = () => {
     setRoleFilter(role);
   };
 
+  const handleStatusFilterChange = (status: string) => {
+    setStatusFilter(status);
+  };
+
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
     const roleMatch =
@@ -224,7 +229,13 @@ const Users: React.FC = () => {
             return true;
         }
       });
-    return fullName.includes(searchQuery.toLowerCase()) && roleMatch;
+    const statusMatch =
+      statusFilter === "All" ||
+      (statusFilter === "Active" && user.active) ||
+      (statusFilter === "Inactive" && !user.active);
+    return (
+      fullName.includes(searchQuery.toLowerCase()) && roleMatch && statusMatch
+    );
   });
 
   const indexOfLastUser = currentPage * itemsPerPage;
@@ -276,6 +287,40 @@ const Users: React.FC = () => {
                 Administrator
               </Dropdown.Item>
             </Dropdown>
+
+            <button
+              type="button"
+              className={`px-4 ml-2 py-2 text-sm font-medium ${
+                statusFilter === "Active"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleStatusFilterChange("Active")}
+            >
+              Active
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                statusFilter === "Inactive"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border-t border-b border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleStatusFilterChange("Inactive")}
+            >
+              Inactive
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium ${
+                statusFilter === "All"
+                  ? "text-yellow-500 bg-yellow-100"
+                  : "text-gray-500 bg-white"
+              } border border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white`}
+              onClick={() => handleStatusFilterChange("All")}
+            >
+              All
+            </button>
           </div>
           <label htmlFor="table-search" className="sr-only">
             Search

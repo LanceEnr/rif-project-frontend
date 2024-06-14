@@ -12,6 +12,8 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import html2canvas from "html2canvas";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(
   CategoryScale,
@@ -34,21 +36,27 @@ interface PrerequisiteDataDTO {
 
 const SDAComparisonChartApprover: React.FC = () => {
   const [data, setData] = useState<PrerequisiteDataDTO[]>([]);
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 5))
+  );
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const token = localStorage.getItem("token");
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/riskforms/dataForApproverUnit",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
+        const url = new URL(
+          "http://localhost:8080/api/riskforms/dataForApproverUnit"
         );
+        url.searchParams.append("startDate", startDate.toISOString());
+        url.searchParams.append("endDate", endDate.toISOString());
+        const response = await fetch(url.toString(), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -62,7 +70,7 @@ const SDAComparisonChartApprover: React.FC = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, startDate, endDate]);
 
   const sdaMapping: { [key: number]: string } = {
     1: "Leadership and Governance",
@@ -89,9 +97,10 @@ const SDAComparisonChartApprover: React.FC = () => {
   ];
 
   const processData = () => {
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 5 }, (_, i) =>
-      (currentYear - i).toString()
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
+    const years = Array.from({ length: endYear - startYear + 1 }, (_, i) =>
+      (startYear + i).toString()
     );
 
     const groupedData = years.reduce((acc, year) => {
@@ -109,7 +118,7 @@ const SDAComparisonChartApprover: React.FC = () => {
       }
     });
 
-    const labels = years.reverse();
+    const labels = years;
     const datasets = Object.keys(sdaMapping).map((sdaNumber, index) => ({
       label: sdaMapping[parseInt(sdaNumber)],
       data: labels.map((year) => groupedData[year][sdaNumber]),
@@ -167,6 +176,41 @@ const SDAComparisonChartApprover: React.FC = () => {
       </div>
 
       <hr className="h-px my-8 border-yellow-500 border-2" />
+
+      <div className="flex flex-column items-center justify-between space-y-4 pb-4">
+        <div>
+          <label
+            htmlFor="dateRange"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Set Date Range:
+          </label>
+          <div className="flex flex-column items-center ">
+            <div className="flex items-center">
+              <DatePicker
+                selected={startDate}
+                onChange={(date: Date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="Select start date"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+              <span className="mx-4 text-gray-500">to</span>
+              <DatePicker
+                selected={endDate}
+                onChange={(date: Date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                placeholderText="Select end date"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div ref={chartRef} id="print-section" className="overflow-x-auto">
         <div className="mb-8">

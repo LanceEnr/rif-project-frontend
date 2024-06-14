@@ -393,7 +393,7 @@ const IdentifiedRisks: React.FC = () => {
               htmlFor="dateRange"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Set Academic Year:
+              Set Date Range:
             </label>
             <div className="flex flex-column items-center ">
               <div className="flex items-center">

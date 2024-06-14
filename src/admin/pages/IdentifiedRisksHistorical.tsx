@@ -14,6 +14,8 @@ import {
 import { Chart } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import html2canvas from "html2canvas";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(
   CategoryScale,
@@ -43,6 +45,10 @@ const IdentifiedRisksHistorical: React.FC = () => {
   const [selectedSdaText, setSelectedSdaText] = useState<string>("");
   const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 5))
+  );
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const token = localStorage.getItem("token");
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +71,11 @@ const IdentifiedRisksHistorical: React.FC = () => {
           }
 
           const result: PrerequisiteDataDTO[] = await response.json();
-          setData(result);
+          const filteredResult = result.filter((item) => {
+            const submissionDate = new Date(item.submissionDate);
+            return submissionDate >= startDate && submissionDate <= endDate;
+          });
+          setData(filteredResult);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -73,7 +83,7 @@ const IdentifiedRisksHistorical: React.FC = () => {
     };
 
     fetchData();
-  }, [selectedSdaNumber, token]);
+  }, [selectedSdaNumber, token, startDate, endDate]);
 
   const processData = (unitType: string) => {
     const filteredData = data.filter((item) => {
@@ -248,7 +258,7 @@ const IdentifiedRisksHistorical: React.FC = () => {
 
       <hr className="h-px my-8 border-yellow-500 border-2" />
 
-      <div className="flex mb-8">
+      <div className="flex justify-between mb-8">
         <div>
           <label
             htmlFor="sdaSelect"
@@ -276,7 +286,7 @@ const IdentifiedRisksHistorical: React.FC = () => {
             <option value={9}>Internationalization</option>
           </select>
         </div>
-        <div className="ml-4">
+        <div>
           <label
             htmlFor="riskLevelSelect"
             className="block text-sm font-medium text-gray-700"
@@ -295,7 +305,7 @@ const IdentifiedRisksHistorical: React.FC = () => {
             <option value="H">High</option>
           </select>
         </div>
-        <div className="ml-4">
+        <div>
           <label
             htmlFor="unitSelect"
             className="block text-sm font-medium text-gray-700"
@@ -315,6 +325,40 @@ const IdentifiedRisksHistorical: React.FC = () => {
               </option>
             ))}
           </select>
+        </div>
+        <div className="flex flex-column items-center justify-between space-y-4 pb-4">
+          <div>
+            <label
+              htmlFor="dateRange"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Set Academic Year:
+            </label>
+            <div className="flex flex-column items-center">
+              <div className="flex items-center">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Select start date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <span className="mx-4 text-gray-500">to</span>
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Select end date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

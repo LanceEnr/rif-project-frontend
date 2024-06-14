@@ -14,6 +14,8 @@ import {
 import { Chart } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import html2canvas from "html2canvas";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(
   CategoryScale,
@@ -42,6 +44,10 @@ const IdentifiedRisksHistoricalApprover: React.FC = () => {
   );
   const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("");
   const [unitType, setUnitType] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 5))
+  );
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const token = localStorage.getItem("token");
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -54,6 +60,8 @@ const IdentifiedRisksHistoricalApprover: React.FC = () => {
         if (selectedSdaNumber !== null) {
           url.searchParams.append("sdaNumber", selectedSdaNumber.toString());
         }
+        url.searchParams.append("startDate", startDate.toISOString());
+        url.searchParams.append("endDate", endDate.toISOString());
         const response = await fetch(url.toString(), {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,7 +85,7 @@ const IdentifiedRisksHistoricalApprover: React.FC = () => {
     };
 
     fetchData();
-  }, [token, selectedSdaNumber]);
+  }, [token, selectedSdaNumber, startDate, endDate]);
 
   const processData = () => {
     const filteredData = data.filter((item) => {
@@ -283,6 +291,42 @@ const IdentifiedRisksHistoricalApprover: React.FC = () => {
             <option value="M">Medium</option>
             <option value="H">High</option>
           </select>
+        </div>
+        <div className="ml-4">
+          <label
+            htmlFor="startDate"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Start Date:
+          </label>
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="Select start date"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+        </div>
+        <span className="mx-4 text-gray-500">to</span>
+        <div className="ml-4">
+          <label
+            htmlFor="endDate"
+            className="block text-sm font-medium text-gray-700"
+          >
+            End Date:
+          </label>
+          <DatePicker
+            selected={endDate}
+            onChange={(date: Date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            placeholderText="Select end date"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
         </div>
       </div>
 

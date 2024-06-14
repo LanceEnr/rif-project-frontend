@@ -8,21 +8,14 @@ import {
 import AuthContext, { AuthProvider } from "./auth/AuthContext";
 import Home from "./user-side/pages/Home";
 import Faqs from "./user-side/pages/Faqs";
-// import Contact from "./user-side/pages/Contact";
 import Navbar from "./user-side/components/Navbar";
 import Footer from "./user-side/components/Footer";
 import Users from "./admin/pages/Users";
-import EditUser from "./admin/pages/EditUser";
 import SubmissionHistory from "./user-side/pages/SubmissionHistory";
-import RifTracker from "./admin/pages/RifTracker";
 import SideNavbar from "./admin/components/SideNavbar";
 import Prerequisites from "./user-side/pages/Prerequisites";
 import Esignature from "./user-side/pages/Esignature";
 import RiskIdentificationForm from "./user-side/pages/RiskIdentificationForm";
-import RifTrackerTable from "./admin/pages/RifTrackerTable";
-import MicroAnalytics from "./admin/pages/MicroAnalytics";
-import MacroAnalytics from "./admin/pages/MacroAnalytics";
-import Dashboard from "./admin/pages/Dashboard";
 import NotFoundPage from "./user-side/pages/NotFoundPage";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
@@ -85,14 +78,9 @@ const AdminLayout: FC = () => {
           <Routes>
             <Route path="/" element={<SubmissionHistoryAdmin />} />
             <Route path="submissions" element={<SubmissionHistoryAdmin />} />
-            <Route path="tracker" element={<RifTracker />} />
-            <Route path="trackertable" element={<RifTrackerTable />} />
             <Route path="users" element={<Users />} />
             <Route path="units" element={<MainUnits />} />
 
-            <Route path="editUser" element={<EditUser />} />
-            <Route path="microanalytics" element={<MicroAnalytics />} />
-            <Route path="macroanalytics" element={<MacroAnalytics />} />
             <Route path="submissionrate" element={<SubmissionRateTable />} />
             <Route path="identifiedrisks" element={<IdentifiedRisks />} />
             <Route path="faqmanagement" element={<FaqManagement />} />
