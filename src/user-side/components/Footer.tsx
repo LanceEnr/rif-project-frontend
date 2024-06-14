@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
                     <a href="https://flowbite.com/" className="hover:underline">
-                      Flowbite
+                      OPQM
                     </a>
                   </li>
                   <li>
@@ -35,14 +35,14 @@ const Footer: React.FC = () => {
                       href="https://tailwindcss.com/"
                       className="hover:underline"
                     >
-                      Tailwind CSS
+                      UST
                     </a>
                   </li>
                 </ul>
               </div>
               <div>
                 <h2 className="mb-6 text-sm font-semibold uppercase text-white">
-                  Follow us
+                  Social Media
                 </h2>
                 <ul className="text-gray-500 font-medium">
                   <li className="mb-4">
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
                       href="https://github.com/themesberg/flowbite"
                       className="hover:underline "
                     >
-                      Github
+                      Facebook
                     </a>
                   </li>
                   <li>
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
                       href="https://discord.gg/4eeurUVvTy"
                       className="hover:underline"
                     >
-                      Discord
+                      Gmail
                     </a>
                   </li>
                 </ul>
