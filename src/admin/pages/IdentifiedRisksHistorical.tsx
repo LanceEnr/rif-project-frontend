@@ -321,13 +321,13 @@ const IdentifiedRisksHistorical: React.FC = () => {
       <div ref={chartRef} className="overflow-x-auto">
         {(!selectedUnit || selectedUnitType === "Academic") && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Academic Units</h3>
+            <h3 className="text-xl font-bold mb-4">Academic Unit(s)</h3>
             <Chart type="bar" data={academicChartData} options={options} />
           </div>
         )}
         {(!selectedUnit || selectedUnitType === "Administrative") && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Administrative Units</h3>
+            <h3 className="text-xl font-bold mb-4">Administrative Unit(s)</h3>
             <Chart
               type="bar"
               data={administrativeChartData}

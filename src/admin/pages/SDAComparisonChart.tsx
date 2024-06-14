@@ -78,6 +78,18 @@ const SDAComparisonChart: React.FC = () => {
     9: "Internationalization",
   };
 
+  const fixedColors = [
+    "rgba(255, 99, 132, 0.6)", // Red
+    "rgba(54, 162, 235, 0.6)", // Blue
+    "rgba(255, 206, 86, 0.6)", // Yellow
+    "rgba(75, 192, 192, 0.6)", // Green
+    "rgba(0, 128, 128, 0.6)", // Teal
+    "rgba(255, 159, 64, 0.6)", // Orange
+    "rgba(199, 199, 199, 0.6)", // Grey
+    "rgba(255, 205, 86, 0.6)", // Yellow
+    "rgba(54, 162, 235, 0.6)", // Blue
+  ];
+
   const processData = () => {
     const filteredData = data.filter(
       (item) =>
@@ -106,12 +118,10 @@ const SDAComparisonChart: React.FC = () => {
     });
 
     const labels = years.reverse();
-    const datasets = Object.keys(sdaMapping).map((sdaNumber) => ({
+    const datasets = Object.keys(sdaMapping).map((sdaNumber, index) => ({
       label: sdaMapping[parseInt(sdaNumber)],
       data: labels.map((year) => groupedData[year][sdaNumber]),
-      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
-        Math.random() * 255
-      )}, ${Math.floor(Math.random() * 255)}, 0.6)`,
+      backgroundColor: fixedColors[index % fixedColors.length],
     }));
 
     const totalSdaCounts = Object.keys(sdaMapping).map((sdaNumber) => ({
@@ -130,9 +140,7 @@ const SDAComparisonChart: React.FC = () => {
       type: "line" as const,
       label: `${sdaMapping[sdaNumber]} Trend`,
       data: labels.map((year) => groupedData[year][sdaNumber]),
-      borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
-        Math.random() * 255
-      )}, ${Math.floor(Math.random() * 255)}, 1)`,
+      borderColor: fixedColors[index % fixedColors.length],
       borderWidth: 2,
       fill: false,
     }));
@@ -229,7 +237,7 @@ const SDAComparisonChart: React.FC = () => {
 
       <div ref={chartRef} id="print-section" className="overflow-x-auto">
         <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">{`${selectedUnitType} Units`}</h3>
+          <h3 className="text-xl font-bold mb-4">{`${selectedUnitType} Unit(s)`}</h3>
           <Chart type="bar" data={chartData} />
         </div>
       </div>

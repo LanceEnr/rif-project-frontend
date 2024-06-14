@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 interface MainUnit {
   id: number;
   mainUnit: string;
-  mainUnitType: "ACADEMIC" | "ADMINISTRATIVE";
+  mainUnitType: "Academic" | "Administrative";
 }
 
 const MainUnits: React.FC = () => {
@@ -182,11 +182,11 @@ const MainUnits: React.FC = () => {
               <Dropdown.Item onClick={() => handleUnitFilterChange(null)}>
                 All
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleUnitFilterChange("ACADEMIC")}>
+              <Dropdown.Item onClick={() => handleUnitFilterChange("Academic")}>
                 Academic
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={() => handleUnitFilterChange("ADMINISTRATIVE")}
+                onClick={() => handleUnitFilterChange("Administrative")}
               >
                 Administrative
               </Dropdown.Item>
@@ -349,8 +349,8 @@ const MainUnits: React.FC = () => {
                   <option value="" disabled>
                     Select type
                   </option>
-                  <option value="ACADEMIC">Academic</option>
-                  <option value="ADMINISTRATIVE">Administrative</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Administrative">Administrative</option>
                 </select>
               </div>
               <div className="flex justify-end">
