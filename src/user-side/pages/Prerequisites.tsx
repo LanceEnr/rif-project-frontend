@@ -21,7 +21,7 @@ interface Prerequisite {
 interface MainUnit {
   id: number;
   mainUnit: string;
-  mainUnitType: "ACADEMIC" | "ADMINISTRATIVE";
+  mainUnitType: "Academic" | "Administrative";
 }
 
 const Prerequisites: React.FC = () => {
@@ -290,7 +290,7 @@ const Prerequisites: React.FC = () => {
                         name="unitType"
                         value="Academic"
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
-                        checked={unitType === "ACADEMIC"}
+                        checked={unitType === "Academic"}
                         readOnly
                       />
                       <Label htmlFor="type-academic">Academic</Label>
@@ -301,7 +301,7 @@ const Prerequisites: React.FC = () => {
                         name="unitType"
                         value="Administrative"
                         className="checked:bg-yellow-500 focus:ring-yellow-500"
-                        checked={unitType === "ADMINISTRATIVE"}
+                        checked={unitType === "Administrative"}
                         readOnly
                       />
                       <Label htmlFor="type-administrative">
