@@ -838,10 +838,10 @@ const SubmissionHistory: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4">
-              Report duplicated successfully
+              RIF duplicated successfully
             </h2>
             <p className="mb-4">
-              You can find the duplicated report under 'Pending'
+              You can find the duplicated RIF under 'Pending'
             </p>
             <div className="flex justify-end">
               <button
