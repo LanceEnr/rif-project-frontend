@@ -89,7 +89,12 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
 
   const processData = () => {
     const filteredData = data.filter((item) => {
-      return selectedRiskLevel === "" || item.riskLevel === selectedRiskLevel;
+      const submissionDate = new Date(item.submissionDate);
+      return (
+        submissionDate >= startDate &&
+        submissionDate <= endDate &&
+        (selectedRiskLevel === "" || item.riskLevel === selectedRiskLevel)
+      );
     });
 
     const groupedData = filteredData.reduce(
@@ -292,41 +297,40 @@ const IdentifiedRisksHistoricalUser: React.FC = () => {
             <option value="H">High</option>
           </select>
         </div>
-        <div className="ml-4">
-          <label
-            htmlFor="startDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Start Date:
-          </label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            placeholderText="Select start date"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          />
-        </div>
-        <span className="mx-4 text-gray-500">to</span>
-        <div className="ml-4">
-          <label
-            htmlFor="endDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            End Date:
-          </label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date: Date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            placeholderText="Select end date"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          />
+
+        <div className="ml-4 flex flex-column items-center justify-between space-y-4 pb-4">
+          <div>
+            <label
+              htmlFor="dateRange"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Set Date Range:
+            </label>
+            <div className="flex flex-column items-center ">
+              <div className="flex items-center">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Select start date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <span className="mx-4 text-gray-500">to</span>
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Select end date"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

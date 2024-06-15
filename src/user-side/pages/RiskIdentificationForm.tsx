@@ -152,7 +152,11 @@ const RiskIdentificationForm: React.FC = () => {
 
     if (riskFormData.length > 0) {
       setActiveRowIndex(0);
-      setFormData(riskFormData[0]);
+      const formDataToUpdate = riskFormData[0];
+      if (formDataToUpdate.opportunities.length === 0) {
+        formDataToUpdate.opportunities = [{ description: "" }];
+      }
+      setFormData(formDataToUpdate);
       setTags(
         riskFormData[0].responsiblePersons.map((person: any) => person.name)
       );
@@ -278,9 +282,13 @@ const RiskIdentificationForm: React.FC = () => {
   };
 
   const handleChangeCheckbox = (value: string) => {
-    const newIssueTypes = formData.issueType.includes(value)
+    let newIssueTypes = formData.issueType.includes(value)
       ? formData.issueType.split(",").filter((type) => type !== value)
       : [...formData.issueType.split(",").filter((type) => type), value];
+
+    if (newIssueTypes.length > 2) {
+      newIssueTypes = newIssueTypes.slice(-2); // Keep only the last two selected checkboxes
+    }
 
     // Update the form state with either the new issue types array joined into a string or empty if no checkboxes are checked
     setFormData({
@@ -297,6 +305,17 @@ const RiskIdentificationForm: React.FC = () => {
         return data;
       });
       setRowsData(updatedRowsData);
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      issueType: newIssueTypes.length
+        ? ""
+        : "At least one issue type must be selected",
+    }));
+
+    if (error && validateForm()) {
+      setError(null);
     }
   };
 
@@ -681,12 +700,8 @@ const RiskIdentificationForm: React.FC = () => {
     if (!formData.status.trim()) {
       newErrors.status = "Status is required";
     }
-    if (
-      !formData.opportunities.some(
-        (opportunity) => opportunity.description.trim() !== ""
-      )
-    ) {
-      newErrors.opportunities = "At least one opportunity is required";
+    if (!formData.issueType.trim()) {
+      newErrors.issueType = "At least one issue type must be selected";
     }
     if (
       !formData.actionPlans.some(
@@ -763,6 +778,9 @@ const RiskIdentificationForm: React.FC = () => {
 
   const selectRow = (index: number) => {
     const selectedRow = rowsData[index];
+    if (selectedRow.opportunities.length === 0) {
+      selectedRow.opportunities = [{ description: "" }];
+    }
     setActiveRowIndex(index);
     setTags(selectedRow.responsiblePersonNames || []);
 
@@ -829,8 +847,9 @@ const RiskIdentificationForm: React.FC = () => {
           <div className="mt-4 mb-10">
             <div className="grid gap-4 mb-4 sm:grid-cols-1">
               <div className="lg:col-span-2">
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Fields marked with <span className="text-red-500">*</span> are required.
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Fields marked with <span className="text-red-500">*</span> are
+                  required.
                 </p>
                 <form onSubmit={handleSubmitFinal} method="post">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
@@ -928,7 +947,7 @@ const RiskIdentificationForm: React.FC = () => {
                     <div className="md:col-span-5 mt-4">
                       <div>
                         <label className="block text-sm font-medium mb-2 text-gray-900">
-                          Issue Type
+                          Issue Type <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <fieldset className="flex flex-row gap-4">
@@ -957,6 +976,7 @@ const RiskIdentificationForm: React.FC = () => {
                         <p className="text-red-500">{errors.issueType}</p>
                       )}
                     </div>
+
                     <div className="md:col-span-5">
                       <hr className="mt-4 mb-8" />
 
@@ -1225,8 +1245,7 @@ const RiskIdentificationForm: React.FC = () => {
                               htmlFor="number-input"
                               className="block text-sm font-medium mb-2 text-gray-900"
                             >
-                              Opportunities{" "}
-                              <span className="text-red-500">*</span>
+                              Opportunities
                             </label>
                             <p
                               id="floating_helper_text"
